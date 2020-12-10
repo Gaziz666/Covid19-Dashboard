@@ -10,11 +10,17 @@ export default class SelectModel extends EventEmitter {
   async fetchItems(url) {
     const response = await fetch(url);
     const json = await response.json();
-    this._items = json.Countries;
+    this._items = json;
   }
 
-  getItems() {
-    return this._items.slice();
+  getCountries() {
+    return this._items.Countries.slice().sort(
+      (a, b) => b.TotalConfirmed - a.TotalConfirmed
+    );
+  }
+
+  getGlobal() {
+    return this._items.Global;
   }
 
   addItem(item) {
