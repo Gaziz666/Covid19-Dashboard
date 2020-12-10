@@ -1,6 +1,6 @@
 import "../css/style.css";
 import SelectModel from "./models/Select.model";
-import ListController from "./controller/List.controller";
+// import ListController from './controller/List.controller';
 import SelectView from "./views/Select.viewer";
 import create from "./utils/create";
 import URL from "./utils/constants";
@@ -19,16 +19,18 @@ document.body.append(select);
 
 const model = new SelectModel();
 
-const p1 = new Promise((resolve, reject) => {
+const p1 = new Promise((resolve) => {
   resolve(model.fetchItems(URL.SUMMARY));
-  reject("error load server");
+  // reject('error load server');
 });
 
 p1.then(() => {
   const view = new SelectView(model, {
-    select: select,
+    select,
   });
-  const controller = new ListController(model, view);
+  // const controller = new ListController(model, view);
 
   view.show();
 });
+
+// test
