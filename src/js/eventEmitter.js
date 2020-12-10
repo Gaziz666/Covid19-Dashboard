@@ -1,14 +1,14 @@
 export default class EventEmitter {
   constructor() {
-    this._events = {};
+    this.events = {};
   }
 
   on(evt, listener) {
-    (this._events[evt] || (this._events[evt] = [])).push(listener);
+    (this.events[evt] || (this.events[evt] = [])).push(listener);
     return this;
   }
 
   emit(evt, arg) {
-    (this._events[evt] || []).slice().forEach((lsn) => lsn(arg));
+    (this.events[evt] || []).forEach((lsn) => lsn(arg));
   }
 }
