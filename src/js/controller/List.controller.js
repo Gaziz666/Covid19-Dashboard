@@ -1,7 +1,7 @@
 export default class ListController {
   constructor(model, view) {
-    this._model = model;
-    this._view = view;
+    this.model = model;
+    this.view = view;
 
     view.on("listModified", (idx) => this.updateSelected(idx));
     view.on("addButtonClicked", () => this.addItem());
@@ -9,20 +9,20 @@ export default class ListController {
   }
 
   addItem() {
-    const item = window.prompt("Add item:", "");
+    const item = "Add item:";
     if (item) {
-      this._model.addItem(item);
+      this.model.addItem(item);
     }
   }
 
   delItem() {
-    const index = this._model.selectedIndex;
+    const index = this.model.selectedIndex;
     if (index !== -1) {
-      this._model.removeItemAt(index);
+      this.model.removeItemAt(index);
     }
   }
 
   updateSelected(index) {
-    this._model.selectedIndex = index;
+    this.model.selectedIndex = index;
   }
 }

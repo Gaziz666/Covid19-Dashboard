@@ -4,16 +4,16 @@ import create from "../utils/create";
 export default class SelectView extends EventEmitter {
   constructor(model, elements) {
     super();
-    this._model = model; // items = [data]
-    this._elements = elements; // select
+    this.model = model; // items = [data]
+    this.elements = elements; // select
 
-    /*// attach model listeners
+    /* // attach model listeners
     model.on('itemAdded', () => this.rebuildList())
       .on('itemRemoved', () => this.rebuildList());
 
     // attach listeners to HTML controls
     elements.select.addEventListener('change',
-      e => this.emit('listModified', e.target.selectedIndex));*/
+      e => this.emit('listModified', e.target.selectedIndex)); */
   }
 
   show() {
@@ -23,16 +23,16 @@ export default class SelectView extends EventEmitter {
   }
 
   rebuildSelect() {
-    const select = this._elements.select;
+    const { select } = this.elements;
     select.options.length = 0;
-    this._model.getCountries().forEach((item) => {
+    this.model.getCountries().forEach((item) => {
       const countryName = create("span", {
         className: "select__country-name",
         child: item.Country,
       });
       const casesCount = create("span", {
         className: "select__cases-count",
-        child: item.TotalConfirmed.toLocaleString() + " ",
+        child: `${item.TotalConfirmed.toLocaleString()} `,
       });
       const newOption = create("option", {
         className: "select__option",
@@ -40,11 +40,11 @@ export default class SelectView extends EventEmitter {
       });
       select.options.add(newOption);
     });
-    this._model.selectedIndex = -1;
+    this.model.selectedIndex = -1;
   }
 
   rebuildTotalCases() {
-    const globalCases = this._elements.globalCases;
+    const { globalCases } = this.elements;
     create("h3", {
       className: "global__header",
       child: "Global Cases",
@@ -52,17 +52,17 @@ export default class SelectView extends EventEmitter {
     });
     create("h3", {
       className: "global__cases",
-      child: this._model.getGlobal().TotalConfirmed.toLocaleString(),
+      child: this.model.getGlobal().TotalConfirmed.toLocaleString(),
       parent: globalCases,
     });
   }
 
   rebuildTable() {
     const globalCasesName = "Global Cases";
-    const currentGlobal = this._model.getGlobal();
-    const globalKeys = Object.keys(currentGlobal);
-    const tableContainer = this._elements.tableCases;
-    const countryName = create("h3", {
+    const currentGlobal = this.model.getGlobal();
+    // const globalKeys = Object.keys(currentGlobal);
+    const tableContainer = this.elements.tableCases;
+    create("h3", {
       className: "table__country-name",
       child: globalCasesName,
       parent: tableContainer,

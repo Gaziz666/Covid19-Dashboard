@@ -1,7 +1,7 @@
 import "../css/style.css";
 import "../css/select.css";
 import SelectModel from "./models/Select.model";
-import ListController from "./controller/List.controller";
+// import ListController from './controller/List.controller';
 import SelectView from "./views/Select.viewer";
 import create from "./utils/create";
 import URL from "./utils/constants";
@@ -22,9 +22,9 @@ document.body.append(select, globalCases, tableCases);
 
 const model = new SelectModel();
 
-const loadData = new Promise((resolve, reject) => {
+const loadData = new Promise((resolve) => {
   resolve(model.fetchItems(URL.SUMMARY));
-  reject("error load server");
+  // reject('error load server');
 });
 
 loadData.then(() => {
@@ -33,7 +33,7 @@ loadData.then(() => {
     globalCases,
     tableCases,
   });
-  const controller = new ListController(model, view);
+  // const controller = new ListController(model, view);
 
   view.show();
 });
