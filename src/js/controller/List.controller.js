@@ -3,13 +3,13 @@ export default class ListController {
     this._model = model;
     this._view = view;
 
-    view.on('listModified', idx => this.updateSelected(idx));
-    view.on('addButtonClicked', () => this.addItem());
-    view.on('delButtonClicked', () => this.delItem());
+    view.on("listModified", (idx) => this.updateSelected(idx));
+    view.on("addButtonClicked", () => this.addItem());
+    view.on("delButtonClicked", () => this.delItem());
   }
 
   addItem() {
-    const item = window.prompt('Add item:', '');
+    const item = window.prompt("Add item:", "");
     if (item) {
       this._model.addItem(item);
     }

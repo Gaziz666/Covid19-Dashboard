@@ -40,7 +40,7 @@ export default function create(el, {
     dataAttr.forEach(([attrName, attrValue]) => {
       if (attrValue === '') {
         element.setAttribute(attrValue, '');
-      } else if (attrName.match(/value|id|placeholder|cols|rows|autocorrect|spellcheck|for|type|style|src|href|target/)) {
+      } else if (attrName.match(/value|id|placeholder|cols|rows|autocorrect|spellcheck|for|type|style|src|href|target|size/)) {
         element.setAttribute(attrName, attrValue);
       } else {
         element.dataset[attrName] = attrValue;
