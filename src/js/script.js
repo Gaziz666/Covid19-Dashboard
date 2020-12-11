@@ -28,7 +28,7 @@ document.body.append(selectSearchWrapper, globalCases, tableCases);
 const model = new SelectModel();
 
 const loadData = new Promise((resolve) => {
-  resolve(model.fetchItems(URL.SUMMARY));
+  resolve(model.fetchData(URL.SUMMARY));
   // reject('error load server');
 });
 

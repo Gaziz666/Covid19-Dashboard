@@ -4,8 +4,8 @@ import create from "../utils/create";
 export default class SelectView extends EventEmitter {
   constructor(model, elements) {
     super();
-    this.model = model; // items = [data]
-    this.elements = elements; // select
+    this.model = model;
+    this.elements = elements;
 
     // attach model listeners
     model
@@ -28,6 +28,7 @@ export default class SelectView extends EventEmitter {
     const { list } = this.elements;
     const searchValue = letter || "";
     this.elements.list.innerHTML = "";
+    const fragment = new DocumentFragment();
     this.model
       .getCountries()
       .filter((obj) => obj.Country.toLowerCase().includes(searchValue))
@@ -43,18 +44,18 @@ export default class SelectView extends EventEmitter {
         const newLi = create("li", {
           className: "list__li",
           child: [casesCount, countryName],
-          parent: list,
+          parent: null,
           dataAttr: [
             ["key", index],
             ["code", obj.CountryCode],
           ],
         });
-        list.append(newLi);
+        fragment.append(newLi);
         newLi.addEventListener("click", (e) => {
           this.emit("chooseCountry", e.target.closest("li").dataset.code);
         });
       });
-    this.model.selectedIndex = -1;
+    list.append(fragment);
   }
 
   rebuildTotalCases() {
@@ -71,19 +72,19 @@ export default class SelectView extends EventEmitter {
     });
   }
 
-  rebuildTable(code) {
+  rebuildTable(countryCode) {
     let currentCountryObj = this.model.getGlobal();
     let tableName = "Global Cases";
-    if (code) {
+    if (countryCode) {
       let i = this.elements.tableCases.childNodes.length - 1;
       while (i > -1) {
         this.elements.tableCases.childNodes[i].remove();
         i -= 1;
       }
-      currentCountryObj = this.model.getCountryByCode(code);
-      tableName = this.model.getCountryByCode(code).Country;
+      currentCountryObj = this.model.getCountryByCode(countryCode);
+      tableName = this.model.getCountryByCode(countryCode).Country;
       this.elements.inputSearch.value = "";
-      // this.rebuildList();
+      this.rebuildList();
     }
     // const globalKeys = Object.keys(currentGlobal);
     const tableContainer = this.elements.tableCases;

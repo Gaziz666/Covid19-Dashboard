@@ -11,8 +11,8 @@ export default class SelectController {
     });
   }
 
-  updateSelectedCountry(code) {
-    this.model.chooseCountry(code);
+  updateSelectedCountry(countryCode) {
+    this.model.chooseCountry(countryCode);
   }
 
   searchCountry(letter) {

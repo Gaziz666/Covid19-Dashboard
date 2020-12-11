@@ -1,36 +1,38 @@
 import EventEmitter from "../eventEmitter";
 
 export default class SelectModel extends EventEmitter {
-  constructor(items) {
+  constructor(objData) {
     super();
-    this.items = items || [];
+    this.objData = objData || {};
     this.selectedCountryCode = "";
     this.searchInputValue = "";
   }
 
-  async fetchItems(url) {
+  async fetchData(url) {
     const response = await fetch(url);
     const json = await response.json();
-    this.items = json;
+    this.objData = json;
   }
 
   getCountries() {
-    return this.items.Countries.sort(
+    return this.objData.Countries.sort(
       (a, b) => b.TotalConfirmed - a.TotalConfirmed
     );
   }
 
   getCountryByCode(code) {
-    return this.items.Countries.filter((item) => item.CountryCode === code)[0];
+    return this.objData.Countries.filter(
+      (item) => item.CountryCode === code
+    )[0];
   }
 
   getGlobal() {
-    return this.items.Global;
+    return this.objData.Global;
   }
 
-  chooseCountry(code) {
-    this.selectedCountryCode = code;
-    this.emit("changeCountry", code);
+  chooseCountry(countryCode) {
+    this.selectedCountryCode = countryCode;
+    this.emit("changeCountry", countryCode);
   }
 
   searchCountryByLetter(letter) {
