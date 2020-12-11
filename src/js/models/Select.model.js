@@ -4,7 +4,8 @@ export default class SelectModel extends EventEmitter {
   constructor(items) {
     super();
     this.items = items || [];
-    this.selectedCountryIndex = -1;
+    this.selectedCountryCode = "";
+    this.searchInputValue = "";
   }
 
   async fetchItems(url) {
@@ -14,36 +15,27 @@ export default class SelectModel extends EventEmitter {
   }
 
   getCountries() {
-    this.items.Countries = this.items.Countries.sort(
+    return this.items.Countries.sort(
       (a, b) => b.TotalConfirmed - a.TotalConfirmed
     );
-    return this.items.Countries;
   }
 
-  getCountryByIndex(index) {
-    return this.items.Countries[index];
+  getCountryByCode(code) {
+    return this.items.Countries.filter((item) => item.CountryCode === code)[0];
   }
 
   getGlobal() {
     return this.items.Global;
   }
 
-  addItem(item) {
-    this.items.push(item);
-    this.emit("itemAdded", item);
+  chooseCountry(code) {
+    this.selectedCountryCode = code;
+    this.emit("changeCountry", code);
   }
 
-  removeItemAt(index) {
-    const item = this.items.splice(index, 1)[0];
-    this.emit("itemRemoved", item);
-    if (index === this.selectedIndex) {
-      this.selectedIndex = -1;
-    }
-  }
-
-  chooseCountry(index) {
-    this.selectedCountryIndex = index;
-    this.emit("changeCountry", index);
+  searchCountryByLetter(letter) {
+    this.searchInputValue = letter;
+    this.emit("searchCountryBy", letter);
   }
 
   /*
@@ -53,7 +45,7 @@ export default class SelectModel extends EventEmitter {
 
   set selectedCountryIndex(index) {
     const previousIndex = this.selectedCountryIndex;
-    console.log("indexi", index);
+    console.log("index", index);
     this.selectedCountryIndex = index;
     this.emit("selectedIndexChanged", previousIndex);
   } */

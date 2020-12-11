@@ -9,16 +9,21 @@ import URL from "./utils/constants";
 // require.context("./../assets/img", true, /\.(png|svg|jpg|gif)$/);
 // require.context("./../assets/audio", true, /\.wav$/);
 
-const select = create("select", {
-  className: "select-block",
+const list = create("ul", { className: "list-wrapper" });
+const inputSearch = create("input", {
+  className: "search-country",
   child: null,
   parent: null,
-  dataAttr: [["size", "10"]],
+  dataAttr: [["placeholder", "Search..."]],
 });
 const globalCases = create("div", { className: "global-cases" });
 const tableCases = create("div", { className: "table-cases" });
+const selectSearchWrapper = create("div", {
+  className: "select-search-wrapper",
+  child: [inputSearch, list],
+});
 
-document.body.append(select, globalCases, tableCases);
+document.body.append(selectSearchWrapper, globalCases, tableCases);
 
 const model = new SelectModel();
 
@@ -29,7 +34,8 @@ const loadData = new Promise((resolve) => {
 
 loadData.then(() => {
   const view = new SelectView(model, {
-    select,
+    list,
+    inputSearch,
     globalCases,
     tableCases,
   });

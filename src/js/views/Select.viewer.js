@@ -9,42 +9,51 @@ export default class SelectView extends EventEmitter {
 
     // attach model listeners
     model
-      .on("itemAdded", () => this.rebuildList())
-      .on("itemRemoved", () => this.rebuildList())
-      .on("changeCountry", (indexC) => this.rebuildTable(indexC));
+      .on("changeCountry", (code) => this.rebuildTable(code))
+      .on("searchCountryBy", (letter) => this.rebuildList(letter));
 
     // attach listeners to HTML controls
-    this.elements.select.addEventListener("change", (e) =>
-      this.emit("chooseCountry", e.target.value)
+    this.elements.inputSearch.addEventListener("input", (e) =>
+      this.emit("searchCountry", e.target.value)
     );
   }
 
   show() {
-    this.rebuildSelect();
+    this.rebuildList();
     this.rebuildTotalCases();
     this.rebuildTable();
   }
 
-  rebuildSelect() {
-    const { select } = this.elements;
-    select.options.length = 0;
-    this.model.getCountries().forEach((item, index) => {
-      const countryName = create("span", {
-        className: "select__country-name",
-        child: item.Country,
+  rebuildList(letter) {
+    const { list } = this.elements;
+    const searchValue = letter || "";
+    this.elements.list.innerHTML = "";
+    this.model
+      .getCountries()
+      .filter((obj) => obj.Country.toLowerCase().includes(searchValue))
+      .forEach((obj, index) => {
+        const countryName = create("span", {
+          className: "select__country-name",
+          child: obj.Country,
+        });
+        const casesCount = create("span", {
+          className: "select__cases-count",
+          child: `${obj.TotalConfirmed.toLocaleString()} `,
+        });
+        const newLi = create("li", {
+          className: "list__li",
+          child: [casesCount, countryName],
+          parent: list,
+          dataAttr: [
+            ["key", index],
+            ["code", obj.CountryCode],
+          ],
+        });
+        list.append(newLi);
+        newLi.addEventListener("click", (e) => {
+          this.emit("chooseCountry", e.target.closest("li").dataset.code);
+        });
       });
-      const casesCount = create("span", {
-        className: "select__cases-count",
-        child: `${item.TotalConfirmed.toLocaleString()} `,
-      });
-      const newOption = create("option", {
-        className: "select__option",
-        child: [casesCount, countryName],
-        parent: select,
-        dataAttr: [["value", index]],
-      });
-      select.options.add(newOption);
-    });
     this.model.selectedIndex = -1;
   }
 
@@ -62,17 +71,19 @@ export default class SelectView extends EventEmitter {
     });
   }
 
-  rebuildTable(indexC) {
+  rebuildTable(code) {
     let currentCountryObj = this.model.getGlobal();
     let tableName = "Global Cases";
-    if (indexC) {
+    if (code) {
       let i = this.elements.tableCases.childNodes.length - 1;
       while (i > -1) {
         this.elements.tableCases.childNodes[i].remove();
         i -= 1;
       }
-      currentCountryObj = this.model.getCountryByIndex(indexC);
-      tableName = this.model.getCountryByIndex(indexC).Country;
+      currentCountryObj = this.model.getCountryByCode(code);
+      tableName = this.model.getCountryByCode(code).Country;
+      this.elements.inputSearch.value = "";
+      // this.rebuildList();
     }
     // const globalKeys = Object.keys(currentGlobal);
     const tableContainer = this.elements.tableCases;

@@ -3,26 +3,19 @@ export default class SelectController {
     this.model = model;
     this.view = view;
 
-    view.on("chooseCountry", (countryIndex) =>
-      this.updateSelectedCountry(countryIndex)
+    view.on("chooseCountry", (countryCode) =>
+      this.updateSelectedCountry(countryCode)
     );
+    view.on("searchCountry", (countryLetter) => {
+      this.searchCountry(countryLetter);
+    });
   }
 
-  addItem() {
-    const item = "Add item:";
-    if (item) {
-      this.model.addItem(item);
-    }
+  updateSelectedCountry(code) {
+    this.model.chooseCountry(code);
   }
 
-  delItem() {
-    const index = this.model.selectedIndex;
-    if (index !== -1) {
-      this.model.removeItemAt(index);
-    }
-  }
-
-  updateSelectedCountry(index) {
-    this.model.chooseCountry(index);
+  searchCountry(letter) {
+    this.model.searchCountryByLetter(letter);
   }
 }
