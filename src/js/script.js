@@ -1,7 +1,7 @@
 import "../css/style.css";
 import "../css/select.css";
 import SelectModel from "./models/Select.model";
-// import ListController from './controller/List.controller';
+import SelectController from "./controller/Select.controller";
 import SelectView from "./views/Select.viewer";
 import create from "./utils/create";
 import URL from "./utils/constants";
@@ -33,7 +33,7 @@ loadData.then(() => {
     globalCases,
     tableCases,
   });
-  // const controller = new ListController(model, view);
-
+  // eslint-disable-next-line no-unused-vars
+  const controller = new SelectController(model, view);
   view.show();
 });

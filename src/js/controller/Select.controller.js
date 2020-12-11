@@ -1,11 +1,11 @@
-export default class ListController {
+export default class SelectController {
   constructor(model, view) {
     this.model = model;
     this.view = view;
 
-    view.on("listModified", (idx) => this.updateSelected(idx));
-    view.on("addButtonClicked", () => this.addItem());
-    view.on("delButtonClicked", () => this.delItem());
+    view.on("chooseCountry", (countryIndex) =>
+      this.updateSelectedCountry(countryIndex)
+    );
   }
 
   addItem() {
@@ -22,7 +22,7 @@ export default class ListController {
     }
   }
 
-  updateSelected(index) {
-    this.model.selectedIndex = index;
+  updateSelectedCountry(index) {
+    this.model.chooseCountry(index);
   }
 }

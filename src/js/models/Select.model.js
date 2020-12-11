@@ -4,7 +4,7 @@ export default class SelectModel extends EventEmitter {
   constructor(items) {
     super();
     this.items = items || [];
-    this.selectedIndex = -1;
+    this.selectedCountryIndex = -1;
   }
 
   async fetchItems(url) {
@@ -14,9 +14,14 @@ export default class SelectModel extends EventEmitter {
   }
 
   getCountries() {
-    return this.items.Countries.slice().sort(
+    this.items.Countries = this.items.Countries.sort(
       (a, b) => b.TotalConfirmed - a.TotalConfirmed
     );
+    return this.items.Countries;
+  }
+
+  getCountryByIndex(index) {
+    return this.items.Countries[index];
   }
 
   getGlobal() {
@@ -36,13 +41,20 @@ export default class SelectModel extends EventEmitter {
     }
   }
 
-  get selectedIndex() {
-    return this.selectedIndex;
+  chooseCountry(index) {
+    this.selectedCountryIndex = index;
+    this.emit("changeCountry", index);
   }
 
-  set selectedIndex(index) {
-    const previousIndex = this.selectedIndex;
-    this.selectedIndex = index;
-    this.emit("selectedIndexChanged", previousIndex);
+  /*
+  get selectedCountryIndex() {
+    return this.selectedCountryIndex;
   }
+
+  set selectedCountryIndex(index) {
+    const previousIndex = this.selectedCountryIndex;
+    console.log("indexi", index);
+    this.selectedCountryIndex = index;
+    this.emit("selectedIndexChanged", previousIndex);
+  } */
 }

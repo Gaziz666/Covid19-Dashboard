@@ -7,13 +7,16 @@ export default class SelectView extends EventEmitter {
     this.model = model; // items = [data]
     this.elements = elements; // select
 
-    /* // attach model listeners
-    model.on('itemAdded', () => this.rebuildList())
-      .on('itemRemoved', () => this.rebuildList());
+    // attach model listeners
+    model
+      .on("itemAdded", () => this.rebuildList())
+      .on("itemRemoved", () => this.rebuildList())
+      .on("changeCountry", (indexC) => this.rebuildTable(indexC));
 
     // attach listeners to HTML controls
-    elements.select.addEventListener('change',
-      e => this.emit('listModified', e.target.selectedIndex)); */
+    this.elements.select.addEventListener("change", (e) =>
+      this.emit("chooseCountry", e.target.value)
+    );
   }
 
   show() {
@@ -25,7 +28,7 @@ export default class SelectView extends EventEmitter {
   rebuildSelect() {
     const { select } = this.elements;
     select.options.length = 0;
-    this.model.getCountries().forEach((item) => {
+    this.model.getCountries().forEach((item, index) => {
       const countryName = create("span", {
         className: "select__country-name",
         child: item.Country,
@@ -37,6 +40,8 @@ export default class SelectView extends EventEmitter {
       const newOption = create("option", {
         className: "select__option",
         child: [casesCount, countryName],
+        parent: select,
+        dataAttr: [["value", index]],
       });
       select.options.add(newOption);
     });
@@ -57,14 +62,23 @@ export default class SelectView extends EventEmitter {
     });
   }
 
-  rebuildTable() {
-    const globalCasesName = "Global Cases";
-    const currentGlobal = this.model.getGlobal();
+  rebuildTable(indexC) {
+    let currentCountryObj = this.model.getGlobal();
+    let tableName = "Global Cases";
+    if (indexC) {
+      let i = this.elements.tableCases.childNodes.length - 1;
+      while (i > -1) {
+        this.elements.tableCases.childNodes[i].remove();
+        i -= 1;
+      }
+      currentCountryObj = this.model.getCountryByIndex(indexC);
+      tableName = this.model.getCountryByIndex(indexC).Country;
+    }
     // const globalKeys = Object.keys(currentGlobal);
     const tableContainer = this.elements.tableCases;
     create("h3", {
       className: "table__country-name",
-      child: globalCasesName,
+      child: tableName,
       parent: tableContainer,
     });
     const tableHeader = create("tr", {
@@ -89,15 +103,15 @@ export default class SelectView extends EventEmitter {
       child: [
         create("td", {
           className: "table_td",
-          child: currentGlobal.TotalConfirmed.toLocaleString(),
+          child: currentCountryObj.TotalConfirmed.toLocaleString(),
         }),
         create("td", {
           className: "table_td",
-          child: currentGlobal.TotalDeaths.toLocaleString(),
+          child: currentCountryObj.TotalDeaths.toLocaleString(),
         }),
         create("td", {
           className: "table_td",
-          child: currentGlobal.TotalRecovered.toLocaleString(),
+          child: currentCountryObj.TotalRecovered.toLocaleString(),
         }),
       ],
     });
