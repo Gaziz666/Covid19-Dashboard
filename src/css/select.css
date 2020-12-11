@@ -26,3 +26,9 @@
   color: #bdbdbd;
   background-color: rgb(43, 45, 46);
 }
+
+.flag-img {
+  width: 10px;
+  height: 10px;
+  object-fit: contain;
+}
