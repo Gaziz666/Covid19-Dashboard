@@ -7,11 +7,6 @@ export default class AppView extends EventEmitter {
     this.model = model;
     this.elements = elements;
 
-    // attach model listeners
-    model
-      .on("changeCountry", (code) => this.rebuildTableByCountry(code))
-      .on("searchCountryBy", (letter) => this.rebuildList(letter));
-
     // attach listeners to HTML controls
     this.elements.inputSearch.addEventListener("input", (e) =>
       this.emit("searchCountry", e.target.value)
@@ -62,6 +57,7 @@ export default class AppView extends EventEmitter {
         });
       });
     list.append(fragment);
+    this.renderCheckbox();
   }
 
   rebuildTotalCases() {
@@ -128,7 +124,7 @@ export default class AppView extends EventEmitter {
       ],
     });
     const tableBody = create("tr", {
-      className: "table_td",
+      className: "table_tr",
       child: [
         create("td", {
           className: "table_td",
@@ -149,5 +145,67 @@ export default class AppView extends EventEmitter {
       child: [tableHeader, tableBody],
       parent: tableContainer,
     });
+  }
+
+  renderCheckbox() {
+    const checkBoxContainer = create("div", {
+      className: "checkbox-container",
+    });
+    const onCases = create("span", {
+      className: "on",
+      child: "All cases",
+    });
+    const offCases = create("span", {
+      className: "off",
+      child: "Cases per day",
+    });
+    const labelCases = create("label", {
+      className: "checkbox-label",
+      child: [onCases, offCases],
+      parent: null,
+      dataAttr: [["for", "checkbox1"]],
+    });
+    const inputCases = create("input", {
+      className: "checkbox",
+      child: null,
+      parent: null,
+      dataAttr: [
+        ["id", "checkbox1"],
+        ["type", "checkbox"],
+      ],
+    });
+    checkBoxContainer.append(inputCases, labelCases);
+
+    const onPerHundred = create("span", {
+      className: "on",
+      child: "Cases for all population",
+    });
+    const offPerHundred = create("span", {
+      className: "off",
+    });
+    offPerHundred.innerHTML = `Cases for 100 000 population`;
+    const labelPerHundred = create("label", {
+      className: "checkbox-label",
+      child: [onPerHundred, offPerHundred],
+      parent: null,
+      dataAttr: [["for", "checkbox2"]],
+    });
+    const inputPerHundred = create("input", {
+      className: "checkbox",
+      child: null,
+      parent: null,
+      dataAttr: [
+        ["id", "checkbox2"],
+        ["type", "checkbox"],
+      ],
+    });
+
+    checkBoxContainer.append(inputPerHundred, labelPerHundred);
+    this.elements.list.parentNode.append(checkBoxContainer);
+    if (inputCases.checked) {
+      // console.log("checked");
+    } else {
+      // console.log("unchecked");
+    }
   }
 }

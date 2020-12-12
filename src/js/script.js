@@ -1,9 +1,10 @@
 import "../css/style.css";
 import "../css/select.css";
 import "../css/table.css";
+import "../css/checkbox.css";
 import AppModel from "./models/app.model";
 import AppController from "./controller/app.controller";
-import AppView from "./views/app.viewer";
+import AppView from "./views/app.view";
 import create from "./utils/create";
 import URL from "./utils/constants";
 
@@ -40,7 +41,7 @@ loadData.then(() => {
     globalCases,
     tableCases,
   });
+  view.show();
   // eslint-disable-next-line no-unused-vars
   const controller = new AppController(model, view);
-  view.show();
 });
