@@ -7,6 +7,7 @@ export default class AppModel extends EventEmitter {
     this.countryDataArr = [];
     this.selectedCountryCode = "";
     this.searchInputValue = "";
+    this.checkboxIsChecked = false;
   }
 
   async fetchData(urlCountry, urlSummary) {

@@ -16,9 +16,14 @@
 }
 
 .select__cases-count {
-  margin-left: 2px;
-  margin-right: 2px;
+  margin-left: 5px;
+  margin-right: 5px;
   color: red;
+  font-size: 1.2rem;
+}
+
+.select__country-name {
+  font-size: 1.2rem;
 }
 
 .search-country,
@@ -28,7 +33,7 @@
 }
 
 .flag-img {
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   object-fit: contain;
 }

@@ -3,4 +3,5 @@
 .table_td,
 .table_th {
   border: 1px solid black;
+  font-size: 1.2rem;
 }
