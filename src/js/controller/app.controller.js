@@ -3,12 +3,16 @@ export default class AppController {
     this.model = model;
     this.view = view;
 
-    view.on("chooseCountry", (countryCode) =>
-      this.updateSelectedCountry(countryCode)
-    );
-    view.on("searchCountry", (countryLetter) => {
-      this.searchCountry(countryLetter);
-    });
+    this.view
+      .on('chooseCountry', (countryCode) =>
+        this.updateSelectedCountry(countryCode)
+      )
+      .on('searchCountry', (countryLetter) => {
+        this.searchCountry(countryLetter);
+      });
+    this.model
+      .on('changeCountry', (code) => this.view.rebuildTableByCountry(code))
+      .on('searchCountryBy', (letter) => this.view.rebuildList(letter));
   }
 
   updateSelectedCountry(countryCode) {
