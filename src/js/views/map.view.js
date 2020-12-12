@@ -4,14 +4,21 @@ import EventEmitter from "../eventEmitter";
 export default class SelectView extends EventEmitter {
   constructor(model, elements) {
     super();
-    this.model = model; // items = [data]
-    this.elements = elements; // select
-    // console.log(this.model);
+    this.model = model;
+    this.elements = elements;
+    this.countryDataArr = this.model.countryDataArr;
   }
 
   show() {
     this.rebuildMap();
   }
 
-  // rebuildMap() {}
+  // rebuildMap() {
+  // const { map } = this.elements;
+  // console.log(this.countryDataArr);
+  // console.log(this.mapContainer);
+  // const mapContainer = create('div', {
+  //   className: 'map',
+  // });
+  // }
 }
