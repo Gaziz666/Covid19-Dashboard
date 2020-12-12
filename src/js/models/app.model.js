@@ -1,12 +1,12 @@
-import EventEmitter from "../eventEmitter";
+import EventEmitter from '../eventEmitter';
 
 export default class AppModel extends EventEmitter {
   constructor(objData) {
     super();
     this.objData = objData || {};
     this.countryDataArr = [];
-    this.selectedCountryCode = "";
-    this.searchInputValue = "";
+    this.selectedCountryCode = '';
+    this.searchInputValue = '';
     this.checkboxIsChecked = false;
   }
 
@@ -36,12 +36,12 @@ export default class AppModel extends EventEmitter {
 
   chooseCountry(countryCode) {
     this.selectedCountryCode = countryCode;
-    this.emit("changeCountry", countryCode);
+    this.emit('changeCountry', countryCode);
   }
 
   searchCountryByLetter(letter) {
     this.searchInputValue = letter;
-    this.emit("searchCountryBy", letter);
+    this.emit('searchCountryBy', letter);
   }
 
   /*

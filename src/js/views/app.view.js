@@ -1,5 +1,5 @@
-import EventEmitter from "../eventEmitter";
-import create from "../utils/create";
+import EventEmitter from '../eventEmitter';
+import create from '../utils/create';
 
 export default class AppView extends EventEmitter {
   constructor(model, elements) {
@@ -8,8 +8,8 @@ export default class AppView extends EventEmitter {
     this.elements = elements;
 
     // attach listeners to HTML controls
-    this.elements.inputSearch.addEventListener("input", (e) =>
-      this.emit("searchCountry", e.target.value)
+    this.elements.inputSearch.addEventListener('input', (e) =>
+      this.emit('searchCountry', e.target.value)
     );
   }
 
@@ -21,39 +21,39 @@ export default class AppView extends EventEmitter {
 
   rebuildList(letter) {
     const { list } = this.elements;
-    const searchValue = letter || "";
-    this.elements.list.innerHTML = "";
+    const searchValue = letter || '';
+    this.elements.list.innerHTML = '';
     const fragment = new DocumentFragment();
     this.model
       .getCountries()
       .filter((obj) => obj.country.toLowerCase().includes(searchValue))
       .forEach((obj, index) => {
-        const flagImg = create("img", {
-          className: "flag-img",
+        const flagImg = create('img', {
+          className: 'flag-img',
           child: null,
           parent: null,
-          dataAttr: [["src", obj.countryInfo.flag]],
+          dataAttr: [['src', obj.countryInfo.flag]],
         });
-        const countryName = create("span", {
-          className: "select__country-name",
+        const countryName = create('span', {
+          className: 'select__country-name',
           child: obj.country,
         });
-        const casesCount = create("span", {
-          className: "select__cases-count",
+        const casesCount = create('span', {
+          className: 'select__cases-count',
           child: `${obj.cases.toLocaleString()} `,
         });
-        const newLi = create("li", {
-          className: "list__li",
+        const newLi = create('li', {
+          className: 'list__li',
           child: [flagImg, casesCount, countryName],
           parent: null,
           dataAttr: [
-            ["key", index],
-            ["code", obj.countryInfo.iso3],
+            ['key', index],
+            ['code', obj.countryInfo.iso3],
           ],
         });
         fragment.append(newLi);
-        newLi.addEventListener("click", (e) => {
-          this.emit("chooseCountry", e.target.closest("li").dataset.code);
+        newLi.addEventListener('click', (e) => {
+          this.emit('chooseCountry', e.target.closest('li').dataset.code);
         });
       });
     list.append(fragment);
@@ -62,13 +62,13 @@ export default class AppView extends EventEmitter {
 
   rebuildTotalCases() {
     const { globalCases } = this.elements;
-    create("h3", {
-      className: "global__header",
-      child: "Global Cases",
+    create('h3', {
+      className: 'global__header',
+      child: 'Global Cases',
       parent: globalCases,
     });
-    create("h3", {
-      className: "global__cases",
+    create('h3', {
+      className: 'global__cases',
       child: this.model.getGlobal().TotalConfirmed.toLocaleString(),
       parent: globalCases,
     });
@@ -92,7 +92,7 @@ export default class AppView extends EventEmitter {
 
   rebuildTable() {
     const currentCountryObj = this.model.getGlobal();
-    const tableName = "Global Cases";
+    const tableName = 'Global Cases';
     const confirmed = currentCountryObj.TotalConfirmed;
     const deaths = currentCountryObj.TotalDeaths;
     const recovered = currentCountryObj.TotalRecovered;
@@ -101,102 +101,102 @@ export default class AppView extends EventEmitter {
 
   renderTable(tableName, confirmed, deaths, recovered) {
     const tableContainer = this.elements.tableCases;
-    create("h3", {
-      className: "table__country-name",
+    create('h3', {
+      className: 'table__country-name',
       child: tableName,
       parent: tableContainer,
     });
-    const tableHeader = create("tr", {
-      className: "table_tr",
+    const tableHeader = create('tr', {
+      className: 'table_tr',
       child: [
-        create("th", {
-          className: "table_th",
-          child: "Total confirmed",
+        create('th', {
+          className: 'table_th',
+          child: 'Total confirmed',
         }),
-        create("th", {
-          className: "table_th",
-          child: "Total deaths",
+        create('th', {
+          className: 'table_th',
+          child: 'Total deaths',
         }),
-        create("th", {
-          className: "table_th",
-          child: "Total Recovered",
+        create('th', {
+          className: 'table_th',
+          child: 'Total Recovered',
         }),
       ],
     });
-    const tableBody = create("tr", {
-      className: "table_tr",
+    const tableBody = create('tr', {
+      className: 'table_tr',
       child: [
-        create("td", {
-          className: "table_td",
+        create('td', {
+          className: 'table_td',
           child: confirmed.toLocaleString(),
         }),
-        create("td", {
-          className: "table_td",
+        create('td', {
+          className: 'table_td',
           child: deaths.toLocaleString(),
         }),
-        create("td", {
-          className: "table_td",
+        create('td', {
+          className: 'table_td',
           child: recovered.toLocaleString(),
         }),
       ],
     });
-    create("table", {
-      className: "table",
+    create('table', {
+      className: 'table',
       child: [tableHeader, tableBody],
       parent: tableContainer,
     });
   }
 
   renderCheckbox() {
-    const checkBoxContainer = create("div", {
-      className: "checkbox-container",
+    const checkBoxContainer = create('div', {
+      className: 'checkbox-container',
     });
-    const onCases = create("span", {
-      className: "on",
-      child: "All cases",
+    const onCases = create('span', {
+      className: 'on',
+      child: 'All cases',
     });
-    const offCases = create("span", {
-      className: "off",
-      child: "Cases per day",
+    const offCases = create('span', {
+      className: 'off',
+      child: 'Cases per day',
     });
-    const labelCases = create("label", {
-      className: "checkbox-label",
+    const labelCases = create('label', {
+      className: 'checkbox-label',
       child: [onCases, offCases],
       parent: null,
-      dataAttr: [["for", "checkbox1"]],
+      dataAttr: [['for', 'checkbox1']],
     });
-    const inputCases = create("input", {
-      className: "checkbox",
+    const inputCases = create('input', {
+      className: 'checkbox',
       child: null,
       parent: null,
       dataAttr: [
-        ["id", "checkbox1"],
-        ["type", "checkbox"],
+        ['id', 'checkbox1'],
+        ['type', 'checkbox'],
       ],
     });
     checkBoxContainer.append(inputCases, labelCases);
 
-    const onPerHundred = create("span", {
-      className: "on",
-      child: "Cases for all population",
+    const onPerHundred = create('span', {
+      className: 'on',
+      child: 'Cases for all population',
     });
-    const offPerHundred = create("span", {
-      className: "off",
+    const offPerHundred = create('span', {
+      className: 'off',
     });
     offPerHundred.innerHTML = `Cases for 100 000 population`;
-    const labelPerHundred = create("label", {
-      className: "checkbox-label",
+    const labelPerHundred = create('label', {
+      className: 'checkbox-label',
       child: [onPerHundred, offPerHundred],
       parent: null,
-      dataAttr: [["for", "checkbox2"]],
+      dataAttr: [['for', 'checkbox2']],
     });
-    const inputPerHundred = create("input", {
-      className: "checkbox",
+    const inputPerHundred = create('input', {
+      className: 'checkbox',
       child: null,
       parent: null,
       dataAttr: [
-        ["id", "checkbox2"],
-        ["type", "checkbox"],
+        ['id', 'checkbox2'],
+        ['type', 'checkbox'],
       ],
     });
 
