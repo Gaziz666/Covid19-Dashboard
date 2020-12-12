@@ -1,0 +1,6 @@
+.table-cases,
+.table,
+.table_td,
+.table_th {
+  border: 1px solid black;
+}

@@ -1,8 +1,9 @@
 import "../css/style.css";
 import "../css/select.css";
-import SelectModel from "./models/Select.model";
-import SelectController from "./controller/Select.controller";
-import SelectView from "./views/Select.viewer";
+import "../css/table.css";
+import AppModel from "./models/app.model";
+import AppController from "./controller/app.controller";
+import AppView from "./views/app.viewer";
 import create from "./utils/create";
 import URL from "./utils/constants";
 
@@ -25,21 +26,21 @@ const selectSearchWrapper = create("div", {
 
 document.body.append(selectSearchWrapper, globalCases, tableCases);
 
-const model = new SelectModel();
+const model = new AppModel();
 
 const loadData = new Promise((resolve) => {
-  resolve(model.fetchItems(URL.SUMMARY));
+  resolve(model.fetchData(URL.COUNTRY, URL.SUMMARY));
   // reject('error load server');
 });
 
 loadData.then(() => {
-  const view = new SelectView(model, {
+  const view = new AppView(model, {
     list,
     inputSearch,
     globalCases,
     tableCases,
   });
   // eslint-disable-next-line no-unused-vars
-  const controller = new SelectController(model, view);
+  const controller = new AppController(model, view);
   view.show();
 });

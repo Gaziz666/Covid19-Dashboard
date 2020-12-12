@@ -1,15 +1,15 @@
 import EventEmitter from "../eventEmitter";
 import create from "../utils/create";
 
-export default class SelectView extends EventEmitter {
+export default class AppView extends EventEmitter {
   constructor(model, elements) {
     super();
-    this.model = model; // items = [data]
-    this.elements = elements; // select
+    this.model = model;
+    this.elements = elements;
 
     // attach model listeners
     model
-      .on("changeCountry", (code) => this.rebuildTable(code))
+      .on("changeCountry", (code) => this.rebuildTableByCountry(code))
       .on("searchCountryBy", (letter) => this.rebuildList(letter));
 
     // attach listeners to HTML controls
@@ -28,33 +28,40 @@ export default class SelectView extends EventEmitter {
     const { list } = this.elements;
     const searchValue = letter || "";
     this.elements.list.innerHTML = "";
+    const fragment = new DocumentFragment();
     this.model
       .getCountries()
-      .filter((obj) => obj.Country.toLowerCase().includes(searchValue))
+      .filter((obj) => obj.country.toLowerCase().includes(searchValue))
       .forEach((obj, index) => {
+        const flagImg = create("img", {
+          className: "flag-img",
+          child: null,
+          parent: null,
+          dataAttr: [["src", obj.countryInfo.flag]],
+        });
         const countryName = create("span", {
           className: "select__country-name",
-          child: obj.Country,
+          child: obj.country,
         });
         const casesCount = create("span", {
           className: "select__cases-count",
-          child: `${obj.TotalConfirmed.toLocaleString()} `,
+          child: `${obj.cases.toLocaleString()} `,
         });
         const newLi = create("li", {
           className: "list__li",
-          child: [casesCount, countryName],
-          parent: list,
+          child: [flagImg, casesCount, countryName],
+          parent: null,
           dataAttr: [
             ["key", index],
-            ["code", obj.CountryCode],
+            ["code", obj.countryInfo.iso3],
           ],
         });
-        list.append(newLi);
+        fragment.append(newLi);
         newLi.addEventListener("click", (e) => {
           this.emit("chooseCountry", e.target.closest("li").dataset.code);
         });
       });
-    this.model.selectedIndex = -1;
+    list.append(fragment);
   }
 
   rebuildTotalCases() {
@@ -71,21 +78,32 @@ export default class SelectView extends EventEmitter {
     });
   }
 
-  rebuildTable(code) {
-    let currentCountryObj = this.model.getGlobal();
-    let tableName = "Global Cases";
-    if (code) {
-      let i = this.elements.tableCases.childNodes.length - 1;
-      while (i > -1) {
-        this.elements.tableCases.childNodes[i].remove();
-        i -= 1;
-      }
-      currentCountryObj = this.model.getCountryByCode(code);
-      tableName = this.model.getCountryByCode(code).Country;
-      this.elements.inputSearch.value = "";
-      // this.rebuildList();
+  rebuildTableByCountry(countryCode) {
+    const currentCountryObj = this.model.getCountryByCode(countryCode);
+    const tableName = this.model.getCountryByCode(countryCode).country;
+    const { cases } = currentCountryObj;
+    const { deaths } = currentCountryObj;
+    const { recovered } = currentCountryObj;
+
+    let i = this.elements.tableCases.childNodes.length - 1;
+    while (i > -1) {
+      this.elements.tableCases.childNodes[i].remove();
+      i -= 1;
     }
-    // const globalKeys = Object.keys(currentGlobal);
+
+    this.renderTable(tableName, cases, deaths, recovered);
+  }
+
+  rebuildTable() {
+    const currentCountryObj = this.model.getGlobal();
+    const tableName = "Global Cases";
+    const confirmed = currentCountryObj.TotalConfirmed;
+    const deaths = currentCountryObj.TotalDeaths;
+    const recovered = currentCountryObj.TotalRecovered;
+    this.renderTable(tableName, confirmed, deaths, recovered);
+  }
+
+  renderTable(tableName, confirmed, deaths, recovered) {
     const tableContainer = this.elements.tableCases;
     create("h3", {
       className: "table__country-name",
@@ -114,15 +132,15 @@ export default class SelectView extends EventEmitter {
       child: [
         create("td", {
           className: "table_td",
-          child: currentCountryObj.TotalConfirmed.toLocaleString(),
+          child: confirmed.toLocaleString(),
         }),
         create("td", {
           className: "table_td",
-          child: currentCountryObj.TotalDeaths.toLocaleString(),
+          child: deaths.toLocaleString(),
         }),
         create("td", {
           className: "table_td",
-          child: currentCountryObj.TotalRecovered.toLocaleString(),
+          child: recovered.toLocaleString(),
         }),
       ],
     });
