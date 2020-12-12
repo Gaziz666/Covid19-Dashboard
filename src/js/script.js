@@ -3,6 +3,7 @@ import "../css/select.css";
 import SelectModel from "./models/Select.model";
 import SelectController from "./controller/Select.controller";
 import SelectView from "./views/Select.viewer";
+import MapView from "./views/map.view";
 import create from "./utils/create";
 import URL from "./utils/constants";
 
@@ -18,17 +19,19 @@ const inputSearch = create("input", {
 });
 const globalCases = create("div", { className: "global-cases" });
 const tableCases = create("div", { className: "table-cases" });
+const map = create("div", { className: "map-wrapper" });
 const selectSearchWrapper = create("div", {
   className: "select-search-wrapper",
   child: [inputSearch, list],
 });
 
-document.body.append(selectSearchWrapper, globalCases, tableCases);
+document.body.append(selectSearchWrapper, globalCases, tableCases, map);
 
 const model = new SelectModel();
 
 const loadData = new Promise((resolve) => {
   resolve(model.fetchItems(URL.SUMMARY));
+  resolve(model.fetchDataForMap(URL.MAP));
   // reject('error load server');
 });
 
@@ -39,6 +42,10 @@ loadData.then(() => {
     globalCases,
     tableCases,
   });
+
+  const mapView = new MapView(model, { map });
+  mapView.show();
+
   // eslint-disable-next-line no-unused-vars
   const controller = new SelectController(model, view);
   view.show();

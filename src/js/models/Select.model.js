@@ -6,12 +6,19 @@ export default class SelectModel extends EventEmitter {
     this.items = items || [];
     this.selectedCountryCode = "";
     this.searchInputValue = "";
+    this.mapData = {};
   }
 
   async fetchItems(url) {
     const response = await fetch(url);
     const json = await response.json();
     this.items = json;
+  }
+
+  async fetchDataForMap(url) {
+    const response = await fetch(url);
+    const json = await response.json();
+    this.mapData = json;
   }
 
   getCountries() {
@@ -27,6 +34,10 @@ export default class SelectModel extends EventEmitter {
   getGlobal() {
     return this.items.Global;
   }
+
+  // getCoordinates() {
+  // console.log(this.mapData);
+  // }
 
   chooseCountry(code) {
     this.selectedCountryCode = code;

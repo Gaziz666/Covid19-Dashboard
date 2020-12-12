@@ -28,6 +28,7 @@ export default class SelectView extends EventEmitter {
     const { list } = this.elements;
     const searchValue = letter || "";
     this.elements.list.innerHTML = "";
+    const fragment = new DocumentFragment();
     this.model
       .getCountries()
       .filter((obj) => obj.Country.toLowerCase().includes(searchValue))
@@ -43,17 +44,18 @@ export default class SelectView extends EventEmitter {
         const newLi = create("li", {
           className: "list__li",
           child: [casesCount, countryName],
-          parent: list,
+          parent: fragment,
           dataAttr: [
             ["key", index],
             ["code", obj.CountryCode],
           ],
         });
-        list.append(newLi);
         newLi.addEventListener("click", (e) => {
           this.emit("chooseCountry", e.target.closest("li").dataset.code);
         });
       });
+
+    list.append(fragment);
     this.model.selectedIndex = -1;
   }
 
