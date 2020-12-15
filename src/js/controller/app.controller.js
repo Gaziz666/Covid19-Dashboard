@@ -4,15 +4,15 @@ export default class AppController {
     this.view = view;
 
     this.view
-      .on("chooseCountry", (countryCode) =>
+      .on('chooseCountry', (countryCode) =>
         this.updateSelectedCountry(countryCode)
       )
-      .on("searchCountry", (countryLetter) => {
+      .on('searchCountry', (countryLetter) => {
         this.searchCountry(countryLetter);
       });
     this.model
-      .on("changeCountry", (code) => this.view.rebuildTableByCountry(code))
-      .on("searchCountryBy", (letter) => this.view.rebuildList(letter));
+      .on('changeCountry', (code) => this.view.rebuildTableByCountry(code))
+      .on('searchCountryBy', (letter) => this.view.rebuildList(letter));
   }
 
   updateSelectedCountry(countryCode) {

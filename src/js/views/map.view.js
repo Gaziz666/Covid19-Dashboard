@@ -1,6 +1,6 @@
-import L from "leaflet";
-import EventEmitter from "../eventEmitter";
-import { MAP_SETTINGS } from "../utils/constants";
+import L from 'leaflet';
+import EventEmitter from '../eventEmitter';
+import { MAP_SETTINGS } from '../utils/constants';
 
 export default class SelectView extends EventEmitter {
   constructor(model, elements) {
@@ -33,17 +33,17 @@ export default class SelectView extends EventEmitter {
     if (!hasData) return;
 
     const geoJson = {
-      type: "FeatureCollection",
+      type: 'FeatureCollection',
       features: this.countryDataArr.map((country = {}) => {
         const { countryInfo = {} } = country;
         const { lat, long: lng } = countryInfo;
         return {
-          type: "Feature",
+          type: 'Feature',
           properties: {
             ...country,
           },
           geometry: {
-            type: "Point",
+            type: 'Point',
             coordinates: [lng, lat],
           },
         };
@@ -85,7 +85,7 @@ export default class SelectView extends EventEmitter {
 
         return L.marker(latLong, {
           icon: L.divIcon({
-            className: "icon",
+            className: 'icon',
             html,
           }),
           riseOnHover: true,
