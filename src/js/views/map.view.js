@@ -21,6 +21,10 @@ export default class SelectView extends EventEmitter {
       MAP_SETTINGS.ZOOM_LVL
     );
 
+    mapContainer.addEventListener('click', (e) => {
+      console.log(e.target);
+    });
+
     L.tileLayer(MAP_SETTINGS.MAP_URL_TEMPLATE, {
       attribution: MAP_SETTINGS.ATTRIBUTION,
       subdomains: MAP_SETTINGS.SUBDOMAINS,
@@ -36,7 +40,7 @@ export default class SelectView extends EventEmitter {
       type: 'FeatureCollection',
       features: this.countryDataArr.map((country = {}) => {
         const { countryInfo = {} } = country;
-        const { lat, long: lng } = countryInfo;
+        const { lat, long } = countryInfo;
         return {
           type: 'Feature',
           properties: {
@@ -44,7 +48,7 @@ export default class SelectView extends EventEmitter {
           },
           geometry: {
             type: 'Point',
-            coordinates: [lng, lat],
+            coordinates: [long, lat],
           },
         };
       }),
@@ -69,7 +73,7 @@ export default class SelectView extends EventEmitter {
         }
 
         const html = `
-          <span class="icon-marker">
+          <span class="icon-marker" data-countryCode=${properties.countryInfo.iso3}>
             <span class="icon-marker-tooltip">
               <h2>${country}</h2>
               <ul>
