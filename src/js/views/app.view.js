@@ -183,7 +183,7 @@ export default class AppView extends EventEmitter {
     const offPerHundred = create('span', {
       className: 'off',
     });
-    offPerHundred.innerHTML = `Cases for 100 000 population`;
+    offPerHundred.innerHTML = 'Cases for 100 000 population';
     const labelPerHundred = create('label', {
       className: 'checkbox-label',
       child: [onPerHundred, offPerHundred],

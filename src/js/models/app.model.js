@@ -20,6 +20,10 @@ export default class AppModel extends EventEmitter {
     this.countryDataArr = jsonCountry;
   }
 
+  // getCoordinates() {
+  //   console.log(this.countryDataArr);
+  // }
+
   getCountries() {
     return this.countryDataArr.sort((a, b) => b.cases - a.cases);
   }
@@ -46,7 +50,7 @@ export default class AppModel extends EventEmitter {
 
   /*
   get selectedCountryIndex() {
-    return this.selectedCountryIndex;
+    return this.selectedCountryIndex; 
   }
 
   set selectedCountryIndex(index) {
