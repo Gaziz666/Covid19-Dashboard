@@ -50,7 +50,7 @@ export default class AppModel extends EventEmitter {
 
   /*
   get selectedCountryIndex() {
-    return this.selectedCountryIndex;
+    return this.selectedCountryIndex; 
   }
 
   set selectedCountryIndex(index) {
