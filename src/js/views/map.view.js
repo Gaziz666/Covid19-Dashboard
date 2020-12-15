@@ -21,10 +21,6 @@ export default class SelectView extends EventEmitter {
       MAP_SETTINGS.ZOOM_LVL
     );
 
-    mapContainer.addEventListener('click', (e) => {
-      console.log(e.target);
-    });
-
     L.tileLayer(MAP_SETTINGS.MAP_URL_TEMPLATE, {
       attribution: MAP_SETTINGS.ATTRIBUTION,
       subdomains: MAP_SETTINGS.SUBDOMAINS,
