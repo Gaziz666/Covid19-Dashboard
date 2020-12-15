@@ -7,11 +7,6 @@ export default class AppView extends EventEmitter {
     this.model = model;
     this.elements = elements;
 
-    // attach model listeners
-    model
-      .on("changeCountry", (code) => this.rebuildTableByCountry(code))
-      .on("searchCountryBy", (letter) => this.rebuildList(letter));
-
     // attach listeners to HTML controls
     this.elements.inputSearch.addEventListener("input", (e) =>
       this.emit("searchCountry", e.target.value)
@@ -29,7 +24,6 @@ export default class AppView extends EventEmitter {
     const searchValue = letter || "";
     this.elements.list.innerHTML = "";
     const fragment = new DocumentFragment();
-
     this.model
       .getCountries()
       .filter((obj) => obj.country.toLowerCase().includes(searchValue))
@@ -52,32 +46,27 @@ export default class AppView extends EventEmitter {
           className: "list__li",
           child: [flagImg, casesCount, countryName],
           parent: null,
-
           dataAttr: [
             ["key", index],
             ["code", obj.countryInfo.iso3],
           ],
         });
-
         fragment.append(newLi);
-
         newLi.addEventListener("click", (e) => {
           this.emit("chooseCountry", e.target.closest("li").dataset.code);
         });
       });
-
     list.append(fragment);
+    this.renderCheckbox();
   }
 
   rebuildTotalCases() {
     const { globalCases } = this.elements;
-
     create("h3", {
       className: "global__header",
       child: "Global Cases",
       parent: globalCases,
     });
-
     create("h3", {
       className: "global__cases",
       child: this.model.getGlobal().TotalConfirmed.toLocaleString(),
@@ -112,13 +101,11 @@ export default class AppView extends EventEmitter {
 
   renderTable(tableName, confirmed, deaths, recovered) {
     const tableContainer = this.elements.tableCases;
-
     create("h3", {
       className: "table__country-name",
       child: tableName,
       parent: tableContainer,
     });
-
     const tableHeader = create("tr", {
       className: "table_tr",
       child: [
@@ -136,9 +123,8 @@ export default class AppView extends EventEmitter {
         }),
       ],
     });
-
     const tableBody = create("tr", {
-      className: "table_td",
+      className: "table_tr",
       child: [
         create("td", {
           className: "table_td",
@@ -154,11 +140,72 @@ export default class AppView extends EventEmitter {
         }),
       ],
     });
-
     create("table", {
       className: "table",
       child: [tableHeader, tableBody],
       parent: tableContainer,
     });
+  }
+
+  renderCheckbox() {
+    const checkBoxContainer = create("div", {
+      className: "checkbox-container",
+    });
+    const onCases = create("span", {
+      className: "on",
+      child: "All cases",
+    });
+    const offCases = create("span", {
+      className: "off",
+      child: "Cases per day",
+    });
+    const labelCases = create("label", {
+      className: "checkbox-label",
+      child: [onCases, offCases],
+      parent: null,
+      dataAttr: [["for", "checkbox1"]],
+    });
+    const inputCases = create("input", {
+      className: "checkbox",
+      child: null,
+      parent: null,
+      dataAttr: [
+        ["id", "checkbox1"],
+        ["type", "checkbox"],
+      ],
+    });
+    checkBoxContainer.append(inputCases, labelCases);
+
+    const onPerHundred = create("span", {
+      className: "on",
+      child: "Cases for all population",
+    });
+    const offPerHundred = create("span", {
+      className: "off",
+    });
+    offPerHundred.innerHTML = `Cases for 100 000 population`;
+    const labelPerHundred = create("label", {
+      className: "checkbox-label",
+      child: [onPerHundred, offPerHundred],
+      parent: null,
+      dataAttr: [["for", "checkbox2"]],
+    });
+    const inputPerHundred = create("input", {
+      className: "checkbox",
+      child: null,
+      parent: null,
+      dataAttr: [
+        ["id", "checkbox2"],
+        ["type", "checkbox"],
+      ],
+    });
+
+    checkBoxContainer.append(inputPerHundred, labelPerHundred);
+    this.elements.list.parentNode.append(checkBoxContainer);
+    if (inputCases.checked) {
+      // console.log("checked");
+    } else {
+      // console.log("unchecked");
+    }
   }
 }
