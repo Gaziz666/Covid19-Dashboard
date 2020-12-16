@@ -2,12 +2,20 @@ import L from 'leaflet';
 import EventEmitter from '../eventEmitter';
 import { MAP_SETTINGS } from '../utils/constants';
 
+import '../../css/map.css';
+
 export default class SelectView extends EventEmitter {
   constructor(model, elements) {
     super();
     this.model = model;
     this.elements = elements;
     this.countryDataArr = this.model.countryDataArr;
+
+    this.elements.map.addEventListener('click', (e) => {
+      if (e.target.hasAttribute('data-countrycode')) {
+        this.emit('chooseCountry', e.target.dataset.countrycode);
+      }
+    });
   }
 
   show() {
@@ -82,7 +90,7 @@ export default class SelectView extends EventEmitter {
             ${casesString}
           </span>
         `;
-
+        // html.addEventListener('click', () => console.log('map click'));
         return L.marker(latLong, {
           icon: L.divIcon({
             className: 'icon',

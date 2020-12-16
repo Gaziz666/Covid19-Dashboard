@@ -1,8 +1,4 @@
 import '../css/style.css';
-import '../css/select.css';
-import '../css/table.css';
-import '../css/checkbox.css';
-import '../css/map.css';
 
 import AppModel from './models/app.model';
 import AppController from './controller/app.controller';
@@ -53,5 +49,5 @@ loadData.then(() => {
   view.show();
 
   // eslint-disable-next-line no-unused-vars
-  const controller = new AppController(model, view);
+  const controller = new AppController(model, view, mapView);
 });

@@ -8,6 +8,8 @@
 html {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
+  background-color: rgb(43, 45, 46);
+  color: #bdbdbd;
 }
 
 *,
