@@ -7,17 +7,19 @@ export default class AppModel extends EventEmitter {
     this.countryDataArr = [];
     this.selectedCountryCode = '';
     this.searchInputValue = '';
-    this.checkboxIsChecked = false;
+    this.checkboxCasesIsChecked = false;
+    this.checkboxForPopulationIsChecked = false;
   }
 
   async fetchData(urlCountry, urlSummary) {
-    const response = await fetch(urlSummary);
-    const json = await response.json();
-    this.objData = json;
-
-    const responseCountry = await fetch(urlCountry);
-    const jsonCountry = await responseCountry.json();
-    this.countryDataArr = jsonCountry;
+    const [resCountry, resSummary] = await Promise.all([
+      fetch(urlCountry),
+      fetch(urlSummary),
+    ]);
+    const countryData = await resCountry.json();
+    const summaryData = await resSummary.json();
+    this.objData = summaryData;
+    this.countryDataArr = countryData;
   }
 
   // getCoordinates() {
@@ -25,6 +27,9 @@ export default class AppModel extends EventEmitter {
   // }
 
   getCountries() {
+    if (this.checkboxCasesIsChecked) {
+      return this.countryDataArr.sort((a, b) => b.todayCases - a.todayCases);
+    }
     return this.countryDataArr.sort((a, b) => b.cases - a.cases);
   }
 
@@ -40,12 +45,22 @@ export default class AppModel extends EventEmitter {
 
   chooseCountry(countryCode) {
     this.selectedCountryCode = countryCode;
-    this.emit('changeCountry', countryCode);
+    this.emit('changeCountry');
   }
 
   searchCountryByLetter(letter) {
     this.searchInputValue = letter;
-    this.emit('searchCountryBy', letter);
+    this.emit('searchCountryBy');
+  }
+
+  changeCasesView(checkbox) {
+    this.checkboxCasesIsChecked = checkbox.checked;
+    this.emit('rebuildView');
+  }
+
+  changeForPopulationView(checkbox) {
+    this.checkboxForPopulationIsChecked = checkbox.checked;
+    this.emit('rebuildView');
   }
 
   /*

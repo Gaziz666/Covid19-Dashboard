@@ -9,10 +9,17 @@ export default class AppController {
       )
       .on('searchCountry', (countryLetter) => {
         this.searchCountry(countryLetter);
+      })
+      .on('changeCases', (checkbox) => {
+        this.changeCasesCheckbox(checkbox);
+      })
+      .on('changeForPopulations', (checkbox) => {
+        this.changeForPopulationCheckbox(checkbox);
       });
     this.model
-      .on('changeCountry', (code) => this.view.rebuildTableByCountry(code))
-      .on('searchCountryBy', (letter) => this.view.rebuildList(letter));
+      .on('changeCountry', () => this.view.rebuildTableByCountry())
+      .on('searchCountryBy', () => this.view.rebuildList())
+      .on('rebuildView', () => this.view.show());
   }
 
   updateSelectedCountry(countryCode) {
@@ -21,5 +28,13 @@ export default class AppController {
 
   searchCountry(letter) {
     this.model.searchCountryByLetter(letter);
+  }
+
+  changeCasesCheckbox(checkbox) {
+    this.model.changeCasesView(checkbox);
+  }
+
+  changeForPopulationCheckbox(checkbox) {
+    this.model.changeForPopulationView(checkbox);
   }
 }

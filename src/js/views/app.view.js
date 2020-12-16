@@ -11,6 +11,7 @@ export default class AppView extends EventEmitter {
     this.elements.inputSearch.addEventListener('input', (e) =>
       this.emit('searchCountry', e.target.value)
     );
+    this.renderCheckbox();
   }
 
   show() {
@@ -19,15 +20,25 @@ export default class AppView extends EventEmitter {
     this.rebuildTable();
   }
 
-  rebuildList(letter) {
+  rebuildList() {
     const { list } = this.elements;
-    const searchValue = letter || '';
+    const searchValue = this.model.searchInputValue;
     this.elements.list.innerHTML = '';
     const fragment = new DocumentFragment();
     this.model
       .getCountries()
       .filter((obj) => obj.country.toLowerCase().includes(searchValue))
       .forEach((obj, index) => {
+        let cases = '';
+        if (!this.model.checkboxForPopulationIsChecked) {
+          cases = this.model.checkboxCasesIsChecked
+            ? obj.todayCases
+            : obj.cases;
+        } else {
+          cases = this.model.checkboxCasesIsChecked
+            ? obj.todayCases
+            : Math.ceil(Number(obj.casesPerOneMillion) / 10).toLocaleString();
+        }
         const flagImg = create('img', {
           className: 'flag-img',
           child: null,
@@ -40,7 +51,7 @@ export default class AppView extends EventEmitter {
         });
         const casesCount = create('span', {
           className: 'select__cases-count',
-          child: `${obj.cases.toLocaleString()} `,
+          child: `${cases.toLocaleString()} `,
         });
         const newLi = create('li', {
           className: 'list__li',
@@ -57,11 +68,11 @@ export default class AppView extends EventEmitter {
         });
       });
     list.append(fragment);
-    this.renderCheckbox();
   }
 
   rebuildTotalCases() {
     const { globalCases } = this.elements;
+    globalCases.innerHTML = '';
     create('h3', {
       className: 'global__header',
       child: 'Global Cases',
@@ -74,12 +85,19 @@ export default class AppView extends EventEmitter {
     });
   }
 
-  rebuildTableByCountry(countryCode) {
+  rebuildTableByCountry() {
+    const countryCode = this.model.selectedCountryCode;
     const currentCountryObj = this.model.getCountryByCode(countryCode);
     const tableName = this.model.getCountryByCode(countryCode).country;
-    const { cases } = currentCountryObj;
-    const { deaths } = currentCountryObj;
-    const { recovered } = currentCountryObj;
+    const cases = this.model.checkboxCasesIsChecked
+      ? currentCountryObj.todayCases
+      : currentCountryObj.cases;
+    const deaths = this.model.checkboxCasesIsChecked
+      ? currentCountryObj.todayDeaths
+      : currentCountryObj.deaths;
+    const recovered = this.model.checkboxCasesIsChecked
+      ? currentCountryObj.todayRecovered
+      : currentCountryObj.recovered;
 
     let i = this.elements.tableCases.childNodes.length - 1;
     while (i > -1) {
@@ -91,58 +109,75 @@ export default class AppView extends EventEmitter {
   }
 
   rebuildTable() {
+    if (this.model.selectedCountryCode) {
+      this.rebuildTableByCountry();
+      return;
+    }
     const currentCountryObj = this.model.getGlobal();
     const tableName = 'Global Cases';
-    const confirmed = currentCountryObj.TotalConfirmed;
-    const deaths = currentCountryObj.TotalDeaths;
-    const recovered = currentCountryObj.TotalRecovered;
+    const confirmed = this.model.checkboxCasesIsChecked
+      ? currentCountryObj.NewConfirmed
+      : currentCountryObj.TotalConfirmed;
+    const deaths = this.model.checkboxCasesIsChecked
+      ? currentCountryObj.NewDeaths
+      : currentCountryObj.TotalDeaths;
+    const recovered = this.model.checkboxCasesIsChecked
+      ? currentCountryObj.NewRecovered
+      : currentCountryObj.TotalRecovered;
     this.renderTable(tableName, confirmed, deaths, recovered);
   }
 
   renderTable(tableName, confirmed, deaths, recovered) {
     const tableContainer = this.elements.tableCases;
+    tableContainer.innerHTML = '';
     create('h3', {
       className: 'table__country-name',
       child: tableName,
       parent: tableContainer,
     });
-    const tableHeader = create('tr', {
-      className: 'table_tr',
+
+    const confirmedColumn = create('div', {
+      className: 'table-column',
       child: [
-        create('th', {
-          className: 'table_th',
-          child: 'Total confirmed',
+        create('div', {
+          className: 'table-header',
+          child: 'Confirmed',
         }),
-        create('th', {
-          className: 'table_th',
-          child: 'Total deaths',
-        }),
-        create('th', {
-          className: 'table_th',
-          child: 'Total Recovered',
+        create('div', {
+          className: 'table-body',
+          child: confirmed.toLocaleString(),
         }),
       ],
     });
-    const tableBody = create('tr', {
-      className: 'table_tr',
+    const deathColumn = create('div', {
+      className: 'table-column',
       child: [
-        create('td', {
-          className: 'table_td',
-          child: confirmed.toLocaleString(),
+        create('div', {
+          className: 'table-header',
+          child: 'Deaths',
         }),
-        create('td', {
-          className: 'table_td',
+        create('div', {
+          className: 'table-body',
           child: deaths.toLocaleString(),
         }),
-        create('td', {
-          className: 'table_td',
+      ],
+    });
+    const recoveredColumn = create('div', {
+      className: 'table-column',
+      child: [
+        create('div', {
+          className: 'table-header',
+          child: 'Recovered',
+        }),
+        create('div', {
+          className: 'table-body',
           child: recovered.toLocaleString(),
         }),
       ],
     });
-    create('table', {
+    create('div', {
       className: 'table',
-      child: [tableHeader, tableBody],
+      child: [confirmedColumn, deathColumn, recoveredColumn],
       parent: tableContainer,
     });
   }
@@ -153,11 +188,11 @@ export default class AppView extends EventEmitter {
     });
     const onCases = create('span', {
       className: 'on',
-      child: 'All cases',
+      child: 'Cases per day',
     });
     const offCases = create('span', {
       className: 'off',
-      child: 'Cases per day',
+      child: 'All cases',
     });
     const labelCases = create('label', {
       className: 'checkbox-label',
@@ -178,12 +213,12 @@ export default class AppView extends EventEmitter {
 
     const onPerHundred = create('span', {
       className: 'on',
-      child: 'Cases for all population',
+      child: 'Cases for 100 000 population',
     });
     const offPerHundred = create('span', {
       className: 'off',
+      child: 'Cases for all population',
     });
-    offPerHundred.innerHTML = 'Cases for 100 000 population';
     const labelPerHundred = create('label', {
       className: 'checkbox-label',
       child: [onPerHundred, offPerHundred],
@@ -202,10 +237,11 @@ export default class AppView extends EventEmitter {
 
     checkBoxContainer.append(inputPerHundred, labelPerHundred);
     this.elements.list.parentNode.append(checkBoxContainer);
-    if (inputCases.checked) {
-      // console.log("checked");
-    } else {
-      // console.log("unchecked");
-    }
+    this.elements.checkboxCases = inputCases;
+    this.elements.checkboxPerHundred = inputPerHundred;
+    this.elements.checkboxCases.onchange = (e) =>
+      this.emit('changeCases', e.target);
+    this.elements.checkboxPerHundred.onchange = (e) =>
+      this.emit('changeForPopulations', e.target);
   }
 }
