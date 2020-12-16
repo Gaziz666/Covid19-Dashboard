@@ -12,10 +12,15 @@ export default class AppModel extends EventEmitter {
   }
 
   async fetchData(urlCountry, urlSummary) {
-    const [resCountry, resSummary] = await Promise.all([
-      fetch(urlCountry),
-      fetch(urlSummary),
-    ]);
+    let [resCountry, resSummary] = ['', ''];
+    try {
+      [resCountry, resSummary] = await Promise.all([
+        fetch(urlCountry),
+        fetch(urlSummary),
+      ]);
+    } catch (err) {
+      console.log('error', err);
+    }
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
     this.objData = summaryData;

@@ -1,12 +1,14 @@
 export default class AppController {
-  constructor(model, view) {
+  constructor(model, view, appView) {
     this.model = model;
     this.view = view;
+    this.appView = appView;
 
     this.view
-      .on('chooseCountry', (countryCode) =>
-        this.updateSelectedCountry(countryCode)
-      )
+      .on('chooseCountry', (countryCode) => {
+        this.updateSelectedCountry(countryCode);
+        console.log('chooscountry1');
+      })
       .on('searchCountry', (countryLetter) => {
         this.searchCountry(countryLetter);
       })
@@ -16,6 +18,10 @@ export default class AppController {
       .on('changeForPopulations', (checkbox) => {
         this.changeForPopulationCheckbox(checkbox);
       });
+    this.appView.on('chooseCountry', (countryCode) => {
+      this.updateSelectedCountry(countryCode);
+      console.log('chooscountry2');
+    });
     this.model
       .on('changeCountry', () => this.view.rebuildTableByCountry())
       .on('searchCountryBy', () => this.view.rebuildList())

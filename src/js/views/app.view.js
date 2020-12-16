@@ -1,6 +1,10 @@
 import EventEmitter from '../eventEmitter';
 import create from '../utils/create';
 
+import '../../css/checkbox.css';
+import '../../css/select.css';
+import '../../css/table.css';
+
 export default class AppView extends EventEmitter {
   constructor(model, elements) {
     super();
