@@ -3,12 +3,12 @@ export default class EventEmitter {
     this.events = {};
   }
 
-  on(evt, listener) {
-    (this.events[evt] || (this.events[evt] = [])).push(listener);
+  on(event, listener) {
+    (this.events[event] || (this.events[event] = [])).push(listener);
     return this;
   }
 
-  emit(evt, arg) {
-    (this.events[evt] || []).forEach((lsn) => lsn(arg));
+  emit(event, arg) {
+    (this.events[event] || []).forEach((listener) => listener(arg));
   }
 }
