@@ -7,7 +7,6 @@ export default class AppController {
     this.view
       .on('chooseCountry', (countryCode) => {
         this.updateSelectedCountry(countryCode);
-        console.log('chooscountry1');
       })
       .on('searchCountry', (countryLetter) => {
         this.searchCountry(countryLetter);
@@ -20,7 +19,6 @@ export default class AppController {
       });
     this.appView.on('chooseCountry', (countryCode) => {
       this.updateSelectedCountry(countryCode);
-      console.log('chooscountry2');
     });
     this.model
       .on('changeCountry', () => this.view.rebuildTableByCountry())

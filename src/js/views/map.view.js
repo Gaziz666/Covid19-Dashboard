@@ -43,8 +43,8 @@ export default class SelectView extends EventEmitter {
     const geoJson = {
       type: 'FeatureCollection',
       features: this.countryDataArr.map((country = {}) => {
-        const { countryInfo = {} } = country;
-        const { lat, long } = countryInfo;
+        const { CountryInfo = {} } = country;
+        const { lat, long } = CountryInfo;
         return {
           type: 'Feature',
           properties: {
@@ -61,36 +61,36 @@ export default class SelectView extends EventEmitter {
     const geoJsonLayers = new L.GeoJSON(geoJson, {
       pointToLayer: (feature = {}, latLong) => {
         const { properties = {} } = feature;
-        let updatedFormatted;
         let casesString;
+        console.log(latLong);
+        const {
+          Country,
+          Date,
+          TotalConfirmed,
+          TotalDeaths,
+          TotalRecovered,
+        } = properties;
 
-        const { country, updated, cases, deaths, recovered } = properties;
+        casesString = `${TotalConfirmed}`;
 
-        casesString = `${cases}`;
-
-        if (cases > MAP_SETTINGS.MIN_CASES) {
+        if (TotalConfirmed > MAP_SETTINGS.MIN_CASES) {
           casesString = `${casesString.slice(0, -3)}k+`;
         }
 
-        if (updated) {
-          updatedFormatted = new Date(updated).toLocaleString();
-        }
-
         const html = `
-          <span class="icon-marker" data-countryCode=${properties.countryInfo.iso3}>
+          <span class="icon-marker" data-countryCode=${properties.CountryInfo.iso2}>
             <span class="icon-marker-tooltip">
-              <h2>${country}</h2>
+              <h2>${Country}</h2>
               <ul>
-                <li><strong>Confirmed:</strong> ${cases}</li>
-                <li><strong>Deaths:</strong> ${deaths}</li>
-                <li><strong>Recovered:</strong> ${recovered}</li>
-                <li><strong>Last Update:</strong> ${updatedFormatted}</li>
+                <li><strong>Confirmed:</strong> ${TotalConfirmed}</li>
+                <li><strong>Deaths:</strong> ${TotalDeaths}</li>
+                <li><strong>Recovered:</strong> ${TotalRecovered}</li>
+                <li><strong>Last Update:</strong> ${Date}</li>
               </ul>
             </span>
             ${casesString}
           </span>
         `;
-        // html.addEventListener('click', () => console.log('map click'));
         return L.marker(latLong, {
           icon: L.divIcon({
             className: 'icon',

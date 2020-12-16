@@ -24,7 +24,29 @@ export default class AppModel extends EventEmitter {
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
     this.objData = summaryData;
-    this.countryDataArr = countryData;
+    summaryData.Countries.forEach((country, index) => {
+      let condition = true;
+      let i = 0;
+      while (condition && i < 220) {
+        if (countryData[i].countryInfo.iso2 === country.CountryCode) {
+          condition = false;
+          summaryData.Countries[index].CountryInfo = countryData[i].countryInfo;
+          summaryData.Countries[index].Population = countryData[i].population;
+        }
+        i += 1;
+        if (country.CountryCode === 'XK') {
+          summaryData.Countries[index].CountryInfo = {
+            _id: '',
+            iso2: 'XK',
+            iso3: '',
+            lat: 44,
+            long: 20,
+            flag: 'https://disease.sh/assets/img/flags/rs.png',
+          };
+        }
+      }
+    });
+    this.countryDataArr = summaryData.Countries;
   }
 
   // getCoordinates() {
@@ -32,22 +54,26 @@ export default class AppModel extends EventEmitter {
   // }
 
   getCountries() {
-    let cases = '';
+    const cases = this.checkboxCasesIsChecked
+      ? 'NewConfirmed'
+      : 'TotalConfirmed';
+
     if (!this.checkboxForPopulationIsChecked) {
-      cases = this.checkboxCasesIsChecked ? 'todayCases' : 'cases';
-    } else {
-      cases = this.checkboxCasesIsChecked
-        ? 'oneCasePerPeople'
-        : 'casesPerOneMillion';
+      return this.countryDataArr.sort(
+        (a, b) => Number(b[cases]) - Number(a[cases])
+      );
     }
+    const populationFor100000 = 100000;
     return this.countryDataArr.sort(
-      (a, b) => Number(b[cases]) - Number(a[cases])
+      (a, b) =>
+        Number((+b.cases / +b.population) * populationFor100000) -
+        Number((+a.cases / +a.population) * populationFor100000)
     );
   }
 
   getCountryByCode(countryCode) {
     return this.countryDataArr.filter(
-      (item) => item.countryInfo.iso3 === countryCode
+      (item) => item.CountryInfo.iso2 === countryCode
     )[0];
   }
 

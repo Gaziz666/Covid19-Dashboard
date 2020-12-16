@@ -31,18 +31,18 @@ export default class AppView extends EventEmitter {
     const fragment = new DocumentFragment();
     this.model
       .getCountries()
-      .filter((obj) => obj.country.toLowerCase().includes(searchValue))
+      .filter((obj) => obj.Country.toLowerCase().includes(searchValue))
       .forEach((obj, index) => {
-        const cases = this.returnCasesWithCheckCheckboxes(obj, 'cases');
+        const cases = this.returnCasesWithCheckCheckboxes(obj, 'confirmed');
         const flagImg = create('img', {
           className: 'flag-img',
           child: null,
           parent: null,
-          dataAttr: [['src', obj.countryInfo.flag]],
+          dataAttr: [['src', obj.CountryInfo.flag]],
         });
         const countryName = create('span', {
           className: 'select__country-name',
-          child: obj.country,
+          child: obj.Country,
         });
         const casesCount = create('span', {
           className: 'select__cases-count',
@@ -54,7 +54,7 @@ export default class AppView extends EventEmitter {
           parent: null,
           dataAttr: [
             ['key', index],
-            ['code', obj.countryInfo.iso3],
+            ['code', obj.CountryInfo.iso2],
           ],
         });
         fragment.append(newLi);
@@ -83,10 +83,10 @@ export default class AppView extends EventEmitter {
   rebuildTableByCountry() {
     const countryCode = this.model.selectedCountryCode;
     const currentCountryObj = this.model.getCountryByCode(countryCode);
-    const tableName = this.model.getCountryByCode(countryCode).country;
-    const cases = this.returnCasesWithCheckCheckboxes(
+    const tableName = currentCountryObj.Country;
+    const confirmed = this.returnCasesWithCheckCheckboxes(
       currentCountryObj,
-      'cases'
+      'confirmed'
     );
     const deaths = this.returnCasesWithCheckCheckboxes(
       currentCountryObj,
@@ -102,7 +102,7 @@ export default class AppView extends EventEmitter {
       i -= 1;
     }
 
-    this.renderTable(tableName, cases, deaths, recovered);
+    this.renderTable(tableName, confirmed, deaths, recovered);
   }
 
   rebuildTable() {
@@ -242,43 +242,46 @@ export default class AppView extends EventEmitter {
       this.emit('changeForPopulations', e.target);
   }
 
-  returnCasesWithCheckCheckboxes(obj, type) {
+  returnCasesWithCheckCheckboxes(countryObj, type) {
     let cases = '';
     const vewType = {
-      cases: {
-        cases: 'cases',
-        todayCases: 'todayCases',
-        population: 'population',
-        casesPerOneMillion: 'casesPerOneMillion',
+      confirmed: {
+        Total: 'TotalConfirmed',
+        New: 'NewConfirmed',
+        Population: 'Population',
       },
       deaths: {
-        cases: 'deaths',
-        todayCases: 'todayDeaths',
-        population: 'population',
-        casesPerOneMillion: 'deathsPerOneMillion',
+        Total: 'TotalDeaths',
+        New: 'NewDeaths',
+        Population: 'Population',
       },
       recovered: {
-        cases: 'recovered',
-        todayCases: 'todayRecovered',
-        population: 'population',
-        casesPerOneMillion: 'recoveredPerOneMillion',
+        Total: 'TotalRecovered',
+        New: 'NewRecovered',
+        Population: 'Population',
       },
     };
     if (!this.model.checkboxForPopulationIsChecked) {
       cases = this.model.checkboxCasesIsChecked
-        ? obj[vewType[type].todayCases]
-        : obj[vewType[type].cases];
+        ? countryObj[vewType[type].New]
+        : countryObj[vewType[type].Total];
     } else {
+      const populationFor100000 = 100000;
       const casesTodayPerHundred =
         Math.ceil(
-          (obj[vewType[type].todayCases] /
-            obj[vewType[type].population] /
-            100000) *
+          (countryObj[vewType[type].New] / countryObj.Population) *
+            populationFor100000 *
+            100
+        ) / 100;
+      const casesTotalPerOneMillion =
+        Math.ceil(
+          (countryObj[vewType[type].Total] / countryObj.Population) *
+            populationFor100000 *
             100
         ) / 100;
       cases = this.model.checkboxCasesIsChecked
         ? casesTodayPerHundred
-        : Math.ceil(Number(obj[vewType[type].casesPerOneMillion]) / 10);
+        : casesTotalPerOneMillion;
     }
     return cases.toLocaleString();
   }
