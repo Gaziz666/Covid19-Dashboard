@@ -29,16 +29,7 @@ export default class AppView extends EventEmitter {
       .getCountries()
       .filter((obj) => obj.country.toLowerCase().includes(searchValue))
       .forEach((obj, index) => {
-        let cases = '';
-        if (!this.model.checkboxForPopulationIsChecked) {
-          cases = this.model.checkboxCasesIsChecked
-            ? obj.todayCases
-            : obj.cases;
-        } else {
-          cases = this.model.checkboxCasesIsChecked
-            ? obj.todayCases
-            : Math.ceil(Number(obj.casesPerOneMillion) / 10).toLocaleString();
-        }
+        const cases = this.returnCasesWithCheckCheckboxes(obj, 'cases');
         const flagImg = create('img', {
           className: 'flag-img',
           child: null,
@@ -89,16 +80,18 @@ export default class AppView extends EventEmitter {
     const countryCode = this.model.selectedCountryCode;
     const currentCountryObj = this.model.getCountryByCode(countryCode);
     const tableName = this.model.getCountryByCode(countryCode).country;
-    const cases = this.model.checkboxCasesIsChecked
-      ? currentCountryObj.todayCases
-      : currentCountryObj.cases;
-    const deaths = this.model.checkboxCasesIsChecked
-      ? currentCountryObj.todayDeaths
-      : currentCountryObj.deaths;
-    const recovered = this.model.checkboxCasesIsChecked
-      ? currentCountryObj.todayRecovered
-      : currentCountryObj.recovered;
-
+    const cases = this.returnCasesWithCheckCheckboxes(
+      currentCountryObj,
+      'cases'
+    );
+    const deaths = this.returnCasesWithCheckCheckboxes(
+      currentCountryObj,
+      'deaths'
+    );
+    const recovered = this.returnCasesWithCheckCheckboxes(
+      currentCountryObj,
+      'recovered'
+    );
     let i = this.elements.tableCases.childNodes.length - 1;
     while (i > -1) {
       this.elements.tableCases.childNodes[i].remove();
@@ -243,5 +236,46 @@ export default class AppView extends EventEmitter {
       this.emit('changeCases', e.target);
     this.elements.checkboxPerHundred.onchange = (e) =>
       this.emit('changeForPopulations', e.target);
+  }
+
+  returnCasesWithCheckCheckboxes(obj, type) {
+    let cases = '';
+    const vewType = {
+      cases: {
+        cases: 'cases',
+        todayCases: 'todayCases',
+        population: 'population',
+        casesPerOneMillion: 'casesPerOneMillion',
+      },
+      deaths: {
+        cases: 'deaths',
+        todayCases: 'todayDeaths',
+        population: 'population',
+        casesPerOneMillion: 'deathsPerOneMillion',
+      },
+      recovered: {
+        cases: 'recovered',
+        todayCases: 'todayRecovered',
+        population: 'population',
+        casesPerOneMillion: 'recoveredPerOneMillion',
+      },
+    };
+    if (!this.model.checkboxForPopulationIsChecked) {
+      cases = this.model.checkboxCasesIsChecked
+        ? obj[vewType[type].todayCases]
+        : obj[vewType[type].cases];
+    } else {
+      const casesTodayPerHundred =
+        Math.ceil(
+          (obj[vewType[type].todayCases] /
+            obj[vewType[type].population] /
+            100000) *
+            100
+        ) / 100;
+      cases = this.model.checkboxCasesIsChecked
+        ? casesTodayPerHundred
+        : Math.ceil(Number(obj[vewType[type].casesPerOneMillion]) / 10);
+    }
+    return cases.toLocaleString();
   }
 }

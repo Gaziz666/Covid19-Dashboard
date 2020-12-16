@@ -27,10 +27,17 @@ export default class AppModel extends EventEmitter {
   // }
 
   getCountries() {
-    if (this.checkboxCasesIsChecked) {
-      return this.countryDataArr.sort((a, b) => b.todayCases - a.todayCases);
+    let cases = '';
+    if (!this.checkboxForPopulationIsChecked) {
+      cases = this.checkboxCasesIsChecked ? 'todayCases' : 'cases';
+    } else {
+      cases = this.checkboxCasesIsChecked
+        ? 'oneCasePerPeople'
+        : 'casesPerOneMillion';
     }
-    return this.countryDataArr.sort((a, b) => b.cases - a.cases);
+    return this.countryDataArr.sort(
+      (a, b) => Number(b[cases]) - Number(a[cases])
+    );
   }
 
   getCountryByCode(countryCode) {
