@@ -90,7 +90,6 @@ export default class SelectView extends EventEmitter {
             ${casesString}
           </span>
         `;
-        // html.addEventListener('click', () => console.log('map click'));
         return L.marker(latLong, {
           icon: L.divIcon({
             className: 'icon',

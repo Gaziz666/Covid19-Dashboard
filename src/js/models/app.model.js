@@ -27,10 +27,6 @@ export default class AppModel extends EventEmitter {
     this.countryDataArr = countryData;
   }
 
-  // getCoordinates() {
-  //   console.log(this.countryDataArr);
-  // }
-
   getCountries() {
     let cases = '';
     if (!this.checkboxForPopulationIsChecked) {
