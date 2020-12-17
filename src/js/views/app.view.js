@@ -33,7 +33,10 @@ export default class AppView extends EventEmitter {
       .getCountries()
       .filter((obj) => obj.Country.toLowerCase().includes(searchValue))
       .forEach((obj, index) => {
-        const cases = this.returnCasesWithCheckCheckboxes(obj, 'confirmed');
+        const cases = this.model.returnCasesWithCheckCheckboxes(
+          obj,
+          'confirmed'
+        );
         const flagImg = create('img', {
           className: 'flag-img',
           child: null,
@@ -84,15 +87,15 @@ export default class AppView extends EventEmitter {
     const countryCode = this.model.selectedCountryCode;
     const currentCountryObj = this.model.getCountryByCode(countryCode);
     const tableName = currentCountryObj.Country;
-    const confirmed = this.returnCasesWithCheckCheckboxes(
+    const confirmed = this.model.returnCasesWithCheckCheckboxes(
       currentCountryObj,
       'confirmed'
     );
-    const deaths = this.returnCasesWithCheckCheckboxes(
+    const deaths = this.model.returnCasesWithCheckCheckboxes(
       currentCountryObj,
       'deaths'
     );
-    const recovered = this.returnCasesWithCheckCheckboxes(
+    const recovered = this.model.returnCasesWithCheckCheckboxes(
       currentCountryObj,
       'recovered'
     );
@@ -240,49 +243,5 @@ export default class AppView extends EventEmitter {
       this.emit('changeCases', e.target);
     this.elements.checkboxPerHundred.onchange = (e) =>
       this.emit('changeForPopulations', e.target);
-  }
-
-  returnCasesWithCheckCheckboxes(countryObj, type) {
-    let cases = '';
-    const vewType = {
-      confirmed: {
-        Total: 'TotalConfirmed',
-        New: 'NewConfirmed',
-        Population: 'Population',
-      },
-      deaths: {
-        Total: 'TotalDeaths',
-        New: 'NewDeaths',
-        Population: 'Population',
-      },
-      recovered: {
-        Total: 'TotalRecovered',
-        New: 'NewRecovered',
-        Population: 'Population',
-      },
-    };
-    if (!this.model.checkboxForPopulationIsChecked) {
-      cases = this.model.checkboxCasesIsChecked
-        ? countryObj[vewType[type].New]
-        : countryObj[vewType[type].Total];
-    } else {
-      const populationFor100000 = 100000;
-      const casesTodayPerHundred =
-        Math.ceil(
-          (countryObj[vewType[type].New] / countryObj.Population) *
-            populationFor100000 *
-            100
-        ) / 100;
-      const casesTotalPerOneMillion =
-        Math.ceil(
-          (countryObj[vewType[type].Total] / countryObj.Population) *
-            populationFor100000 *
-            100
-        ) / 100;
-      cases = this.model.checkboxCasesIsChecked
-        ? casesTodayPerHundred
-        : casesTotalPerOneMillion;
-    }
-    return cases.toLocaleString();
   }
 }

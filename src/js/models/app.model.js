@@ -35,6 +35,7 @@ export default class AppModel extends EventEmitter {
         }
         i += 1;
         if (country.CountryCode === 'XK') {
+          // second data don't have data of Kosovo
           summaryData.Countries[index].CountryInfo = {
             _id: '',
             iso2: 'XK',
@@ -66,8 +67,8 @@ export default class AppModel extends EventEmitter {
     const populationFor100000 = 100000;
     return this.countryDataArr.sort(
       (a, b) =>
-        Number((+b.cases / +b.population) * populationFor100000) -
-        Number((+a.cases / +a.population) * populationFor100000)
+        Number((+b[cases] / +b.Population) * populationFor100000) -
+        Number((+a[cases] / +a.Population) * populationFor100000)
     );
   }
 
@@ -99,6 +100,50 @@ export default class AppModel extends EventEmitter {
   changeForPopulationView(checkbox) {
     this.checkboxForPopulationIsChecked = checkbox.checked;
     this.emit('rebuildView');
+  }
+
+  returnCasesWithCheckCheckboxes(countryObj, type) {
+    let cases = '';
+    const vewType = {
+      confirmed: {
+        Total: 'TotalConfirmed',
+        New: 'NewConfirmed',
+        Population: 'Population',
+      },
+      deaths: {
+        Total: 'TotalDeaths',
+        New: 'NewDeaths',
+        Population: 'Population',
+      },
+      recovered: {
+        Total: 'TotalRecovered',
+        New: 'NewRecovered',
+        Population: 'Population',
+      },
+    };
+    if (!this.checkboxForPopulationIsChecked) {
+      cases = this.checkboxCasesIsChecked
+        ? countryObj[vewType[type].New]
+        : countryObj[vewType[type].Total];
+    } else {
+      const populationFor100000 = 100000;
+      const casesTodayPerHundred =
+        Math.ceil(
+          (countryObj[vewType[type].New] / countryObj.Population) *
+            populationFor100000 *
+            100
+        ) / 100;
+      const casesTotalPerOneMillion =
+        Math.ceil(
+          (countryObj[vewType[type].Total] / countryObj.Population) *
+            populationFor100000 *
+            100
+        ) / 100;
+      cases = this.checkboxCasesIsChecked
+        ? casesTodayPerHundred
+        : casesTotalPerOneMillion;
+    }
+    return cases.toLocaleString();
   }
 
   /*

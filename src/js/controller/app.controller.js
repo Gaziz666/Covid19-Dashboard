@@ -1,8 +1,8 @@
 export default class AppController {
-  constructor(model, view, appView) {
+  constructor(model, view, mapView) {
     this.model = model;
     this.view = view;
-    this.appView = appView;
+    this.mapView = mapView;
 
     this.view
       .on('chooseCountry', (countryCode) => {
@@ -17,13 +17,16 @@ export default class AppController {
       .on('changeForPopulations', (checkbox) => {
         this.changeForPopulationCheckbox(checkbox);
       });
-    this.appView.on('chooseCountry', (countryCode) => {
+    this.mapView.on('chooseCountry', (countryCode) => {
       this.updateSelectedCountry(countryCode);
     });
     this.model
       .on('changeCountry', () => this.view.rebuildTableByCountry())
       .on('searchCountryBy', () => this.view.rebuildList())
-      .on('rebuildView', () => this.view.show());
+      .on('rebuildView', () => {
+        this.view.show();
+        this.mapView.show();
+      });
   }
 
   updateSelectedCountry(countryCode) {
