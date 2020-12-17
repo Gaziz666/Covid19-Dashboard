@@ -3,6 +3,7 @@ import EventEmitter from '../eventEmitter';
 import { MAP_SETTINGS } from '../utils/constants';
 
 import '../../css/map.css';
+import create from '../utils/create';
 
 export default class SelectView extends EventEmitter {
   constructor(model, elements) {
@@ -23,7 +24,13 @@ export default class SelectView extends EventEmitter {
   }
 
   rebuildMap() {
-    const { map: mapContainer } = this.elements;
+    if (this.elements.map.childNodes.length !== 0) {
+      this.elements.map.firstChild.remove();
+    }
+
+    const div = create('div', { className: 'map-container' });
+    this.elements.map.append(div);
+    const mapContainer = this.elements.map.firstChild;
     const myMap = L.map(mapContainer).setView(
       MAP_SETTINGS.COORDINATES,
       MAP_SETTINGS.ZOOM_LVL
@@ -61,15 +68,17 @@ export default class SelectView extends EventEmitter {
     const geoJsonLayers = new L.GeoJSON(geoJson, {
       pointToLayer: (feature = {}, latLong) => {
         const { properties = {} } = feature;
-        let casesString;
         const { Country, Date } = properties;
-
-        casesString = this.model.returnCasesWithCheckCheckboxes(
+        let casesString = this.model.returnCasesWithCheckCheckboxes(
           properties,
           'confirmed'
         );
-        if (casesString.length > MAP_SETTINGS.MIN_LENGTH) {
-          casesString = `${casesString.slice(0, -3)}k+`;
+        const casesNumber = Number(casesString.split(',').join(''));
+        const thousandForRemoveDecimal = 1000;
+        if (casesNumber > MAP_SETTINGS.MIN_CASES) {
+          casesString = `${(casesNumber * thousandForRemoveDecimal)
+            .toLocaleString()
+            .slice(0, -8)}k+`;
         }
 
         const html = `
@@ -108,50 +117,5 @@ export default class SelectView extends EventEmitter {
     });
 
     geoJsonLayers.addTo(myMap);
-  }
-
-  // it's repeat from app.view, how can i chang it?
-  returnCasesWithCheckCheckboxes(countryObj, type) {
-    let cases = '';
-    const vewType = {
-      confirmed: {
-        Total: 'TotalConfirmed',
-        New: 'NewConfirmed',
-        Population: 'Population',
-      },
-      deaths: {
-        Total: 'TotalDeaths',
-        New: 'NewDeaths',
-        Population: 'Population',
-      },
-      recovered: {
-        Total: 'TotalRecovered',
-        New: 'NewRecovered',
-        Population: 'Population',
-      },
-    };
-    if (!this.model.checkboxForPopulationIsChecked) {
-      cases = this.model.checkboxCasesIsChecked
-        ? countryObj[vewType[type].New]
-        : countryObj[vewType[type].Total];
-    } else {
-      const populationFor100000 = 100000;
-      const casesTodayPerHundred =
-        Math.ceil(
-          (countryObj[vewType[type].New] / countryObj.Population) *
-            populationFor100000 *
-            100
-        ) / 100;
-      const casesTotalPerOneMillion =
-        Math.ceil(
-          (countryObj[vewType[type].Total] / countryObj.Population) *
-            populationFor100000 *
-            100
-        ) / 100;
-      cases = this.model.checkboxCasesIsChecked
-        ? casesTodayPerHundred
-        : casesTotalPerOneMillion;
-    }
-    return cases.toLocaleString();
   }
 }
