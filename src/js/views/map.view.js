@@ -3,6 +3,7 @@ import EventEmitter from '../eventEmitter';
 import { MAP_SETTINGS } from '../utils/constants';
 
 import '../../css/map.css';
+import create from '../utils/create';
 
 export default class SelectView extends EventEmitter {
   constructor(model, elements) {
@@ -23,7 +24,13 @@ export default class SelectView extends EventEmitter {
   }
 
   rebuildMap() {
-    const { map: mapContainer } = this.elements;
+    if (this.elements.map.childNodes.length !== 0) {
+      this.elements.map.firstChild.remove();
+    }
+
+    const div = create('div', { className: 'map-container' });
+    this.elements.map.append(div);
+    const mapContainer = this.elements.map.firstChild;
     const myMap = L.map(mapContainer).setView(
       MAP_SETTINGS.COORDINATES,
       MAP_SETTINGS.ZOOM_LVL
@@ -43,8 +50,8 @@ export default class SelectView extends EventEmitter {
     const geoJson = {
       type: 'FeatureCollection',
       features: this.countryDataArr.map((country = {}) => {
-        const { countryInfo = {} } = country;
-        const { lat, long } = countryInfo;
+        const { CountryInfo = {} } = country;
+        const { lat, long } = CountryInfo;
         return {
           type: 'Feature',
           properties: {
@@ -61,36 +68,44 @@ export default class SelectView extends EventEmitter {
     const geoJsonLayers = new L.GeoJSON(geoJson, {
       pointToLayer: (feature = {}, latLong) => {
         const { properties = {} } = feature;
-        let updatedFormatted;
-        let casesString;
-
-        const { country, updated, cases, deaths, recovered } = properties;
-
-        casesString = `${cases}`;
-
-        if (cases > MAP_SETTINGS.MIN_CASES) {
-          casesString = `${casesString.slice(0, -3)}k+`;
-        }
-
-        if (updated) {
-          updatedFormatted = new Date(updated).toLocaleString();
+        const { Country, Date } = properties;
+        let casesString = this.model.returnCasesWithCheckCheckboxes(
+          properties,
+          'confirmed'
+        );
+        const casesNumber = Number(casesString.split(',').join(''));
+        const thousandForRemoveDecimal = 1000;
+        if (casesNumber > MAP_SETTINGS.MIN_CASES) {
+          casesString = `${(casesNumber * thousandForRemoveDecimal)
+            .toLocaleString()
+            .slice(0, -8)}k+`;
         }
 
         const html = `
-          <span class="icon-marker" data-countryCode=${properties.countryInfo.iso3}>
+          <span class="icon-marker " data-countryCode=${
+            properties.CountryInfo.iso2
+          }>
             <span class="icon-marker-tooltip">
-              <h2>${country}</h2>
+              <h2>${Country}</h2>
               <ul>
-                <li><strong>Confirmed:</strong> ${cases}</li>
-                <li><strong>Deaths:</strong> ${deaths}</li>
-                <li><strong>Recovered:</strong> ${recovered}</li>
-                <li><strong>Last Update:</strong> ${updatedFormatted}</li>
+                <li><strong>Confirmed:</strong> ${this.model.returnCasesWithCheckCheckboxes(
+                  properties,
+                  'confirmed'
+                )}</li>
+                <li><strong>Deaths:</strong> ${this.model.returnCasesWithCheckCheckboxes(
+                  properties,
+                  'deaths'
+                )}</li>
+                <li><strong>Recovered:</strong> ${this.model.returnCasesWithCheckCheckboxes(
+                  properties,
+                  'recovered'
+                )}</li>
+                <li><strong>Last Update:</strong> ${Date}</li>
               </ul>
             </span>
             ${casesString}
           </span>
         `;
-        // html.addEventListener('click', () => console.log('map click'));
         return L.marker(latLong, {
           icon: L.divIcon({
             className: 'icon',

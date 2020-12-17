@@ -1,61 +1,41 @@
 .checkbox-container {
   background-color: rgb(43, 45, 46);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
-
 .checkbox-label {
   display: block;
-  background: #f3f3f3;
-  height: 15px;
-  width: 40px;
-  border-radius: 15px;
-  margin: 25px auto;
-  position: relative;
-  box-shadow: 0 0 0 2px #dddddd;
   cursor: pointer;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: row;
 }
-
-.checkbox-label:before {
-  content: "";
-  display: block;
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  border-radius: 50%;
-  height: 15px;
-  width: 15px;
-  background: white;
-  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2), 0 0 0 2px #dddddd;
+.on,
+.off {
+  text-align: center;
+  max-width: 100px;
+  min-width: 60px;
+  line-height: 15px;
+  padding: 10px;
+  overflow-wrap: break-word;
+  border: 1px solid rgb(111, 112, 112);
+  border-top: none;
+  font-size: 1rem;
 }
 
 .on {
-  display: block;
-  position: absolute;
-  z-index: 0;
-  left: 50px;
-  top: -10px;
-  text-align: center;
   opacity: 1;
-  min-width: 50px;
-  line-height: 15px;
   opacity: 0.3;
   color: #bdbdbd;
 }
 
 .off {
-  display: block;
-  position: absolute;
-  z-index: 0;
-  right: 50px;
-  top: -10px;
-  text-align: center;
   opacity: 1;
-  min-width: 50px;
-  line-height: 15px;
   opacity: 1;
   color: #bdbdbd;
+  background-color: black;
 }
-
 .checkbox {
   position: absolute;
   left: -5000px;
@@ -63,10 +43,9 @@
 
 .checkbox:checked + .checkbox-label .on {
   opacity: 1;
+  background-color: black;
 }
 .checkbox:checked + .checkbox-label .off {
   opacity: 0.3;
-}
-.checkbox:checked + .checkbox-label:before {
-  left: 25px;
+  background-color: rgb(43, 45, 46);
 }

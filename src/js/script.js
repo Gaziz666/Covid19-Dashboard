@@ -30,6 +30,8 @@ document.body.prepend(selectSearchWrapper, globalCases, tableCases, map);
 
 const model = new AppModel();
 
+const timeStart = Date.now();
+
 const loadData = new Promise((resolve) => {
   resolve(model.fetchData(URL.COUNTRY, URL.SUMMARY));
   // reject('error load server');
@@ -47,7 +49,8 @@ loadData.then(() => {
 
   mapView.show();
   view.show();
-
+  const endTime = Date.now();
+  console.log(endTime - timeStart);
   // eslint-disable-next-line no-unused-vars
   const controller = new AppController(model, view, mapView);
 });
