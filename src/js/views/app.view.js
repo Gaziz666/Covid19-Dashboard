@@ -15,7 +15,6 @@ export default class AppView extends EventEmitter {
     this.elements.inputSearch.addEventListener('input', (e) =>
       this.emit('searchCountry', e.target.value)
     );
-    this.renderCheckbox();
   }
 
   show() {
@@ -31,18 +30,21 @@ export default class AppView extends EventEmitter {
     const fragment = new DocumentFragment();
     this.model
       .getCountries()
-      .filter((obj) => obj.country.toLowerCase().includes(searchValue))
+      .filter((obj) => obj.Country.toLowerCase().includes(searchValue))
       .forEach((obj, index) => {
-        const cases = this.returnCasesWithCheckCheckboxes(obj, 'cases');
+        const cases = this.model.returnCasesWithCheckCheckboxes(
+          obj,
+          'confirmed'
+        );
         const flagImg = create('img', {
           className: 'flag-img',
           child: null,
           parent: null,
-          dataAttr: [['src', obj.countryInfo.flag]],
+          dataAttr: [['src', obj.CountryInfo.flag]],
         });
         const countryName = create('span', {
           className: 'select__country-name',
-          child: obj.country,
+          child: obj.Country,
         });
         const casesCount = create('span', {
           className: 'select__cases-count',
@@ -54,7 +56,7 @@ export default class AppView extends EventEmitter {
           parent: null,
           dataAttr: [
             ['key', index],
-            ['code', obj.countryInfo.iso3],
+            ['code', obj.CountryInfo.iso2],
           ],
         });
         fragment.append(newLi);
@@ -63,6 +65,10 @@ export default class AppView extends EventEmitter {
         });
       });
     list.append(fragment);
+    const checkbox = this.renderCheckbox('forList');
+    if (list.parentNode.childNodes.length < 3) {
+      list.parentNode.append(checkbox);
+    }
   }
 
   rebuildTotalCases() {
@@ -83,16 +89,16 @@ export default class AppView extends EventEmitter {
   rebuildTableByCountry() {
     const countryCode = this.model.selectedCountryCode;
     const currentCountryObj = this.model.getCountryByCode(countryCode);
-    const tableName = this.model.getCountryByCode(countryCode).country;
-    const cases = this.returnCasesWithCheckCheckboxes(
+    const tableName = currentCountryObj.Country;
+    const confirmed = this.model.returnCasesWithCheckCheckboxes(
       currentCountryObj,
-      'cases'
+      'confirmed'
     );
-    const deaths = this.returnCasesWithCheckCheckboxes(
+    const deaths = this.model.returnCasesWithCheckCheckboxes(
       currentCountryObj,
       'deaths'
     );
-    const recovered = this.returnCasesWithCheckCheckboxes(
+    const recovered = this.model.returnCasesWithCheckCheckboxes(
       currentCountryObj,
       'recovered'
     );
@@ -102,7 +108,7 @@ export default class AppView extends EventEmitter {
       i -= 1;
     }
 
-    this.renderTable(tableName, cases, deaths, recovered);
+    this.renderTable(tableName, confirmed, deaths, recovered);
   }
 
   rebuildTable() {
@@ -177,17 +183,19 @@ export default class AppView extends EventEmitter {
       child: [confirmedColumn, deathColumn, recoveredColumn],
       parent: tableContainer,
     });
+    const checkbox = this.renderCheckbox('forTable');
+    tableContainer.append(checkbox);
   }
 
-  renderCheckbox() {
+  renderCheckbox(name) {
     const checkBoxContainer = create('div', {
       className: 'checkbox-container',
     });
-    const onCases = create('span', {
+    const onCases = create('div', {
       className: 'on',
       child: 'Cases per day',
     });
-    const offCases = create('span', {
+    const offCases = create('div', {
       className: 'off',
       child: 'All cases',
     });
@@ -195,24 +203,24 @@ export default class AppView extends EventEmitter {
       className: 'checkbox-label',
       child: [onCases, offCases],
       parent: null,
-      dataAttr: [['for', 'checkbox1']],
+      dataAttr: [['for', `${name}1`]],
     });
     const inputCases = create('input', {
       className: 'checkbox',
       child: null,
       parent: null,
       dataAttr: [
-        ['id', 'checkbox1'],
+        ['id', `${name}1`],
         ['type', 'checkbox'],
       ],
     });
     checkBoxContainer.append(inputCases, labelCases);
 
-    const onPerHundred = create('span', {
+    const onPerHundred = create('div', {
       className: 'on',
-      child: 'Cases for 100 000 population',
+      child: 'Cases for 100 000 p',
     });
-    const offPerHundred = create('span', {
+    const offPerHundred = create('div', {
       className: 'off',
       child: 'Cases for all population',
     });
@@ -220,66 +228,27 @@ export default class AppView extends EventEmitter {
       className: 'checkbox-label',
       child: [onPerHundred, offPerHundred],
       parent: null,
-      dataAttr: [['for', 'checkbox2']],
+      dataAttr: [['for', `${name}2`]],
     });
     const inputPerHundred = create('input', {
       className: 'checkbox',
       child: null,
       parent: null,
       dataAttr: [
-        ['id', 'checkbox2'],
+        ['id', `${name}2`],
         ['type', 'checkbox'],
       ],
     });
 
     checkBoxContainer.append(inputPerHundred, labelPerHundred);
-    this.elements.list.parentNode.append(checkBoxContainer);
+    // this.elements.list.parentNode.append(checkBoxContainer);
     this.elements.checkboxCases = inputCases;
     this.elements.checkboxPerHundred = inputPerHundred;
     this.elements.checkboxCases.onchange = (e) =>
       this.emit('changeCases', e.target);
     this.elements.checkboxPerHundred.onchange = (e) =>
       this.emit('changeForPopulations', e.target);
-  }
 
-  returnCasesWithCheckCheckboxes(obj, type) {
-    let cases = '';
-    const vewType = {
-      cases: {
-        cases: 'cases',
-        todayCases: 'todayCases',
-        population: 'population',
-        casesPerOneMillion: 'casesPerOneMillion',
-      },
-      deaths: {
-        cases: 'deaths',
-        todayCases: 'todayDeaths',
-        population: 'population',
-        casesPerOneMillion: 'deathsPerOneMillion',
-      },
-      recovered: {
-        cases: 'recovered',
-        todayCases: 'todayRecovered',
-        population: 'population',
-        casesPerOneMillion: 'recoveredPerOneMillion',
-      },
-    };
-    if (!this.model.checkboxForPopulationIsChecked) {
-      cases = this.model.checkboxCasesIsChecked
-        ? obj[vewType[type].todayCases]
-        : obj[vewType[type].cases];
-    } else {
-      const casesTodayPerHundred =
-        Math.ceil(
-          (obj[vewType[type].todayCases] /
-            obj[vewType[type].population] /
-            100000) *
-            100
-        ) / 100;
-      cases = this.model.checkboxCasesIsChecked
-        ? casesTodayPerHundred
-        : Math.ceil(Number(obj[vewType[type].casesPerOneMillion]) / 10);
-    }
-    return cases.toLocaleString();
+    return checkBoxContainer;
   }
 }

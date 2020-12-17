@@ -13,6 +13,7 @@ const MAP_SETTINGS = {
   MAP_URL_TEMPLATE:
     'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
   MIN_CASES: 1000,
+  MIN_LENGTH: 3,
 };
 
 export { URL, MAP_SETTINGS };
