@@ -15,7 +15,6 @@ export default class AppView extends EventEmitter {
     this.elements.inputSearch.addEventListener('input', (e) =>
       this.emit('searchCountry', e.target.value)
     );
-    this.renderCheckbox();
   }
 
   show() {
@@ -66,6 +65,10 @@ export default class AppView extends EventEmitter {
         });
       });
     list.append(fragment);
+    const checkbox = this.renderCheckbox('forList');
+    if (list.parentNode.childNodes.length < 3) {
+      list.parentNode.append(checkbox);
+    }
   }
 
   rebuildTotalCases() {
@@ -180,17 +183,19 @@ export default class AppView extends EventEmitter {
       child: [confirmedColumn, deathColumn, recoveredColumn],
       parent: tableContainer,
     });
+    const checkbox = this.renderCheckbox('forTable');
+    tableContainer.append(checkbox);
   }
 
-  renderCheckbox() {
+  renderCheckbox(name) {
     const checkBoxContainer = create('div', {
       className: 'checkbox-container',
     });
-    const onCases = create('span', {
+    const onCases = create('div', {
       className: 'on',
       child: 'Cases per day',
     });
-    const offCases = create('span', {
+    const offCases = create('div', {
       className: 'off',
       child: 'All cases',
     });
@@ -198,24 +203,24 @@ export default class AppView extends EventEmitter {
       className: 'checkbox-label',
       child: [onCases, offCases],
       parent: null,
-      dataAttr: [['for', 'checkbox1']],
+      dataAttr: [['for', `${name}1`]],
     });
     const inputCases = create('input', {
       className: 'checkbox',
       child: null,
       parent: null,
       dataAttr: [
-        ['id', 'checkbox1'],
+        ['id', `${name}1`],
         ['type', 'checkbox'],
       ],
     });
     checkBoxContainer.append(inputCases, labelCases);
 
-    const onPerHundred = create('span', {
+    const onPerHundred = create('div', {
       className: 'on',
-      child: 'Cases for 100 000 population',
+      child: 'Cases for 100 000 p',
     });
-    const offPerHundred = create('span', {
+    const offPerHundred = create('div', {
       className: 'off',
       child: 'Cases for all population',
     });
@@ -223,25 +228,27 @@ export default class AppView extends EventEmitter {
       className: 'checkbox-label',
       child: [onPerHundred, offPerHundred],
       parent: null,
-      dataAttr: [['for', 'checkbox2']],
+      dataAttr: [['for', `${name}2`]],
     });
     const inputPerHundred = create('input', {
       className: 'checkbox',
       child: null,
       parent: null,
       dataAttr: [
-        ['id', 'checkbox2'],
+        ['id', `${name}2`],
         ['type', 'checkbox'],
       ],
     });
 
     checkBoxContainer.append(inputPerHundred, labelPerHundred);
-    this.elements.list.parentNode.append(checkBoxContainer);
+    // this.elements.list.parentNode.append(checkBoxContainer);
     this.elements.checkboxCases = inputCases;
     this.elements.checkboxPerHundred = inputPerHundred;
     this.elements.checkboxCases.onchange = (e) =>
       this.emit('changeCases', e.target);
     this.elements.checkboxPerHundred.onchange = (e) =>
       this.emit('changeForPopulations', e.target);
+
+    return checkBoxContainer;
   }
 }

@@ -82,7 +82,7 @@ export default class SelectView extends EventEmitter {
         }
 
         const html = `
-          <span class="icon-marker" data-countryCode=${
+          <span class="icon-marker " data-countryCode=${
             properties.CountryInfo.iso2
           }>
             <span class="icon-marker-tooltip">

@@ -50,10 +50,6 @@ export default class AppModel extends EventEmitter {
     this.countryDataArr = summaryData.Countries;
   }
 
-  // getCoordinates() {
-  //   console.log(this.countryDataArr);
-  // }
-
   getCountries() {
     const cases = this.checkboxCasesIsChecked
       ? 'NewConfirmed'
@@ -133,7 +129,7 @@ export default class AppModel extends EventEmitter {
             populationFor100000 *
             100
         ) / 100;
-      const casesTotalPerOneMillion =
+      const casesTotalPerHundred =
         Math.ceil(
           (countryObj[vewType[type].Total] / countryObj.Population) *
             populationFor100000 *
@@ -141,20 +137,8 @@ export default class AppModel extends EventEmitter {
         ) / 100;
       cases = this.checkboxCasesIsChecked
         ? casesTodayPerHundred
-        : casesTotalPerOneMillion;
+        : casesTotalPerHundred;
     }
     return cases.toLocaleString();
   }
-
-  /*
-  get selectedCountryIndex() {
-    return this.selectedCountryIndex; 
-  }
-
-  set selectedCountryIndex(index) {
-    const previousIndex = this.selectedCountryIndex;
-    console.log("index", index);
-    this.selectedCountryIndex = index;
-    this.emit("selectedIndexChanged", previousIndex);
-  } */
 }
