@@ -4,6 +4,7 @@ import AppModel from './models/app.model';
 import AppController from './controller/app.controller';
 import AppView from './views/app.view';
 import MapView from './views/map.view';
+import CheckboxView from './views/checkbox.view';
 import create from './utils/create';
 import { URL } from './utils/constants';
 
@@ -30,8 +31,6 @@ document.body.prepend(selectSearchWrapper, globalCases, tableCases, map);
 
 const model = new AppModel();
 
-const timeStart = Date.now();
-
 const loadData = new Promise((resolve) => {
   resolve(model.fetchData(URL.COUNTRY, URL.SUMMARY));
   // reject('error load server');
@@ -46,11 +45,10 @@ loadData.then(() => {
   });
 
   const mapView = new MapView(model, { map });
+  const checkboxView = new CheckboxView(model);
 
   mapView.show();
   view.show();
-  const endTime = Date.now();
-  console.log(endTime - timeStart);
   // eslint-disable-next-line no-unused-vars
-  const controller = new AppController(model, view, mapView);
+  const controller = new AppController(model, view, mapView, checkboxView);
 });

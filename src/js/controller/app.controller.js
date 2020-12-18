@@ -1,8 +1,17 @@
 export default class AppController {
-  constructor(model, view, mapView) {
+  constructor(model, view, mapView, checkboxView) {
     this.model = model;
     this.view = view;
     this.mapView = mapView;
+    this.checkboxView = checkboxView;
+
+    this.mapView
+      .on('changeCases', (checkbox) => {
+        this.changeCasesCheckbox(checkbox);
+      })
+      .on('changeForPopulations', (checkbox) => {
+        this.changeForPopulationCheckbox(checkbox);
+      });
 
     this.view
       .on('chooseCountry', (countryCode) => {

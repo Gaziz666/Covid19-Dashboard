@@ -23,6 +23,9 @@ export default class AppModel extends EventEmitter {
     }
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
+    if (summaryData.Message) {
+      alert(summaryData.Message + ' Please wait api response');
+    }
     this.objData = summaryData;
     summaryData.Countries.forEach((country, index) => {
       let condition = true;
