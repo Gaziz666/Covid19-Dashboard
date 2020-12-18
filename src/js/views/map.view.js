@@ -36,6 +36,7 @@ export default class MapView extends EventEmitter {
       `size_${CASES_TYPES.MAX_CASES}`,
       `size_${CASES_TYPES.EXTRA_MAX_CASES}`,
       `size_${CASES_TYPES.ULTRA_MAX_CASES}`,
+      `size_${CASES_TYPES.EXTRA_ULTRA_CASES}`,
     ];
 
     return this.sizesArray[index];
