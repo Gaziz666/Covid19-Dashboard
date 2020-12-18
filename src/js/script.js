@@ -4,6 +4,7 @@ import AppModel from './models/app.model';
 import AppController from './controller/app.controller';
 import AppView from './views/app.view';
 import MapView from './views/map.view';
+import CheckboxView from './views/checkbox.view';
 import create from './utils/create';
 import { URL } from './utils/constants';
 
@@ -44,9 +45,10 @@ loadData.then(() => {
   });
 
   const mapView = new MapView(model, { map });
+  const checkboxView = new CheckboxView(model);
 
   mapView.show();
   view.show();
   // eslint-disable-next-line no-unused-vars
-  const controller = new AppController(model, view, mapView);
+  const controller = new AppController(model, view, mapView, checkboxView);
 });

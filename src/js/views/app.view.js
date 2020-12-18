@@ -1,5 +1,6 @@
 import EventEmitter from '../eventEmitter';
 import create from '../utils/create';
+import CheckboxView from './checkbox.view';
 
 import '../../css/checkbox.css';
 import '../../css/select.css';
@@ -27,6 +28,10 @@ export default class AppView extends EventEmitter {
     const { list } = this.elements;
     const searchValue = this.model.searchInputValue;
     this.elements.list.innerHTML = '';
+    if (this.elements.list.nextSibling !== null) {
+      this.elements.list.nextSibling.remove();
+    }
+
     const fragment = new DocumentFragment();
     this.model
       .getCountries()
@@ -48,7 +53,7 @@ export default class AppView extends EventEmitter {
         });
         const casesCount = create('span', {
           className: 'select__cases-count',
-          child: `${cases.toLocaleString()} `,
+          child: `${cases.toLocaleString('en-EN')} `,
         });
         const newLi = create('li', {
           className: 'list__li',
@@ -66,9 +71,7 @@ export default class AppView extends EventEmitter {
       });
     list.append(fragment);
     const checkbox = this.renderCheckbox('forList');
-    if (list.parentNode.childNodes.length < 3) {
-      list.parentNode.append(checkbox);
-    }
+    list.parentNode.append(checkbox);
   }
 
   rebuildTotalCases() {
@@ -81,7 +84,7 @@ export default class AppView extends EventEmitter {
     });
     create('h3', {
       className: 'global__cases',
-      child: this.model.getGlobal().TotalConfirmed.toLocaleString(),
+      child: this.model.getGlobal().TotalConfirmed.toLocaleString('en-EN'),
       parent: globalCases,
     });
   }
@@ -148,7 +151,7 @@ export default class AppView extends EventEmitter {
         }),
         create('div', {
           className: 'table-body',
-          child: confirmed.toLocaleString(),
+          child: confirmed.toLocaleString('en-EN'),
         }),
       ],
     });
@@ -161,7 +164,7 @@ export default class AppView extends EventEmitter {
         }),
         create('div', {
           className: 'table-body',
-          child: deaths.toLocaleString(),
+          child: deaths.toLocaleString('en-EN'),
         }),
       ],
     });
@@ -174,7 +177,7 @@ export default class AppView extends EventEmitter {
         }),
         create('div', {
           className: 'table-body',
-          child: recovered.toLocaleString(),
+          child: recovered.toLocaleString('en-EN'),
         }),
       ],
     });
@@ -188,67 +191,14 @@ export default class AppView extends EventEmitter {
   }
 
   renderCheckbox(name) {
-    const checkBoxContainer = create('div', {
-      className: 'checkbox-container',
-    });
-    const onCases = create('div', {
-      className: 'on',
-      child: 'Cases per day',
-    });
-    const offCases = create('div', {
-      className: 'off',
-      child: 'All cases',
-    });
-    const labelCases = create('label', {
-      className: 'checkbox-label',
-      child: [onCases, offCases],
-      parent: null,
-      dataAttr: [['for', `${name}1`]],
-    });
-    const inputCases = create('input', {
-      className: 'checkbox',
-      child: null,
-      parent: null,
-      dataAttr: [
-        ['id', `${name}1`],
-        ['type', 'checkbox'],
-      ],
-    });
-    checkBoxContainer.append(inputCases, labelCases);
-
-    const onPerHundred = create('div', {
-      className: 'on',
-      child: 'Cases for 100 000 p',
-    });
-    const offPerHundred = create('div', {
-      className: 'off',
-      child: 'Cases for all population',
-    });
-    const labelPerHundred = create('label', {
-      className: 'checkbox-label',
-      child: [onPerHundred, offPerHundred],
-      parent: null,
-      dataAttr: [['for', `${name}2`]],
-    });
-    const inputPerHundred = create('input', {
-      className: 'checkbox',
-      child: null,
-      parent: null,
-      dataAttr: [
-        ['id', `${name}2`],
-        ['type', 'checkbox'],
-      ],
-    });
-
-    checkBoxContainer.append(inputPerHundred, labelPerHundred);
-    // this.elements.list.parentNode.append(checkBoxContainer);
-    this.elements.checkboxCases = inputCases;
-    this.elements.checkboxPerHundred = inputPerHundred;
-    this.elements.checkboxCases.onchange = (e) =>
+    const checkbox = new CheckboxView(this.model);
+    const checkBoxContainer = checkbox.renderCheckbox(name);
+    checkbox.inputCases.onchange = (e) => {
       this.emit('changeCases', e.target);
-    this.elements.checkboxPerHundred.onchange = (e) =>
+    };
+    checkbox.inputPerHundred.onchange = (e) => {
       this.emit('changeForPopulations', e.target);
-
+    };
     return checkBoxContainer;
   }
 }

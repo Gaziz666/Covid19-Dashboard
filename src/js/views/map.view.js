@@ -1,6 +1,7 @@
 import L from 'leaflet';
 import EventEmitter from '../eventEmitter';
 import { MAP_SETTINGS, CASES_TYPES } from '../utils/constants';
+import CheckboxView from './checkbox.view';
 
 import '../../css/map.css';
 import create from '../utils/create';
@@ -42,11 +43,15 @@ export default class MapView extends EventEmitter {
 
   rebuildMap() {
     if (this.elements.map.childNodes.length !== 0) {
-      this.elements.map.firstChild.remove();
+      let i = this.elements.map.childNodes.length - 1;
+      while (i > -1) {
+        this.elements.map.childNodes[i].remove();
+        i -= 1;
+      }
     }
 
     const div = create('div', { className: 'map-container' });
-    this.elements.map.append(div);
+    this.elements.map.prepend(div);
     const mapContainer = this.elements.map.firstChild;
     const myMap = L.map(mapContainer).setView(
       MAP_SETTINGS.COORDINATES,
@@ -140,6 +145,16 @@ export default class MapView extends EventEmitter {
     });
 
     geoJsonLayers.addTo(myMap);
+
+    const checkbox = new CheckboxView(this.model);
+    const checkBoxContainer = checkbox.renderCheckbox('forMap');
+    checkbox.inputCases.onchange = (e) => {
+      this.emit('changeCases', e.target);
+    };
+    checkbox.inputPerHundred.onchange = (e) => {
+      this.emit('changeForPopulations', e.target);
+    };
+    this.elements.map.append(checkBoxContainer);
   }
 
   rebuildMapLegend() {
