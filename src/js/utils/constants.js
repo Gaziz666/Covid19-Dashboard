@@ -12,8 +12,18 @@ const MAP_SETTINGS = {
   SUBDOMAINS: 'abcd',
   MAP_URL_TEMPLATE:
     'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
-  MIN_CASES: 1000,
+
   MIN_LENGTH: 3,
 };
 
-export { URL, MAP_SETTINGS };
+const CASES_TYPES = {
+  EXTRA_MIN_CASES: 10,
+  MIN_CASES: 100,
+  MID_CASES: 1000,
+  EXTRA_MID_CASES: 10000,
+  MAX_CASES: 100000,
+  EXTRA_MAX_CASES: 1000000,
+  ULTRA_MAX_CASES: 10000000,
+};
+
+export { URL, MAP_SETTINGS, CASES_TYPES };
