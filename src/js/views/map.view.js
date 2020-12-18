@@ -6,7 +6,7 @@ import CheckboxView from './checkbox.view';
 import '../../css/map.css';
 import create from '../utils/create';
 
-export default class SelectView extends EventEmitter {
+export default class MapView extends EventEmitter {
   constructor(model, elements) {
     super();
     this.model = model;
@@ -23,7 +23,7 @@ export default class SelectView extends EventEmitter {
 
   show() {
     this.rebuildMap();
-    // this.rebuildMapLegend();
+    this.rebuildMapLegend();
   }
 
   setSizeClassSelector(index) {
@@ -97,9 +97,11 @@ export default class SelectView extends EventEmitter {
         );
 
         const casesNumber = Number(casesString.split(',').join(''));
+
         this.sizeClassSelector = this.setSizeClassSelector(
-          Math.trunc(casesNumber).length
+          Math.trunc(casesNumber).toString().length
         );
+
         const thousandForRemoveDecimal = 1000;
         if (casesNumber > CASES_TYPES.MID_CASES) {
           casesString = `${(casesNumber * thousandForRemoveDecimal)
@@ -153,5 +155,39 @@ export default class SelectView extends EventEmitter {
       this.emit('changeForPopulations', e.target);
     };
     this.elements.map.append(checkBoxContainer);
+  }
+
+  rebuildMapLegend() {
+    const mapLegend = create('ul', { className: 'map__legend' });
+    const fragment = new DocumentFragment();
+
+    const legendTitle = create('h3', {
+      className: 'legend__title',
+      child: 'Cases less than:',
+    });
+
+    Object.entries(CASES_TYPES).forEach((element) => {
+      const key = element[0];
+      const value = element[1].toLocaleString('en-En');
+      const typeLowerCase = key.toLowerCase();
+
+      const legendText = create('span', {
+        className: 'legend__text',
+        child: ` < ${value}`,
+      });
+      const legendColor = create('div', {
+        className: `legend__color legend__color_${typeLowerCase}`,
+      });
+
+      const legendItem = create('li', {
+        className: 'legend__item',
+        child: [legendColor, legendText],
+      });
+      fragment.append(legendItem);
+    });
+
+    fragment.prepend(legendTitle);
+    mapLegend.append(fragment);
+    this.elements.map.append(mapLegend);
   }
 }

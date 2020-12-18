@@ -142,6 +142,7 @@ export default class AppModel extends EventEmitter {
         ? casesTodayPerHundred
         : casesTotalPerHundred;
     }
-    return cases.toLocaleString();
+
+    return cases.toLocaleString('en-En');
   }
 }

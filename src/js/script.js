@@ -33,7 +33,6 @@ const model = new AppModel();
 
 const loadData = new Promise((resolve) => {
   resolve(model.fetchData(URL.COUNTRY, URL.SUMMARY));
-  // reject('error load server');
 });
 
 loadData.then(() => {
@@ -42,6 +41,7 @@ loadData.then(() => {
     inputSearch,
     globalCases,
     tableCases,
+    map,
   });
 
   const mapView = new MapView(model, { map });
