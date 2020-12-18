@@ -123,6 +123,12 @@
   background-color: #ff0d00;
 }
 
+.size_1000000000 {
+  width: 120px;
+  height: 120px;
+  background-color: #ff0d00;
+}
+
 .map__legend {
   position: absolute;
   top: 80px;
