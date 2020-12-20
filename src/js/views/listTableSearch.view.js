@@ -6,7 +6,7 @@ import '../../css/checkbox.css';
 import '../../css/select.css';
 import '../../css/table.css';
 
-export default class AppView extends EventEmitter {
+export default class ListTableSearchView extends EventEmitter {
   constructor(model, elements) {
     super();
     this.model = model;

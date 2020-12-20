@@ -1,7 +1,7 @@
 export default class AppController {
-  constructor(model, view, mapView, checkboxView) {
+  constructor(model, viewListTableSearch, mapView, checkboxView) {
     this.model = model;
-    this.view = view;
+    this.viewListTableSearch = viewListTableSearch;
     this.mapView = mapView;
     this.checkboxView = checkboxView;
 
@@ -13,7 +13,7 @@ export default class AppController {
         this.changeForPopulationCheckbox(checkbox);
       });
 
-    this.view
+    this.viewListTableSearch
       .on('chooseCountry', (countryCode) => {
         this.updateSelectedCountry(countryCode);
       })
@@ -33,7 +33,7 @@ export default class AppController {
       .on('changeCountry', () => this.view.rebuildTableByCountry())
       .on('searchCountryBy', () => this.view.rebuildList())
       .on('rebuildView', () => {
-        this.view.show();
+        this.viewListTableSearch.show();
         this.mapView.show();
       });
   }
