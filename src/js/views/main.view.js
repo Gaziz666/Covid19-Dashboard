@@ -1,6 +1,6 @@
 import EventEmitter from '../eventEmitter';
 import AppController from '../controller/app.controller';
-import AppView from './app.view';
+import ListTableSearchView from './listTableSearch.view';
 import MapView from './map.view';
 import CheckboxView from './checkbox.view';
 import create from '../utils/create';
@@ -41,16 +41,19 @@ export default class MainView extends EventEmitter {
     main.append(header, selectMain);
 
     document.body.prepend(main);
-    const view = new AppView(this.model, this.elements);
+    const viewListTableSearch = new ListTableSearchView(
+      this.model,
+      this.elements
+    );
     const mapView = new MapView(this.model, this.elements);
     const checkboxView = new CheckboxView(this.model);
 
-    view.show();
+    viewListTableSearch.show();
     mapView.show();
     // eslint-disable-next-line no-unused-vars
     const controller = new AppController(
       this.model,
-      view,
+      viewListTableSearch,
       mapView,
       checkboxView
     );
