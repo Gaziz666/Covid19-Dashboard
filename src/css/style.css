@@ -34,3 +34,33 @@ ol {
   background-color: #525252;
   border-radius: 5px;
 }
+
+.main {
+  position: relative;
+  z-index: 0;
+}
+
+.select-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  width: 100%;
+}
+
+.second-column {
+  width: 100%;
+}
+
+@media (min-width: 1000px) {
+  .select-main {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .first-column {
+    min-width: 380px;
+  }
+}

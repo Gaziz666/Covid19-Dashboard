@@ -14,7 +14,7 @@ export default function create(el, { className, child, parent, dataAttr }) {
     throw new Error('unable to create  HTMLElement! Give a proper tag name');
   }
 
-  if (className) element.classList.add(...className.split(' '));
+  if (className) element.classList.add(...className.split(' ')); //
 
   if (child && Array.isArray(child)) {
     child.forEach((childElement) => {
