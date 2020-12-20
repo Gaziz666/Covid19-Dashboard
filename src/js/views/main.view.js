@@ -13,8 +13,18 @@ export default class MainView extends EventEmitter {
   }
 
   show() {
-    const main = create('div', { className: 'main' });
-    const header = create('header', { className: 'header', child: 'COVID-19' });
+    const header = create('header', {
+      className: 'header',
+      child: null,
+    });
+    const headerTitle = create('h1', {
+      className: 'header_title',
+      child: 'COVID-19 Dashboard by RS School',
+      parent: header,
+    });
+    const main = create('main', { className: 'main' });
+    const footer = create('footer', { className: 'footer' });
+
     const selectMain = create('section', { className: 'select-main' });
     // const selectGraf = create('section', { className: 'select-graf' });
     const firstColumMain = create('div', { className: 'first-column' });
@@ -38,9 +48,11 @@ export default class MainView extends EventEmitter {
     firstColumMain.append(this.elements.globalCases, selectSearchWrapper);
     secondColumMain.append(this.elements.map, this.elements.tableCases);
     selectMain.append(firstColumMain, secondColumMain);
-    main.append(header, selectMain);
+    main.appendChild(selectMain);
 
+    document.body.prepend(footer);
     document.body.prepend(main);
+    document.body.prepend(header);
     const view = new AppView(this.model, this.elements);
     const mapView = new MapView(this.model, this.elements);
     const checkboxView = new CheckboxView(this.model);

@@ -143,7 +143,7 @@ export default class AppView extends EventEmitter {
     });
 
     const confirmedColumn = create('div', {
-      className: 'table-column',
+      className: 'table-column table-column__confirmed',
       child: [
         create('div', {
           className: 'table-header',
@@ -156,7 +156,7 @@ export default class AppView extends EventEmitter {
       ],
     });
     const deathColumn = create('div', {
-      className: 'table-column',
+      className: 'table-column table-column__deaths',
       child: [
         create('div', {
           className: 'table-header',
@@ -169,7 +169,7 @@ export default class AppView extends EventEmitter {
       ],
     });
     const recoveredColumn = create('div', {
-      className: 'table-column',
+      className: 'table-column table-column__recovered',
       child: [
         create('div', {
           className: 'table-header',

@@ -9,7 +9,7 @@ html {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   background-color: rgb(43, 45, 46);
-  color: #bdbdbd;
+  color: #ffffff;
 }
 
 *,
@@ -36,7 +36,7 @@ ol {
 }
 
 .main {
-  position: relative;
+  /* position: relative; */
   z-index: 0;
 }
 
@@ -46,14 +46,61 @@ ol {
 }
 
 .header {
+  align-items: center;
   text-align: center;
   width: 100%;
+  background-color: #1c1c1c;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.first-column {
+  align-items: center;
+}
+
+.global-cases {
+  text-align: center;
+  color: #c90a0e;
+  border: 2px solid #1c1c1c;
+  background-color: #1c1c1c;
+  margin-bottom: 20px;
+}
+
+.global__cases {
+  font-size: 2.5em;
 }
 
 .second-column {
   width: 100%;
 }
+.table {
+  background-color: #1c1c1c;
+}
 
+.table__country-name {
+  align-items: center;
+  text-align: center;
+}
+
+.table-column {
+  text-align: center;
+}
+
+.table-column__confirmed {
+  color: #ffac00;
+}
+
+.table-column__deaths {
+  color: #c90a0e;
+}
+
+.table-column__recovered {
+  color: #4be700;
+}
+
+.table-body {
+  font-size: 20px;
+}
 @media (min-width: 1000px) {
   .select-main {
     display: flex;
@@ -63,4 +110,9 @@ ol {
   .first-column {
     min-width: 380px;
   }
+}
+
+.footer {
+  background-color: #1c1c1c;
+  height: 100px;
 }
