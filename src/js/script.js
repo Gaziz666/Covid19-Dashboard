@@ -10,7 +10,7 @@ require.context('./../assets/img', true, /\.(png|svg|jpg|gif)$/);
 const model = new AppModel();
 
 const loadData = new Promise((resolve) => {
-  resolve(model.fetchData(URL.COUNTRY, URL.SUMMARY));
+  resolve(model.fetchData(URL.COUNTRY, URL.SUMMARY, URL.ALL_DAYS));
 });
 
 loadData.then(() => {

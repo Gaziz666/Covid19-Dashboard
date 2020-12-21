@@ -36,6 +36,8 @@ export default class AppController {
         this.viewListTableSearch.show();
         this.mapView.show();
       });
+
+    return this;
   }
 
   updateSelectedCountry(countryCode) {

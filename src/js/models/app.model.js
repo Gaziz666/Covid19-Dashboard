@@ -11,21 +11,24 @@ export default class AppModel extends EventEmitter {
     this.checkboxForPopulationIsChecked = false;
   }
 
-  async fetchData(urlCountry, urlSummary) {
-    let [resCountry, resSummary] = ['', ''];
+  async fetchData(urlCountry, urlSummary, urlAllDays) {
+    let [resCountry, resSummary, resAllDays] = ['', '', ''];
     try {
-      [resCountry, resSummary] = await Promise.all([
+      [resCountry, resSummary, resAllDays] = await Promise.all([
         fetch(urlCountry),
         fetch(urlSummary),
+        fetch(urlAllDays),
       ]);
     } catch (err) {
       console.log('error', err);
     }
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
+    const allDays = await resAllDays.json();
     if (summaryData.Message) {
       alert(`${summaryData.Message} Please wait api response`);
     }
+    this.allDate = allDays;
     this.objData = summaryData;
     summaryData.Countries.forEach((country, index) => {
       let condition = true;
