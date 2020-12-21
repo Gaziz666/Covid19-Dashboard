@@ -1,7 +1,8 @@
 import EventEmitter from '../eventEmitter';
 import AppController from '../controller/app.controller';
-import AppView from './app.view';
+import ListTableSearchView from './listTableSearch.view';
 import MapView from './map.view';
+import ChartView from './chart.view';
 import CheckboxView from './checkbox.view';
 import create from '../utils/create';
 
@@ -44,25 +45,34 @@ export default class MainView extends EventEmitter {
       className: 'select-search-wrapper',
       child: [this.elements.inputSearch, this.elements.list],
     });
+    this.elements.chart = create('div', { className: 'chart' });
 
     firstColumMain.append(this.elements.globalCases, selectSearchWrapper);
-    secondColumMain.append(this.elements.map, this.elements.tableCases);
+    secondColumMain.append(
+      this.elements.map,
+      this.elements.tableCases,
+      this.elements.chart
+    );
     selectMain.append(firstColumMain, secondColumMain);
     main.appendChild(selectMain);
 
     document.body.prepend(footer);
     document.body.prepend(main);
-    document.body.prepend(header);
-    const view = new AppView(this.model, this.elements);
+    const viewListTableSearch = new ListTableSearchView(
+      this.model,
+      this.elements
+    );
     const mapView = new MapView(this.model, this.elements);
+    const chartView = new ChartView(this.model, this.elements);
     const checkboxView = new CheckboxView(this.model);
 
-    view.show();
+    viewListTableSearch.show();
     mapView.show();
+    chartView.show();
     // eslint-disable-next-line no-unused-vars
     const controller = new AppController(
       this.model,
-      view,
+      viewListTableSearch,
       mapView,
       checkboxView
     );
