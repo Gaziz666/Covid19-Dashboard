@@ -184,7 +184,10 @@ export default class MapView extends EventEmitter {
         className: 'legend__item',
         child: [legendColor, legendText],
       });
-      fragment.append(legendItem);
+
+      if (!legendColor.classList.contains('legend__color_ultra_max_cases')) {
+        fragment.append(legendItem);
+      }
     });
 
     fragment.prepend(legendTitle);
