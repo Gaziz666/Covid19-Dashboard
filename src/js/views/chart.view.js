@@ -57,6 +57,13 @@ export default class ChartView extends EventEmitter {
         ],
       },
       options: {
+        tooltips: {
+          intersect: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true,
+        },
         scales: {
           yAxes: [
             {
