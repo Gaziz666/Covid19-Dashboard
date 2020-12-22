@@ -35,7 +35,7 @@ export default class AppModel extends EventEmitter {
         fetch(urlAllPopulation),
       ]);
     } catch (err) {
-      alert("Sorry API don't work Please wait api response and repeat late");
+      alert('Sorry API don\'t work Please wait api response and repeat late');
     }
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
@@ -79,7 +79,7 @@ export default class AppModel extends EventEmitter {
       resCountryHistory = await fetch(url);
     } catch (err) {
       alert(
-        "Sorry API for Char don't work Please wait api response and repeat late"
+        'Sorry API for Char don\'t work Please wait api response and repeat late'
       );
     }
     this.countryHistoryCases = await resCountryHistory.json();

@@ -29,6 +29,9 @@ export default class AppController {
       })
       .on('changeForPopulations', (checkbox) => {
         this.changeForPopulationCheckbox(checkbox);
+      })
+      .on('chooseCountry', (countryCode, countryIndex) => {
+        this.updateSelectedCountry(countryCode, countryIndex);
       });
 
     this.viewListTableSearch
@@ -44,9 +47,6 @@ export default class AppController {
       .on('changeForPopulations', (checkbox) => {
         this.changeForPopulationCheckbox(checkbox);
       });
-    this.mapView.on('chooseCountry', (countryCode) => {
-      this.updateSelectedCountry(countryCode);
-    });
     this.model
       .on('changeCountry', () => {
         this.viewListTableSearch.rebuildTableByCountry();
