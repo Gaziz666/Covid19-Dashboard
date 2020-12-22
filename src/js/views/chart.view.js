@@ -50,21 +50,21 @@ export default class ChartView extends EventEmitter {
         datasets: [
           {
             label: 'Confirmed cases',
-            data: Object.values(cases),
+            data: charData.casesData,
             backgroundColor: 'rgba(255, 172, 0, 0.2)',
             borderColor: 'rgba(255, 172, 0, 1)',
             borderWidth: 1,
           },
           {
             label: 'Death',
-            data: Object.values(deaths),
+            data: charData.deathsData,
             backgroundColor: 'rgba(201, 10, 14, 0.2)',
             borderColor: 'rgba(201, 10, 14, 1)',
             borderWidth: 1,
           },
           {
             label: 'Recovered',
-            data: Object.values(recovered),
+            data: charData.recoveredData,
             backgroundColor: 'rgba(75, 231, 0, 0.2)',
             borderColor: 'rgba(75, 231, 0, 1)',
             borderWidth: 1,
