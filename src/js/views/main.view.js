@@ -35,13 +35,13 @@ export default class MainView extends EventEmitter {
       className: 'select-search-wrapper',
       child: [this.elements.inputSearch, this.elements.list],
     });
-    this.elements.chart = create('div', { className: 'chart' });
+    this.elements.chartContainer = create('div', { className: 'chart' });
 
     firstColumMain.append(this.elements.globalCases, selectSearchWrapper);
     secondColumMain.append(
       this.elements.map,
       this.elements.tableCases,
-      this.elements.chart
+      this.elements.chartContainer
     );
     selectMain.append(firstColumMain, secondColumMain);
     main.append(header, selectMain);
@@ -63,7 +63,8 @@ export default class MainView extends EventEmitter {
       this.model,
       viewListTableSearch,
       mapView,
-      checkboxView
+      checkboxView,
+      chartView
     );
   }
 }

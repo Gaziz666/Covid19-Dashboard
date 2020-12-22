@@ -3,13 +3,14 @@ import '../../css/chart.css';
 import Chart from 'chart.js';
 import create from '../utils/create';
 import EventEmitter from '../eventEmitter';
+import CheckboxView from './checkbox.view';
+import { URL } from '../utils/constants';
 
 export default class ChartView extends EventEmitter {
   constructor(model, elements) {
     super();
     this.model = model;
     this.elements = elements;
-    this.chartContainer = elements.chart;
     this.allDate = this.model.allDate;
   }
 
@@ -17,39 +18,53 @@ export default class ChartView extends EventEmitter {
     this.rebuildChart();
   }
 
+  rebuildCharCountry() {
+    // eslint-disable-next-line no-unused-vars
+    const loadCountryData = new Promise((resolve) => {
+      resolve(
+        this.model.fetchCountryData(
+          URL.COUNTRY_HISTORY + this.model.selectedCountryName + URL.PERIOD
+        )
+      );
+    }).then(() => {
+      this.rebuildChart();
+    });
+  }
+
   rebuildChart() {
+    this.elements.chartContainer.innerHTML = '';
     const chart = create('canvas', {
       className: 'chart-inner',
       child: null,
-      parent: this.chartContainer,
+      parent: this.elements.chartContainer,
     });
 
-    const { cases, deaths, recovered } = this.allDate;
+    const charData = this.checkCheckbox();
 
     const ctx = chart.getContext('2d');
     // eslint-disable-next-line no-unused-vars
     const myChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: Object.keys(cases),
+        labels: charData.labelsArr,
         datasets: [
           {
             label: 'Confirmed cases',
-            data: Object.values(cases),
+            data: charData.casesData,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 1,
           },
           {
             label: 'Death',
-            data: Object.values(deaths),
+            data: charData.deathsData,
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
           },
           {
             label: 'Recovered',
-            data: Object.values(recovered),
+            data: charData.recoveredData,
             backgroundColor: 'rgba(80, 206, 86, 0.2)',
             borderColor: 'rgba(80, 206, 86, 1)',
             borderWidth: 1,
@@ -68,5 +83,51 @@ export default class ChartView extends EventEmitter {
         },
       },
     });
+
+    const checkbox = new CheckboxView(this.model);
+    const checkBoxContainer = checkbox.renderCheckbox('forChar');
+    checkbox.inputCases.onchange = (e) => {
+      this.emit('changeCases', e.target);
+    };
+    checkbox.inputPerHundred.onchange = (e) => {
+      this.emit('changeForPopulations', e.target);
+    };
+    this.elements.chartContainer.append(checkBoxContainer);
+  }
+
+  checkCheckbox() {
+    let { cases, deaths, recovered } = this.allDate;
+    const population = Number(this.model.selectedCountryPopulation);
+    if (this.model.selectedCountryName) {
+      cases = this.model.countryHistoryCases.timeline.cases;
+      deaths = this.model.countryHistoryCases.timeline.deaths;
+      recovered = this.model.countryHistoryCases.timeline.recovered;
+    }
+
+    const labelsArr = Object.keys(cases);
+    let casesData = Object.values(cases);
+    let deathsData = Object.values(deaths);
+    let recoveredData = Object.values(recovered);
+    if (this.model.checkboxPerDayCasesIsChecked) {
+      casesData = casesData.map((item, i, arr) => item - arr[i - 1]);
+      deathsData = deathsData.map((item, i, arr) => item - arr[i - 1]);
+      recoveredData = recoveredData.map((item, i, arr) => item - arr[i - 1]);
+    }
+    if (this.model.checkboxFor100ThouthandPopulationIsChecked) {
+      const populationFor100000 = 100000;
+      casesData = casesData.map(
+        (item) =>
+          Math.ceil((item / population) * populationFor100000 * 100) / 100
+      );
+      deathsData = deathsData.map(
+        (item) =>
+          Math.ceil((item / population) * populationFor100000 * 100) / 100
+      );
+      recoveredData = recoveredData.map(
+        (item) =>
+          Math.ceil((item / population) * populationFor100000 * 100) / 100
+      );
+    }
+    return { labelsArr, casesData, deathsData, recoveredData };
   }
 }

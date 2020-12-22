@@ -26,49 +26,46 @@ export default class ListTableSearchView extends EventEmitter {
 
   rebuildList() {
     const { list } = this.elements;
-    const searchValue = this.model.searchInputValue;
     this.elements.list.innerHTML = '';
     if (this.elements.list.nextSibling !== null) {
       this.elements.list.nextSibling.remove();
     }
 
     const fragment = new DocumentFragment();
-    this.model
-      .getCountries()
-      .filter((obj) => obj.Country.toLowerCase().includes(searchValue))
-      .forEach((obj, index) => {
-        const cases = this.model.returnCasesWithCheckCheckboxes(
-          obj,
-          'confirmed'
-        );
-        const flagImg = create('img', {
-          className: 'flag-img',
-          child: null,
-          parent: null,
-          dataAttr: [['src', obj.CountryInfo.flag]],
-        });
-        const countryName = create('span', {
-          className: 'select__country-name',
-          child: obj.Country,
-        });
-        const casesCount = create('span', {
-          className: 'select__cases-count',
-          child: `${cases.toLocaleString('en-EN')} `,
-        });
-        const newLi = create('li', {
-          className: 'list__li',
-          child: [flagImg, casesCount, countryName],
-          parent: null,
-          dataAttr: [
-            ['key', index],
-            ['code', obj.CountryInfo.iso2],
-          ],
-        });
-        fragment.append(newLi);
-        newLi.addEventListener('click', (e) => {
-          this.emit('chooseCountry', e.target.closest('li').dataset.code);
-        });
+    this.model.getCountries().forEach((obj, index) => {
+      const cases = this.model.returnCasesWithCheckCheckboxes(obj, 'confirmed');
+      const flagImg = create('img', {
+        className: 'flag-img',
+        child: null,
+        parent: null,
+        dataAttr: [['src', obj.CountryInfo.flag]],
       });
+      const countryName = create('span', {
+        className: 'select__country-name',
+        child: obj.Country,
+      });
+      const casesCount = create('span', {
+        className: 'select__cases-count',
+        child: `${cases.toLocaleString('en-EN')} `,
+      });
+      const newLi = create('li', {
+        className: 'list__li',
+        child: [flagImg, casesCount, countryName],
+        parent: null,
+        dataAttr: [
+          ['key', index],
+          ['name', obj.Country],
+        ],
+      });
+      fragment.append(newLi);
+      newLi.addEventListener('click', (e) =>
+        this.emit(
+          'chooseCountry',
+          e.target.closest('li').dataset.name,
+          e.target.closest('li').getAttribute('key')
+        )
+      );
+    });
     list.append(fragment);
     const checkbox = this.renderCheckbox('forList');
     list.parentNode.append(checkbox);
@@ -90,8 +87,8 @@ export default class ListTableSearchView extends EventEmitter {
   }
 
   rebuildTableByCountry() {
-    const countryCode = this.model.selectedCountryCode;
-    const currentCountryObj = this.model.getCountryByCode(countryCode);
+    const countryName = this.model.selectedCountryName;
+    const currentCountryObj = this.model.getCountryByCode(countryName);
     const tableName = currentCountryObj.Country;
     const confirmed = this.model.returnCasesWithCheckCheckboxes(
       currentCountryObj,
@@ -115,19 +112,19 @@ export default class ListTableSearchView extends EventEmitter {
   }
 
   rebuildTable() {
-    if (this.model.selectedCountryCode) {
+    if (this.model.selectedCountryName) {
       this.rebuildTableByCountry();
       return;
     }
     const currentCountryObj = this.model.getGlobal();
     const tableName = 'Global Cases';
-    const confirmed = this.model.checkboxCasesIsChecked
+    const confirmed = this.model.checkboxPerDayCasesIsChecked
       ? currentCountryObj.NewConfirmed
       : currentCountryObj.TotalConfirmed;
-    const deaths = this.model.checkboxCasesIsChecked
+    const deaths = this.model.checkboxPerDayCasesIsChecked
       ? currentCountryObj.NewDeaths
       : currentCountryObj.TotalDeaths;
-    const recovered = this.model.checkboxCasesIsChecked
+    const recovered = this.model.checkboxPerDayCasesIsChecked
       ? currentCountryObj.NewRecovered
       : currentCountryObj.TotalRecovered;
     this.renderTable(tableName, confirmed, deaths, recovered);

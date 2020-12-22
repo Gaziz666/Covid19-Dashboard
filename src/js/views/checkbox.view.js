@@ -64,8 +64,8 @@ export default class CheckboxView extends EventEmitter {
       ],
     });
 
-    inputCases.checked = this.model.checkboxCasesIsChecked;
-    inputPerHundred.checked = this.model.checkboxForPopulationIsChecked;
+    inputCases.checked = this.model.checkboxPerDayCasesIsChecked;
+    inputPerHundred.checked = this.model.checkboxFor100ThouthandPopulationIsChecked;
 
     checkBoxContainer.append(inputPerHundred, labelPerHundred);
     this.inputCases = inputCases;
