@@ -58,6 +58,7 @@ export default class MainView extends EventEmitter {
 
     document.body.prepend(footer);
     document.body.prepend(main);
+    document.body.prepend(header);
     const viewListTableSearch = new ListTableSearchView(
       this.model,
       this.elements
