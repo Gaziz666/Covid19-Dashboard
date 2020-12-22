@@ -102,6 +102,6 @@ ol {
 .footer {
   background-color: #1c1c1c;
   height: 100px;
-  bottom: 0;
+  /* bottom: 0; */
   width: 100%;
 }

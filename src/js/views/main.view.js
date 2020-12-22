@@ -18,7 +18,7 @@ export default class MainView extends EventEmitter {
       className: 'header',
       child: null,
     });
-    const headerTitle = create('h1', {
+    create('h1', {
       className: 'header_title',
       child: 'COVID-19 Dashboard by RS School',
       parent: header,
