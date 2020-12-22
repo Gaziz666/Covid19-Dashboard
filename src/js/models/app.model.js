@@ -35,7 +35,7 @@ export default class AppModel extends EventEmitter {
         fetch(urlAllPopulation),
       ]);
     } catch (err) {
-      alert('Sorry API don\'t work Please wait api response and repeat late');
+      alert('Sorry API do not work Please wait api response and repeat late');
     }
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
@@ -79,14 +79,13 @@ export default class AppModel extends EventEmitter {
       resCountryHistory = await fetch(url);
     } catch (err) {
       alert(
-        'Sorry API for Char don\'t work Please wait api response and repeat late'
+        'Sorry API for Char do not work Please wait api response and repeat late'
       );
     }
     this.countryHistoryCases = await resCountryHistory.json();
   }
 
   getCountries() {
-    console.log('getcountys work');
     const cases = this.checkboxPerDayCasesIsChecked
       ? 'NewConfirmed'
       : 'TotalConfirmed';
@@ -99,7 +98,6 @@ export default class AppModel extends EventEmitter {
         );
     }
     const populationFor100000 = 100000;
-
     return this.countryDataArr
       .sort(
         (a, b) =>
@@ -145,42 +143,30 @@ export default class AppModel extends EventEmitter {
     this.emit('rebuildView');
   }
 
-  returnCasesWithCheckCheckboxes(countryObj, type) {
+  returnCasesWithCheckCheckboxes(caseType, countryObject) {
     let cases = '';
-    const vewType = {
-      confirmed: {
-        Total: 'TotalConfirmed',
-        New: 'NewConfirmed',
-        Population: 'Population',
-      },
-      deaths: {
-        Total: 'TotalDeaths',
-        New: 'NewDeaths',
-        Population: 'Population',
-      },
-      recovered: {
-        Total: 'TotalRecovered',
-        New: 'NewRecovered',
-        Population: 'Population',
-      },
-    };
+    let countryObj = this.objData.Global;
+    let population = this.selectedCountryPopulation;
+    if (countryObject) {
+      population = countryObject.Population;
+      countryObj = countryObject;
+    }
+    if (countryObject === undefined && this.selectedCountryIndex) {
+      countryObj = this.countryDataArr[this.selectedCountryIndex];
+    }
     if (!this.checkboxFor100ThouthandPopulationIsChecked) {
       cases = this.checkboxPerDayCasesIsChecked
-        ? countryObj[vewType[type].New]
-        : countryObj[vewType[type].Total];
+        ? countryObj[caseType.NEW]
+        : countryObj[caseType.TOTAL];
     } else {
       const populationFor100000 = 100000;
       const casesTodayPerHundred =
         Math.ceil(
-          (countryObj[vewType[type].New] / countryObj.Population) *
-            populationFor100000 *
-            100
+          (countryObj[caseType.NEW] / population) * populationFor100000 * 100
         ) / 100;
       const casesTotalPerHundred =
         Math.ceil(
-          (countryObj[vewType[type].Total] / countryObj.Population) *
-            populationFor100000 *
-            100
+          (countryObj[caseType.TOTAL] / population) * populationFor100000 * 100
         ) / 100;
       cases = this.checkboxPerDayCasesIsChecked
         ? casesTodayPerHundred

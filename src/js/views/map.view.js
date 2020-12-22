@@ -1,7 +1,8 @@
 import L from 'leaflet';
 import EventEmitter from '../eventEmitter';
-import { MAP_SETTINGS, CASES_TYPES } from '../utils/constants';
+import { MAP_SETTINGS, CASES_TYPES, CASES } from '../utils/constants';
 import CheckboxView from './checkbox.view';
+import CheckboxController from '../controller/checkbox.controller';
 
 import '../../css/map.css';
 import create from '../utils/create';
@@ -99,8 +100,8 @@ export default class MapView extends EventEmitter {
         const { Country, Date } = properties;
         const { index } = feature;
         let casesString = this.model.returnCasesWithCheckCheckboxes(
-          properties,
-          'confirmed'
+          CASES.CONFIRMED,
+          properties
         );
 
         const casesNumber = Number(casesString.split(',').join(''));
@@ -124,16 +125,16 @@ export default class MapView extends EventEmitter {
               <h2>${Country}</h2>
               <ul>
                 <li><strong>Confirmed:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  properties,
-                  'confirmed'
+                  CASES.CONFIRMED,
+                  properties
                 )}</li>
                 <li><strong>Deaths:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  properties,
-                  'deaths'
+                  CASES.DEATHS,
+                  properties
                 )}</li>
                 <li><strong>Recovered:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  properties,
-                  'recovered'
+                  CASES.RECOVERED,
+                  properties
                 )}</li>
                 <li><strong>Last Update:</strong> ${Date}</li>
               </ul>
@@ -155,12 +156,9 @@ export default class MapView extends EventEmitter {
 
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox('forMap');
-    checkbox.inputCases.onchange = (e) => {
-      this.emit('changeCases', e.target);
-    };
-    checkbox.inputPerHundred.onchange = (e) => {
-      this.emit('changeForPopulations', e.target);
-    };
+    // eslint-disable-next-line no-unused-vars
+    const checkboxController = new CheckboxController(this.model, checkbox);
+
     this.elements.map.append(checkBoxContainer);
   }
 
