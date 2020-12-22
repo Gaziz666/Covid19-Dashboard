@@ -15,8 +15,12 @@ export default class MapView extends EventEmitter {
     this.sizeClassSelector = '';
 
     this.elements.map.addEventListener('click', (e) => {
-      if (e.target.hasAttribute('data-countrycode')) {
-        this.emit('chooseCountry', e.target.dataset.countrycode);
+      if (e.target.hasAttribute('data-country_name')) {
+        this.emit(
+          'chooseCountry',
+          e.target.dataset.country_name,
+          e.target.dataset.country_index
+        );
       }
     });
   }
@@ -72,7 +76,7 @@ export default class MapView extends EventEmitter {
 
     const geoJson = {
       type: 'FeatureCollection',
-      features: this.countryDataArr.map((country = {}) => {
+      features: this.countryDataArr.map((country = {}, index) => {
         const { CountryInfo = {} } = country;
         const { lat, long } = CountryInfo;
         return {
@@ -84,6 +88,7 @@ export default class MapView extends EventEmitter {
             type: 'Point',
             coordinates: [long, lat],
           },
+          index,
         };
       }),
     };
@@ -92,6 +97,7 @@ export default class MapView extends EventEmitter {
       pointToLayer: (feature = {}, latLong) => {
         const { properties = {} } = feature;
         const { Country, Date } = properties;
+        const { index } = feature;
         let casesString = this.model.returnCasesWithCheckCheckboxes(
           properties,
           'confirmed'
@@ -113,7 +119,7 @@ export default class MapView extends EventEmitter {
         const html = `
           <span class="icon-marker ${
             this.sizeClassSelector
-          }" data-countryCode=${properties.CountryInfo.iso2}>
+          }" data-country_name="${Country}" data-country_index="${index}">
             <span class="icon-marker-tooltip">
               <h2>${Country}</h2>
               <ul>

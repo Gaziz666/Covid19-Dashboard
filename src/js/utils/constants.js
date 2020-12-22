@@ -1,7 +1,11 @@
 const URL = {
   SUMMARY: 'https://api.covid19api.com/summary',
-  COUNTRY: 'https://corona.lmao.ninja/v2/countries',
+  COUNTRY_ARR: 'https://corona.lmao.ninja/v2/countries',
   ALL_DAYS: 'https://disease.sh/v3/covid-19/historical/all?lastdays=366',
+  ALL_DAYS_GLOBAL: 'https://corona-api.com/timeline',
+  COUNTRY_HISTORY: 'https://corona.lmao.ninja/v3/covid-19/historical/',
+  PERIOD: '?lastdays=366',
+  ALL_POPULATION: 'https://corona.lmao.ninja/v3/covid-19/all',
 };
 
 const MAP_SETTINGS = {
