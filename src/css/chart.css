@@ -2,3 +2,10 @@
   width: 800px;
   height: 400px;
 }
+
+@media screen and (max-width: 600px) {
+  .chart {
+    height: 300px;
+    width: 320px;
+  }
+}

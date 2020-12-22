@@ -38,6 +38,9 @@ ol {
 .main {
   /* position: relative; */
   z-index: 0;
+  /* добавила - ??  */
+  /* display: flex;
+  flex-direction: row; */
 }
 
 .select-main {
@@ -46,61 +49,45 @@ ol {
 }
 
 .header {
+  display: flex;
+  justify-content: center;
   align-items: center;
   text-align: center;
   width: 100%;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  height: 50px;
   background-color: #1c1c1c;
+  border: 1px solid #1c1c1c;
+}
+
+.header_title {
   margin: 0 auto;
   align-items: center;
 }
-
 .first-column {
   align-items: center;
 }
 
 .global-cases {
   text-align: center;
-  color: #c90a0e;
+  color: #ffffff;
   border: 2px solid #1c1c1c;
   background-color: #1c1c1c;
-  margin-bottom: 20px;
+  border: 1px solid #1c1c1c;
 }
 
-.global__cases {
-  font-size: 2.5em;
+.global__cases,
+.global__header {
+  font-size: 2rem;
+  margin: 0 auto;
+  padding: 10px;
 }
 
 .second-column {
   width: 100%;
 }
-.table {
-  background-color: #1c1c1c;
-}
 
-.table__country-name {
-  align-items: center;
-  text-align: center;
-}
-
-.table-column {
-  text-align: center;
-}
-
-.table-column__confirmed {
-  color: #ffac00;
-}
-
-.table-column__deaths {
-  color: #c90a0e;
-}
-
-.table-column__recovered {
-  color: #4be700;
-}
-
-.table-body {
-  font-size: 20px;
-}
 @media (min-width: 1000px) {
   .select-main {
     display: flex;
@@ -115,4 +102,7 @@ ol {
 .footer {
   background-color: #1c1c1c;
   height: 100px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
