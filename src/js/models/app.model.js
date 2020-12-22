@@ -5,28 +5,45 @@ export default class AppModel extends EventEmitter {
     super();
     this.objData = objData || {};
     this.countryDataArr = [];
-    this.selectedCountryCode = '';
+    this.countryHistoryCases = {};
+    this.allDate = {};
+    this.selectedCountryName = '';
+    this.selectedCountryIndex = '';
+    this.selectedCountryPopulation = '';
     this.searchInputValue = '';
-    this.checkboxCasesIsChecked = false;
-    this.checkboxForPopulationIsChecked = false;
+    this.checkboxPerDayCasesIsChecked = false;
+    this.checkboxFor100ThouthandPopulationIsChecked = false;
   }
 
-  async fetchData(urlCountry, urlSummary, urlAllDays) {
-    let [resCountry, resSummary, resAllDays] = ['', '', ''];
+  async fetchData(urlCountry, urlSummary, urlAllDays, urlAllPopulation) {
+    let [resCountry, resSummary, resAllDays, resAllPopulation] = [
+      '',
+      '',
+      '',
+      {},
+    ];
     try {
-      [resCountry, resSummary, resAllDays] = await Promise.all([
+      [
+        resCountry,
+        resSummary,
+        resAllDays,
+        resAllPopulation,
+      ] = await Promise.all([
         fetch(urlCountry),
         fetch(urlSummary),
         fetch(urlAllDays),
+        fetch(urlAllPopulation),
       ]);
     } catch (err) {
-      console.log('error', err);
+      alert('Sorry API don\'t work Please wait api response and repeat late');
     }
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
     const allDays = await resAllDays.json();
+    const allPopulation = await resAllPopulation.json();
+    this.selectedCountryPopulation = allPopulation.population;
     if (summaryData.Message) {
-      alert(`${summaryData.Message} Please wait api response`);
+      alert(`${summaryData.Message} Please wait api response and repeat late`);
     }
     this.allDate = allDays;
     this.objData = summaryData;
@@ -56,27 +73,47 @@ export default class AppModel extends EventEmitter {
     this.countryDataArr = summaryData.Countries;
   }
 
+  async fetchCountryData(url) {
+    let resCountryHistory = '';
+    try {
+      resCountryHistory = await fetch(url);
+    } catch (err) {
+      alert(
+        'Sorry API for Char don\'t work Please wait api response and repeat late'
+      );
+    }
+    this.countryHistoryCases = await resCountryHistory.json();
+  }
+
   getCountries() {
-    const cases = this.checkboxCasesIsChecked
+    console.log('getcountys work');
+    const cases = this.checkboxPerDayCasesIsChecked
       ? 'NewConfirmed'
       : 'TotalConfirmed';
 
-    if (!this.checkboxForPopulationIsChecked) {
-      return this.countryDataArr.sort(
-        (a, b) => Number(b[cases]) - Number(a[cases])
-      );
+    if (!this.checkboxFor100ThouthandPopulationIsChecked) {
+      return this.countryDataArr
+        .sort((a, b) => Number(b[cases]) - Number(a[cases]))
+        .filter((obj) =>
+          obj.Country.toLowerCase().includes(this.searchInputValue)
+        );
     }
     const populationFor100000 = 100000;
-    return this.countryDataArr.sort(
-      (a, b) =>
-        Number((+b[cases] / +b.Population) * populationFor100000) -
-        Number((+a[cases] / +a.Population) * populationFor100000)
-    );
+
+    return this.countryDataArr
+      .sort(
+        (a, b) =>
+          Number((+b[cases] / +b.Population) * populationFor100000) -
+          Number((+a[cases] / +a.Population) * populationFor100000)
+      )
+      .filter((obj) =>
+        obj.Country.toLowerCase().includes(this.searchInputValue)
+      );
   }
 
-  getCountryByCode(countryCode) {
+  getCountryByCode(countryName) {
     return this.countryDataArr.filter(
-      (item) => item.CountryInfo.iso2 === countryCode
+      (item) => item.Country === countryName
     )[0];
   }
 
@@ -84,8 +121,12 @@ export default class AppModel extends EventEmitter {
     return this.objData.Global;
   }
 
-  chooseCountry(countryCode) {
-    this.selectedCountryCode = countryCode;
+  chooseCountry(countryName, countryIndex) {
+    this.selectedCountryName = countryName;
+    this.selectedCountryIndex = countryIndex;
+    this.selectedCountryPopulation = this.countryDataArr[
+      countryIndex
+    ].Population;
     this.emit('changeCountry');
   }
 
@@ -95,12 +136,12 @@ export default class AppModel extends EventEmitter {
   }
 
   changeCasesView(checkbox) {
-    this.checkboxCasesIsChecked = checkbox.checked;
+    this.checkboxPerDayCasesIsChecked = checkbox.checked;
     this.emit('rebuildView');
   }
 
   changeForPopulationView(checkbox) {
-    this.checkboxForPopulationIsChecked = checkbox.checked;
+    this.checkboxFor100ThouthandPopulationIsChecked = checkbox.checked;
     this.emit('rebuildView');
   }
 
@@ -123,8 +164,8 @@ export default class AppModel extends EventEmitter {
         Population: 'Population',
       },
     };
-    if (!this.checkboxForPopulationIsChecked) {
-      cases = this.checkboxCasesIsChecked
+    if (!this.checkboxFor100ThouthandPopulationIsChecked) {
+      cases = this.checkboxPerDayCasesIsChecked
         ? countryObj[vewType[type].New]
         : countryObj[vewType[type].Total];
     } else {
@@ -141,7 +182,7 @@ export default class AppModel extends EventEmitter {
             populationFor100000 *
             100
         ) / 100;
-      cases = this.checkboxCasesIsChecked
+      cases = this.checkboxPerDayCasesIsChecked
         ? casesTodayPerHundred
         : casesTotalPerHundred;
     }

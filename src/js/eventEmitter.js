@@ -8,7 +8,7 @@ export default class EventEmitter {
     return this;
   }
 
-  emit(event, arg) {
-    (this.events[event] || []).forEach((listener) => listener(arg));
+  emit(event, ...arg) {
+    (this.events[event] || []).forEach((listener) => listener(...arg));
   }
 }
