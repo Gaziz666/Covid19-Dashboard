@@ -97,6 +97,7 @@ ol {
   height: 700px;
   padding-top: 20px;
   margin: auto 0;
+  width: 40%;
 }
 
 @media screen and (max-width: 1615px) {
