@@ -22,9 +22,12 @@ export default class ChartView extends EventEmitter {
   rebuildCharCountry() {
     // eslint-disable-next-line no-unused-vars
     const loadCountryData = new Promise((resolve) => {
+      console.log(
+        URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
+      );
       resolve(
         this.model.fetchCountryData(
-          URL.COUNTRY_HISTORY + this.model.selectedCountryName + URL.PERIOD
+          URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
         )
       );
     }).then(() => {
@@ -100,18 +103,23 @@ export default class ChartView extends EventEmitter {
   }
 
   checkCheckbox() {
-    let { cases, deaths, recovered } = this.allDate;
-    const population = Number(this.model.selectedCountryPopulation);
-    if (this.model.selectedCountryName) {
-      cases = this.model.countryHistoryCases.timeline.cases;
-      deaths = this.model.countryHistoryCases.timeline.deaths;
-      recovered = this.model.countryHistoryCases.timeline.recovered;
-    }
-
-    const labelsArr = Object.keys(cases);
+    const { cases, deaths, recovered } = this.allDate;
+    let labelsArr = Object.keys(cases);
     let casesData = Object.values(cases);
     let deathsData = Object.values(deaths);
     let recoveredData = Object.values(recovered);
+    const population = Number(this.model.selectedCountryPopulation);
+    if (this.model.selectedCountrySlug) {
+      casesData = this.model.countryHistoryCases.map((item) => item.Confirmed);
+      deathsData = this.model.countryHistoryCases.map((item) => item.Deaths);
+      recoveredData = this.model.countryHistoryCases.map(
+        (item) => item.Recovered
+      );
+      labelsArr = this.model.countryHistoryCases.map((item) =>
+        item.Date.slice(0, 10)
+      );
+    }
+
     if (this.model.checkboxPerDayCasesIsChecked) {
       casesData = casesData.map((item, i, arr) => item - arr[i - 1]);
       deathsData = deathsData.map((item, i, arr) => item - arr[i - 1]);

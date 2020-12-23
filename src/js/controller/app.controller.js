@@ -10,8 +10,8 @@ export default class AppController {
     });
 
     this.viewListTableSearch
-      .on('chooseCountry', (countryCode, countryIndex) => {
-        this.updateSelectedCountry(countryCode, countryIndex);
+      .on('chooseCountry', (countrySlug, countryIndex) => {
+        this.updateSelectedCountry(countrySlug, countryIndex);
       })
       .on('searchCountry', (countryLetter) => {
         this.searchCountry(countryLetter);
@@ -29,8 +29,8 @@ export default class AppController {
       });
   }
 
-  updateSelectedCountry(countryCode, countryIndex) {
-    this.model.chooseCountry(countryCode, countryIndex);
+  updateSelectedCountry(countrySlug, countryIndex) {
+    this.model.chooseCountry(countrySlug, countryIndex);
   }
 
   searchCountry(letter) {
