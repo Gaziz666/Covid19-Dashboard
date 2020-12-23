@@ -35,7 +35,7 @@ export default class AppModel extends EventEmitter {
         fetch(urlAllPopulation),
       ]);
     } catch (err) {
-      alert('Sorry API don\'t work Please wait api response and repeat late');
+      alert('Sorry API down. Please wait api response and repeat later');
     }
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
@@ -43,7 +43,7 @@ export default class AppModel extends EventEmitter {
     const allPopulation = await resAllPopulation.json();
     this.selectedCountryPopulation = allPopulation.population;
     if (summaryData.Message) {
-      alert(`${summaryData.Message} Please wait api response and repeat late`);
+      alert(`${summaryData.Message} Please wait api response and repeat later`);
     }
     this.allDate = allDays;
     this.objData = summaryData;
@@ -79,7 +79,7 @@ export default class AppModel extends EventEmitter {
       resCountryHistory = await fetch(url);
     } catch (err) {
       alert(
-        'Sorry API for Char don\'t work Please wait api response and repeat late'
+        'Sorry API for Char down. Please wait api response and repeat later'
       );
     }
     this.countryHistoryCases = await resCountryHistory.json();
