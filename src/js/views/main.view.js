@@ -45,7 +45,7 @@ export default class MainView extends EventEmitter {
       child: null,
       parent: rsLogo,
       dataAttr: [
-        ['src', '../src/assets/img/rs_school_js.svg'],
+        ['src', './assets/img/rs_school_js.svg'],
         ['alt', 'RS School logo'],
       ],
     });
@@ -69,7 +69,7 @@ export default class MainView extends EventEmitter {
       child: null,
       parent: gitHubInfo,
       dataAttr: [
-        ['src', '../src/assets/img/github-logo.svg'],
+        ['src', './assets/img/github-logo.svg'],
         ['alt', 'GitHub logo'],
       ],
     });
