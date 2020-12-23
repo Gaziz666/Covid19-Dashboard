@@ -1,10 +1,14 @@
 import EventEmitter from '../eventEmitter';
 import create from '../utils/create';
 import CheckboxView from './checkbox.view';
+import CasesTypeBtnView from './casesTypeBtn.view';
+import CheckboxController from '../controller/checkbox.controller';
+import CasesBtnController from '../controller/casesBtn.controller';
 
 import '../../css/checkbox.css';
 import '../../css/select.css';
 import '../../css/table.css';
+import { CASES } from '../utils/constants';
 
 export default class ListTableSearchView extends EventEmitter {
   constructor(model, elements) {
@@ -29,11 +33,12 @@ export default class ListTableSearchView extends EventEmitter {
     this.elements.list.innerHTML = '';
     if (this.elements.list.nextSibling !== null) {
       this.elements.list.nextSibling.remove();
+      this.elements.list.parentNode.lastChild.remove();
     }
 
     const fragment = new DocumentFragment();
     this.model.getCountries().forEach((obj, index) => {
-      const cases = this.model.returnCasesWithCheckCheckboxes(obj, 'confirmed');
+      const cases = this.model.returnCasesWithCheckCheckboxes(null, obj);
       const flagImg = create('img', {
         className: 'flag-img',
         child: null,
@@ -68,7 +73,8 @@ export default class ListTableSearchView extends EventEmitter {
     });
     list.append(fragment);
     const checkbox = this.renderCheckbox('forList');
-    list.parentNode.append(checkbox);
+    const casesBtn = this.renderCasesTypeBtn();
+    list.parentNode.append(casesBtn, checkbox);
   }
 
   rebuildTotalCases() {
@@ -90,18 +96,9 @@ export default class ListTableSearchView extends EventEmitter {
     const countryName = this.model.selectedCountryName;
     const currentCountryObj = this.model.getCountryByCode(countryName);
     const tableName = currentCountryObj.Country;
-    const confirmed = this.model.returnCasesWithCheckCheckboxes(
-      currentCountryObj,
-      'confirmed'
-    );
-    const deaths = this.model.returnCasesWithCheckCheckboxes(
-      currentCountryObj,
-      'deaths'
-    );
-    const recovered = this.model.returnCasesWithCheckCheckboxes(
-      currentCountryObj,
-      'recovered'
-    );
+    const confirmed = this.model.returnCasesWithCheckCheckboxes(CASES[0]);
+    const deaths = this.model.returnCasesWithCheckCheckboxes(CASES[1]);
+    const recovered = this.model.returnCasesWithCheckCheckboxes(CASES[2]);
     let i = this.elements.tableCases.childNodes.length - 1;
     while (i > -1) {
       this.elements.tableCases.childNodes[i].remove();
@@ -116,17 +113,11 @@ export default class ListTableSearchView extends EventEmitter {
       this.rebuildTableByCountry();
       return;
     }
-    const currentCountryObj = this.model.getGlobal();
     const tableName = 'Global Cases';
-    const confirmed = this.model.checkboxPerDayCasesIsChecked
-      ? currentCountryObj.NewConfirmed
-      : currentCountryObj.TotalConfirmed;
-    const deaths = this.model.checkboxPerDayCasesIsChecked
-      ? currentCountryObj.NewDeaths
-      : currentCountryObj.TotalDeaths;
-    const recovered = this.model.checkboxPerDayCasesIsChecked
-      ? currentCountryObj.NewRecovered
-      : currentCountryObj.TotalRecovered;
+    const confirmed = this.model.returnCasesWithCheckCheckboxes(CASES[0]);
+    const deaths = this.model.returnCasesWithCheckCheckboxes(CASES[1]);
+    const recovered = this.model.returnCasesWithCheckCheckboxes(CASES[2]);
+
     this.renderTable(tableName, confirmed, deaths, recovered);
   }
 
@@ -190,12 +181,19 @@ export default class ListTableSearchView extends EventEmitter {
   renderCheckbox(name) {
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox(name);
-    checkbox.inputCases.onchange = (e) => {
-      this.emit('changeCases', e.target);
-    };
-    checkbox.inputPerHundred.onchange = (e) => {
-      this.emit('changeForPopulations', e.target);
-    };
+    // eslint-disable-next-line no-unused-vars
+    const checkboxController = new CheckboxController(this.model, checkbox);
     return checkBoxContainer;
+  }
+
+  renderCasesTypeBtn() {
+    const casesTypeButton = new CasesTypeBtnView(this.model);
+    const casesBtnContainer = casesTypeButton.renderButton();
+    // eslint-disable-next-line no-unused-vars
+    const casesBtnController = new CasesBtnController(
+      this.model,
+      casesTypeButton
+    );
+    return casesBtnContainer;
   }
 }

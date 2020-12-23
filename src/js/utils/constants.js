@@ -32,4 +32,19 @@ const CASES_TYPES = {
   EXTRA_ULTRA_CASES: 1000000000,
 };
 
-export { URL, MAP_SETTINGS, CASES_TYPES };
+const CASES = [
+  {
+    NEW: 'NewConfirmed',
+    TOTAL: 'TotalConfirmed',
+  },
+  {
+    NEW: 'NewDeaths',
+    TOTAL: 'TotalDeaths',
+  },
+  {
+    NEW: 'NewRecovered',
+    TOTAL: 'TotalRecovered',
+  },
+];
+
+export { URL, MAP_SETTINGS, CASES_TYPES, CASES };

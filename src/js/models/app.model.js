@@ -1,4 +1,5 @@
 import EventEmitter from '../eventEmitter';
+import { CASES } from '../utils/constants';
 
 export default class AppModel extends EventEmitter {
   constructor(objData) {
@@ -13,6 +14,7 @@ export default class AppModel extends EventEmitter {
     this.searchInputValue = '';
     this.checkboxPerDayCasesIsChecked = false;
     this.checkboxFor100ThouthandPopulationIsChecked = false;
+    this.casesTypeIndex = 0;
   }
 
   async fetchData(urlCountry, urlSummary, urlAllDays, urlAllPopulation) {
@@ -87,10 +89,9 @@ export default class AppModel extends EventEmitter {
   }
 
   getCountries() {
-    console.log('getcountys work');
     const cases = this.checkboxPerDayCasesIsChecked
-      ? 'NewConfirmed'
-      : 'TotalConfirmed';
+      ? CASES[this.casesTypeIndex].NEW
+      : CASES[this.casesTypeIndex].TOTAL;
 
     if (!this.checkboxFor100ThouthandPopulationIsChecked) {
       return this.countryDataArr
@@ -100,7 +101,6 @@ export default class AppModel extends EventEmitter {
         );
     }
     const populationFor100000 = 100000;
-
     return this.countryDataArr
       .sort(
         (a, b) =>
@@ -146,40 +146,42 @@ export default class AppModel extends EventEmitter {
     this.emit('rebuildView');
   }
 
-  returnCasesWithCheckCheckboxes(countryObj, type) {
+  changeCasesTypeViewAdd() {
+    this.casesTypeIndex = (this.casesTypeIndex + 1) % 3;
+    this.emit('rebuildView');
+  }
+
+  changeCasesTypeViewInc() {
+    this.casesTypeIndex =
+      this.casesTypeIndex - 1 < 0 ? 2 : this.casesTypeIndex - 1;
+    this.emit('rebuildView');
+  }
+
+  returnCasesWithCheckCheckboxes(caseType, countryObject) {
     let cases = '';
-    const vewType = {
-      confirmed: {
-        Total: 'TotalConfirmed',
-        New: 'NewConfirmed',
-        Population: 'Population',
-      },
-      deaths: {
-        Total: 'TotalDeaths',
-        New: 'NewDeaths',
-        Population: 'Population',
-      },
-      recovered: {
-        Total: 'TotalRecovered',
-        New: 'NewRecovered',
-        Population: 'Population',
-      },
-    };
+    const caseTypeObj = caseType || CASES[this.casesTypeIndex];
+    let countryObj = this.objData.Global;
+    let population = this.selectedCountryPopulation;
+    if (countryObject) {
+      population = countryObject.Population;
+      countryObj = countryObject;
+    }
+    if (countryObject === undefined && this.selectedCountryIndex) {
+      countryObj = this.countryDataArr[this.selectedCountryIndex];
+    }
     if (!this.checkboxFor100ThouthandPopulationIsChecked) {
       cases = this.checkboxPerDayCasesIsChecked
-        ? countryObj[vewType[type].New]
-        : countryObj[vewType[type].Total];
+        ? countryObj[caseTypeObj.NEW]
+        : countryObj[caseTypeObj.TOTAL];
     } else {
       const populationFor100000 = 100000;
       const casesTodayPerHundred =
         Math.ceil(
-          (countryObj[vewType[type].New] / countryObj.Population) *
-            populationFor100000 *
-            100
+          (countryObj[caseTypeObj.NEW] / population) * populationFor100000 * 100
         ) / 100;
       const casesTotalPerHundred =
         Math.ceil(
-          (countryObj[vewType[type].Total] / countryObj.Population) *
+          (countryObj[caseTypeObj.TOTAL] / population) *
             populationFor100000 *
             100
         ) / 100;
