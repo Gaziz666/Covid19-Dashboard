@@ -18,6 +18,7 @@ export default class ResizeController {
     this.parentElement.classList.add('full-page');
     bigBtn.classList.add('disable');
     smallBtn.classList.remove('disable');
+    document.body.classList.add('hide-scroll');
   }
 
   smallSizeBlock(buttons) {
@@ -27,5 +28,6 @@ export default class ResizeController {
     this.parentElement.classList.remove('full-page');
     bigBtn.classList.remove('disable');
     smallBtn.classList.add('disable');
+    document.body.classList.remove('hide-scroll');
   }
 }
