@@ -1,12 +1,14 @@
+.map {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .map,
 .map-container,
 .map .map-base {
   position: relative;
-  max-height: 600px;
-  max-width: 1000px;
-  min-height: 350px;
-  min-width: 300px;
-  border: 1px solid #000;
+  height: 600px;
+  width: 100%;
 }
 
 .icon-marker {

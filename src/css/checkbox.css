@@ -28,7 +28,6 @@
   overflow-wrap: break-word;
   border: 1px solid rgb(111, 112, 112);
   border-top: none;
-  font-size: 0.5rem;
 }
 
 .on {
@@ -38,7 +37,6 @@
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border: 2px solid #a1a1a1;
-
 }
 
 .off {
@@ -49,7 +47,6 @@
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   border: 2px solid #a1a1a1;
-
 }
 
 .checkbox {
