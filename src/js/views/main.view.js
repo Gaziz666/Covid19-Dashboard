@@ -3,7 +3,6 @@ import AppController from '../controller/app.controller';
 import ListTableSearchView from './listTableSearch.view';
 import MapView from './map.view';
 import ChartView from './chart.view';
-import CheckboxView from './checkbox.view';
 import create from '../utils/create';
 
 export default class MainView extends EventEmitter {
@@ -65,7 +64,6 @@ export default class MainView extends EventEmitter {
     );
     const mapView = new MapView(this.model, this.elements);
     const chartView = new ChartView(this.model, this.elements);
-    const checkboxView = new CheckboxView(this.model);
 
     viewListTableSearch.show();
     mapView.show();
@@ -75,7 +73,6 @@ export default class MainView extends EventEmitter {
       this.model,
       viewListTableSearch,
       mapView,
-      checkboxView,
       chartView
     );
   }

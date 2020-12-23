@@ -5,6 +5,7 @@ import create from '../utils/create';
 import EventEmitter from '../eventEmitter';
 import CheckboxView from './checkbox.view';
 import { URL } from '../utils/constants';
+import CheckboxController from '../controller/checkbox.controller';
 
 export default class ChartView extends EventEmitter {
   constructor(model, elements) {
@@ -93,12 +94,8 @@ export default class ChartView extends EventEmitter {
 
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox('forChar');
-    checkbox.inputCases.onchange = (e) => {
-      this.emit('changeCases', e.target);
-    };
-    checkbox.inputPerHundred.onchange = (e) => {
-      this.emit('changeForPopulations', e.target);
-    };
+    // eslint-disable-next-line no-unused-vars
+    const checkboxController = new CheckboxController(this.model, checkbox);
     this.elements.chartContainer.append(checkBoxContainer);
   }
 
