@@ -91,18 +91,31 @@ ol {
   padding: 10px;
 }
 .first-column {
-  width: auto;
+  width: 340px;
   align-items: center;
-  padding: 20px;
+  padding-top: 20px;
 }
 .second-column {
   height: 700px;
   padding-top: 20px;
   margin: auto 0;
 }
-@media screen and (max-width: 1000px) {
+
+@media screen and (max-width: 1615px) {
   .second-column {
-    width: auto;
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .second-column {
+    width: 490px;
+  }
+}
+
+@media screen and (max-width: 630px) {
+  .third-column {
+    width: 490px;
   }
 }
 
@@ -112,7 +125,7 @@ ol {
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: space-evenly;
-  padding: 20px;
+  padding-top: 20px;
 }
 
 .footer {

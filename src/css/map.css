@@ -132,7 +132,7 @@
 
 .map__legend {
   position: absolute;
-  top: 80px;
+  bottom: 10px;
   left: 14px;
   display: flex;
   flex-direction: column;

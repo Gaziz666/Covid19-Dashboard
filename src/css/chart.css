@@ -1,11 +1,8 @@
+.chart {
+  width: auto;
+}
+
 .chartjs-render-monitor {
   height: 100%;
   width: 100%;
-}
-
-@media screen and (max-width: 600px) {
-  .chart {
-    height: 300px;
-    width: 320px;
-  }
 }
