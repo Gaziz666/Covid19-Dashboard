@@ -188,3 +188,7 @@
 .legend__color_ultra_max_cases {
   background-color: #ff0d00;
 }
+
+.leaflet-container {
+  background-color: #252525;
+}
