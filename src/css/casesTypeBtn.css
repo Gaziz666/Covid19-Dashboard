@@ -1,0 +1,27 @@
+.button-container {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+  align-items: center;
+}
+
+.button-left,
+.button-right {
+  background-color: transparent;
+  border-color: #ffffff;
+  color: #ffffff;
+  margin: 5px 0;
+  width: 31px;
+  height: 31px;
+  font-size: 1.1rem;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.cases-type {
+  border: 2px solid #ffffff;
+  font-size: 1.1rem;
+  padding: 5px;
+  width: 150px;
+  text-align: center;
+}
