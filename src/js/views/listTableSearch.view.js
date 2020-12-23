@@ -103,9 +103,18 @@ export default class ListTableSearchView extends EventEmitter {
     const countryName = this.model.selectedCountrySlug;
     const currentCountryObj = this.model.getCountryByCode(countryName);
     const tableName = currentCountryObj.Country;
-    const confirmed = this.model.returnCasesWithCheckCheckboxes(CASES[0]);
-    const deaths = this.model.returnCasesWithCheckCheckboxes(CASES[1]);
-    const recovered = this.model.returnCasesWithCheckCheckboxes(CASES[2]);
+    const confirmed = this.model.returnCasesWithCheckCheckboxes(
+      CASES[0],
+      currentCountryObj
+    );
+    const deaths = this.model.returnCasesWithCheckCheckboxes(
+      CASES[1],
+      currentCountryObj
+    );
+    const recovered = this.model.returnCasesWithCheckCheckboxes(
+      CASES[2],
+      currentCountryObj
+    );
     let i = this.elements.tableCases.childNodes.length - 1;
     while (i > -1) {
       this.elements.tableCases.childNodes[i].remove();
