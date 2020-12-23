@@ -1,5 +1,6 @@
 .table-cases {
   font-size: 1.2rem;
+  margin-bottom: 20px;
 }
 
 .table-header {
@@ -14,7 +15,7 @@
 
 .table {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
 }
 
@@ -35,6 +36,7 @@
 
 .table-column {
   text-align: center;
+  margin: 5px;
 }
 
 .table-column__confirmed {
