@@ -124,9 +124,13 @@ export default class ChartView extends EventEmitter {
     }
 
     if (this.model.checkboxPerDayCasesIsChecked) {
-      casesData = casesData.map((item, i, arr) => item - arr[i - 1]);
-      deathsData = deathsData.map((item, i, arr) => item - arr[i - 1]);
-      recoveredData = recoveredData.map((item, i, arr) => item - arr[i - 1]);
+      casesData = casesData.map((item, i, arr) => Math.abs(item - arr[i - 1]));
+      deathsData = deathsData.map((item, i, arr) =>
+        Math.abs(item - arr[i - 1])
+      );
+      recoveredData = recoveredData.map((item, i, arr) =>
+        Math.abs(item - arr[i - 1])
+      );
     }
     if (this.model.checkboxFor100ThouthandPopulationIsChecked) {
       const populationFor100000 = 100000;
