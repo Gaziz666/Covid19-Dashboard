@@ -3,6 +3,8 @@ import EventEmitter from '../eventEmitter';
 import { MAP_SETTINGS, CASES_TYPES, CASES } from '../utils/constants';
 import CheckboxView from './checkbox.view';
 import CasesTypeBtnView from './casesTypeBtn.view';
+import ResizeBtnView from './resizeBtn.view';
+import ResizeController from '../controller/resizeBtn.controller';
 import CheckboxController from '../controller/checkbox.controller';
 import CasesBtnController from '../controller/casesBtn.controller';
 
@@ -170,7 +172,16 @@ export default class MapView extends EventEmitter {
     const checkBoxContainer = checkbox.renderCheckbox('forMap');
     // eslint-disable-next-line no-unused-vars
     const checkboxController = new CheckboxController(this.model, checkbox);
-    this.elements.map.append(casesBtnContainer, checkBoxContainer);
+    const { bigBtn, smallBtn } = this.renderResizeButton(
+      this.elements.map.parentNode
+    );
+
+    this.elements.map.append(
+      bigBtn,
+      smallBtn,
+      casesBtnContainer,
+      checkBoxContainer
+    );
   }
 
   rebuildMapLegend() {
@@ -208,5 +219,13 @@ export default class MapView extends EventEmitter {
     fragment.prepend(legendTitle);
     mapLegend.append(fragment);
     this.elements.map.append(mapLegend);
+  }
+
+  renderResizeButton(element) {
+    const resizeBlock = new ResizeBtnView(this.model);
+    const { bigBtn, smallBtn } = resizeBlock.renderResizeBtn();
+    // eslint-disable-next-line no-unused-vars
+    const checkboxController = new ResizeController(resizeBlock, element);
+    return { bigBtn, smallBtn };
   }
 }
