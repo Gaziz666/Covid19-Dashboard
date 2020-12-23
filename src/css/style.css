@@ -5,13 +5,22 @@
   src: url('./../assets/fonts/Roboto-Regular.ttf') format('truetype');
 }
 
+/* * {
+  border: 2px solid red;
+} */
+
 html {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   background-color: rgb(43, 45, 46);
   color: #ffffff;
+  height: 100vh;
+  width: 100vw;
 }
-
+body {
+  width: 100vw;
+  height: 100vh;
+}
 *,
 *::before,
 *::after {
@@ -36,14 +45,10 @@ ol {
 }
 
 .main {
-  /* position: relative; */
   z-index: 0;
-  /* добавила - ??  */
-  /* display: flex;
-  flex-direction: row; */
 }
 
-.select-main {
+.section-main {
   display: flex;
   flex-direction: column;
 }
@@ -75,6 +80,8 @@ ol {
   border: 2px solid #1c1c1c;
   background-color: #1c1c1c;
   border: 1px solid #1c1c1c;
+  border-radius: 10px;
+  margin: 0px 5px;
 }
 
 .global__cases,
@@ -83,13 +90,18 @@ ol {
   margin: 0 auto;
   padding: 10px;
 }
-
+.first-column {
+  width: 20%;
+}
 .second-column {
-  width: 100%;
+  width: 50%;
+}
+.third-column {
+  width: 30%;
 }
 
 @media (min-width: 1000px) {
-  .select-main {
+  .section-main {
     display: flex;
     flex-direction: row;
   }
@@ -100,8 +112,51 @@ ol {
 }
 
 .footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #1c1c1c;
   height: 100px;
-  /* bottom: 0; */
-  width: 100%;
+  width: 100vw;
+}
+
+.footer_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  /* max-width: 1280px; */
+  padding: 0px 10px;
+  margin: 0px auto;
+}
+
+.rs_logo {
+  height: 100px;
+  width: 200px;
+}
+.github_logo {
+  height: 35px;
+  width: 35px;
+  margin: 0 auto;
+}
+
+.github_info {
+  display: flex;
+  flex-direction: column;
+}
+.github_links {
+  display: flex;
+  justify-content: center;
+}
+.github_link {
+  text-decoration: none;
+  color: #000000;
+  align-items: center;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.rs_image {
+  height: 70px;
+  width: 120px;
 }

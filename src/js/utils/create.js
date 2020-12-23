@@ -40,7 +40,7 @@ export default function create(el, { className, child, parent, dataAttr }) {
         element.setAttribute(attrValue, '');
       } else if (
         attrName.match(
-          /value|id|placeholder|cols|rows|autocorrect|spellcheck|for|type|style|src|href|target|size|key/
+          /value|id|placeholder|cols|rows|autocorrect|spellcheck|for|type|style|src|alt|href|target|size|key/
         )
       ) {
         element.setAttribute(attrName, attrValue);
