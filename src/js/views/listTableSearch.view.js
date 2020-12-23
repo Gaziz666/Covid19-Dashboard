@@ -2,6 +2,8 @@ import EventEmitter from '../eventEmitter';
 import create from '../utils/create';
 import CheckboxView from './checkbox.view';
 import CasesTypeBtnView from './casesTypeBtn.view';
+import ResizeBtnView from './resizeBtn.view';
+import ResizeController from '../controller/resizeBtn.controller';
 import CheckboxController from '../controller/checkbox.controller';
 import CasesBtnController from '../controller/casesBtn.controller';
 
@@ -74,7 +76,8 @@ export default class ListTableSearchView extends EventEmitter {
     list.append(fragment);
     const checkbox = this.renderCheckbox('forList');
     const casesBtn = this.renderCasesTypeBtn();
-    list.parentNode.append(casesBtn, checkbox);
+    const { bigBtn, smallBtn } = this.renderResizeButton(list.parentNode);
+    list.parentNode.append(bigBtn, smallBtn, casesBtn, checkbox);
   }
 
   rebuildTotalCases() {
@@ -195,5 +198,13 @@ export default class ListTableSearchView extends EventEmitter {
       casesTypeButton
     );
     return casesBtnContainer;
+  }
+
+  renderResizeButton(element) {
+    const resizeBlock = new ResizeBtnView(this.model);
+    const { bigBtn, smallBtn } = resizeBlock.renderResizeBtn();
+    // eslint-disable-next-line no-unused-vars
+    const checkboxController = new ResizeController(resizeBlock, element);
+    return { bigBtn, smallBtn };
   }
 }

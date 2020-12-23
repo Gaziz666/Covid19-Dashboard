@@ -109,7 +109,7 @@ export default class MainView extends EventEmitter {
     this.elements.tableCases = create('div', { className: 'table-cases' });
     this.elements.map = create('div', { className: 'map' });
     const selectSearchWrapper = create('div', {
-      className: 'select-search-wrapper',
+      className: 'select-search-wrapper relative',
       child: [this.elements.inputSearch, this.elements.list],
     });
     this.elements.chartContainer = create('div', { className: 'chart' });

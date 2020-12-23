@@ -37,6 +37,7 @@ ol {
 }
 
 .main {
+  position: relative;
   z-index: 0;
   min-height: calc(100% - 180px);
 }
@@ -188,4 +189,34 @@ ol {
 .rs_image {
   height: 80px;
   width: 160px;
+}
+
+.resize-button,
+.small-button {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: #ffffff;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.full-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+  background-color: rgb(43, 45, 46);
+  overflow: hidden;
+}
+
+.relative {
+  position: relative;
+}
+
+.disable {
+  display: none;
 }
