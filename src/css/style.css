@@ -37,6 +37,7 @@ ol {
 }
 
 .main {
+  position: relative;
   z-index: 0;
   min-height: calc(100% - 180px);
 }
@@ -85,34 +86,18 @@ ol {
   margin: 0 auto;
   padding: 10px;
 }
+
 .first-column {
   width: 340px;
   align-items: center;
   padding-top: 20px;
 }
+
 .second-column {
   height: 700px;
   padding-top: 20px;
   margin: auto 0;
   width: 40%;
-}
-
-@media screen and (max-width: 1615px) {
-  .second-column {
-    width: 60%;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  .second-column {
-    width: 490px;
-  }
-}
-
-@media screen and (max-width: 630px) {
-  .third-column {
-    width: 490px;
-  }
 }
 
 .third-column {
@@ -175,4 +160,52 @@ ol {
 .rs_image {
   height: 80px;
   width: 160px;
+}
+
+.resize-button,
+.small-button {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: #ffffff;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.full-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+  background-color: rgb(43, 45, 46);
+  overflow: hidden;
+}
+
+.relative {
+  position: relative;
+}
+
+.disable {
+  display: none;
+}
+
+@media screen and (max-width: 1615px) {
+  .second-column {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .second-column {
+    width: 490px;
+  }
+}
+
+@media screen and (max-width: 630px) {
+  .third-column {
+    width: 490px;
+  }
 }

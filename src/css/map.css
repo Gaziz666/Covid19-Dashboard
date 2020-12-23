@@ -9,6 +9,7 @@
   position: relative;
   height: 580px;
   width: 100%;
+  z-index: 0;
 }
 
 .icon-marker {
@@ -25,6 +26,7 @@
   background-image: url(../assets/img/virus-green-compressed.svg);
   border-radius: 100%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+  z-index: 0;
 }
 
 .icon-marker:hover .icon-marker-tooltip {
@@ -42,6 +44,7 @@
   border-radius: 4px;
   margin-bottom: 10px;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.9);
+  z-index: 0;
 }
 
 .icon-marker-tooltip:before {
@@ -55,6 +58,7 @@
   background-color: #3d3d3d;
   transform: rotate(45deg);
   margin-left: -9px;
+  z-index: 0;
 }
 
 .icon-marker-tooltip h2 {
@@ -62,6 +66,7 @@
   line-height: 1.2;
   margin-bottom: 2px;
   margin-top: 0;
+  z-index: 0;
 }
 
 .icon-marker-tooltip h3 {
@@ -142,7 +147,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
 
-  z-index: 400;
+  z-index: 1;
 }
 
 .legend__title {
