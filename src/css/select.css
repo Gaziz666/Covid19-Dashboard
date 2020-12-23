@@ -20,11 +20,11 @@
   margin-left: 5px;
   margin-right: 5px;
   color: red;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .select__country-name {
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 
 .search-country,

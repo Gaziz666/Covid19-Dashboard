@@ -54,6 +54,11 @@ export default class MainView extends EventEmitter {
       child: null,
       parent: footerContainer,
     });
+    const year = create('div', {
+      className: 'year',
+      child: 'created in 2020 by',
+      parent: gitHubInfo,
+    });
     const gitHubLinks = create('div', {
       className: 'github_links',
       child: null,
@@ -119,7 +124,7 @@ export default class MainView extends EventEmitter {
 
     rsLogo.append(rsImg);
     rsLink.append(rsLogo);
-    gitHubInfo.append(gitHubLinks, gitHubLogo);
+    gitHubInfo.append(year, gitHubLogo, gitHubLinks);
     footerContainer.append(rsLink, gitHubInfo);
     footer.append(footerContainer);
 

@@ -21,14 +21,15 @@
 .on,
 .off {
   text-align: center;
-  max-width: 100px;
+  max-width: 120px;
   min-width: 60px;
+  height: 40px;
   line-height: 15px;
   padding: 5px;
   overflow-wrap: break-word;
   border: 1px solid rgb(111, 112, 112);
   border-top: none;
-  font-size: 0.5rem;
+  font-size: 1rem;
 }
 
 .on {
@@ -38,7 +39,6 @@
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   border: 2px solid #a1a1a1;
-
 }
 
 .off {
@@ -49,7 +49,6 @@
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
   border: 2px solid #a1a1a1;
-
 }
 
 .checkbox {
