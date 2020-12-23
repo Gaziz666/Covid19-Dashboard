@@ -8,7 +8,7 @@ export default class AppModel extends EventEmitter {
     this.countryDataArr = [];
     this.countryHistoryCases = {};
     this.allDate = {};
-    this.selectedCountryName = '';
+    this.selectedCountrySlug = '';
     this.selectedCountryIndex = '';
     this.selectedCountryPopulation = '';
     this.searchInputValue = '';
@@ -37,15 +37,16 @@ export default class AppModel extends EventEmitter {
         fetch(urlAllPopulation),
       ]);
     } catch (err) {
-      alert('Sorry API down. Please wait api response and repeat later');
+      alert('Sorry API down. Please wait api response and refresh page');
     }
+
     const countryData = await resCountry.json();
     const summaryData = await resSummary.json();
     const allDays = await resAllDays.json();
     const allPopulation = await resAllPopulation.json();
     this.selectedCountryPopulation = allPopulation.population;
     if (summaryData.Message) {
-      alert(`${summaryData.Message} Please wait api response and repeat later`);
+      alert(`${summaryData.Message} Please wait api response and refresh page`);
     }
     this.allDate = allDays;
     this.objData = summaryData;
@@ -81,7 +82,7 @@ export default class AppModel extends EventEmitter {
       resCountryHistory = await fetch(url);
     } catch (err) {
       alert(
-        'Sorry API for Char down. Please wait api response and repeat later'
+        'Sorry API for Char down. Please wait api response and refresh page'
       );
     }
     this.countryHistoryCases = await resCountryHistory.json();
@@ -111,18 +112,16 @@ export default class AppModel extends EventEmitter {
       );
   }
 
-  getCountryByCode(countryName) {
-    return this.countryDataArr.filter(
-      (item) => item.Country === countryName
-    )[0];
+  getCountryByCode(countrySlug) {
+    return this.countryDataArr.filter((item) => item.Slug === countrySlug)[0];
   }
 
   getGlobal() {
     return this.objData.Global;
   }
 
-  chooseCountry(countryName, countryIndex) {
-    this.selectedCountryName = countryName;
+  chooseCountry(countrySlug, countryIndex) {
+    this.selectedCountrySlug = countrySlug;
     this.selectedCountryIndex = countryIndex;
     this.selectedCountryPopulation = this.countryDataArr[
       countryIndex
