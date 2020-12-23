@@ -8,7 +8,7 @@ export default class AppModel extends EventEmitter {
     this.countryDataArr = [];
     this.countryHistoryCases = {};
     this.allDate = {};
-    this.selectedCountryName = '';
+    this.selectedCountrySlug = '';
     this.selectedCountryIndex = '';
     this.selectedCountryPopulation = '';
     this.searchInputValue = '';
@@ -112,18 +112,16 @@ export default class AppModel extends EventEmitter {
       );
   }
 
-  getCountryByCode(countryName) {
-    return this.countryDataArr.filter(
-      (item) => item.Country === countryName
-    )[0];
+  getCountryByCode(countrySlug) {
+    return this.countryDataArr.filter((item) => item.Slug === countrySlug)[0];
   }
 
   getGlobal() {
     return this.objData.Global;
   }
 
-  chooseCountry(countryName, countryIndex) {
-    this.selectedCountryName = countryName;
+  chooseCountry(countrySlug, countryIndex) {
+    this.selectedCountrySlug = countrySlug;
     this.selectedCountryIndex = countryIndex;
     this.selectedCountryPopulation = this.countryDataArr[
       countryIndex

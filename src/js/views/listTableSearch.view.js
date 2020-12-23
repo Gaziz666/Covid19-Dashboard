@@ -59,14 +59,14 @@ export default class ListTableSearchView extends EventEmitter {
         parent: null,
         dataAttr: [
           ['key', index],
-          ['name', obj.Country],
+          ['slug', obj.Slug],
         ],
       });
       fragment.append(newLi);
       newLi.addEventListener('click', (e) =>
         this.emit(
           'chooseCountry',
-          e.target.closest('li').dataset.name,
+          e.target.closest('li').dataset.slug,
           e.target.closest('li').getAttribute('key')
         )
       );
@@ -93,7 +93,7 @@ export default class ListTableSearchView extends EventEmitter {
   }
 
   rebuildTableByCountry() {
-    const countryName = this.model.selectedCountryName;
+    const countryName = this.model.selectedCountrySlug;
     const currentCountryObj = this.model.getCountryByCode(countryName);
     const tableName = currentCountryObj.Country;
     const confirmed = this.model.returnCasesWithCheckCheckboxes(CASES[0]);
@@ -109,7 +109,7 @@ export default class ListTableSearchView extends EventEmitter {
   }
 
   rebuildTable() {
-    if (this.model.selectedCountryName) {
+    if (this.model.selectedCountrySlug) {
       this.rebuildTableByCountry();
       return;
     }

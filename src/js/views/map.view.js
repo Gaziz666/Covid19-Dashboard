@@ -102,7 +102,7 @@ export default class MapView extends EventEmitter {
     const geoJsonLayers = new L.GeoJSON(geoJson, {
       pointToLayer: (feature = {}, latLong) => {
         const { properties = {} } = feature;
-        const { Country, Date } = properties;
+        const { Country, Date, Slug } = properties;
         const { index } = feature;
         let casesString = this.model.returnCasesWithCheckCheckboxes(
           null,
@@ -125,7 +125,7 @@ export default class MapView extends EventEmitter {
         const html = `
           <span class="icon-marker ${
             this.sizeClassSelector
-          }" data-country_name="${Country}" data-country_index="${index}">
+          }" data-country_name="${Slug}" data-country_index="${index}">
             <span class="icon-marker-tooltip">
               <h2>${Country}</h2>
               <ul>
