@@ -59,15 +59,13 @@ ol {
   display: flex;
   justify-content: center;
   align-items: center;
-
+  text-align: center;
   width: 100%;
-  height: 50px;
   margin: 0 auto;
   margin-bottom: 5px;
-
-  background-color: #1c1c1c;
-  border: 1px solid #1c1c1c;
-  text-align: center;
+  height: 50px;
+  background-color: rgba(201, 10, 14, 0.5);
+  color: #000000;
 }
 
 .header_title {
@@ -130,44 +128,42 @@ ol {
 
 .footer {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  background-color: #1c1c1c;
+  background-color: rgba(201, 10, 14, 0.5);
   height: 100px;
   width: 100vw;
+  font-size: 14px;
   margin-top: 20px;
 }
 
 .footer_container {
   display: flex;
   align-items: center;
+  width: 1280px;
   justify-content: space-evenly;
   flex-wrap: wrap;
   padding: 0px 10px;
   margin: 0px auto;
 }
 
-.rs_logo {
-  height: 100px;
-  width: 200px;
-}
-
 .github_logo {
   height: 35px;
   width: 35px;
-  margin: 0 auto;
+  margin: 5px auto;
 }
 
 .github_info {
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
 }
-
-.github_links {
+.github_links,
+.year {
   display: flex;
   justify-content: center;
+  color: #000000;
 }
-
 .github_link {
   text-decoration: none;
   color: #000000;
@@ -176,11 +172,9 @@ ol {
   padding: 0 10px;
 }
 
-.rs_image {
-  height: 70px;
-  width: 120px;
+.rs_link {
+  margin: 0px auto;
 }
-
 .rs_image {
   height: 80px;
   width: 160px;
