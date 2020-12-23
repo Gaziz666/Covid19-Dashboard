@@ -32,10 +32,13 @@ export default class ListTableSearchView extends EventEmitter {
 
   rebuildList() {
     const { list } = this.elements;
+
     this.elements.list.innerHTML = '';
-    if (this.elements.list.nextSibling !== null) {
-      this.elements.list.nextSibling.remove();
-      this.elements.list.parentNode.lastChild.remove();
+    const children = this.elements.list.parentNode.childNodes;
+    let { length } = children;
+    while (length > 2) {
+      length -= 1;
+      children[length].remove();
     }
 
     const fragment = new DocumentFragment();
@@ -77,6 +80,7 @@ export default class ListTableSearchView extends EventEmitter {
     const checkbox = this.renderCheckbox('forList');
     const casesBtn = this.renderCasesTypeBtn();
     const { bigBtn, smallBtn } = this.renderResizeButton(list.parentNode);
+
     list.parentNode.append(bigBtn, smallBtn, casesBtn, checkbox);
   }
 
@@ -178,7 +182,8 @@ export default class ListTableSearchView extends EventEmitter {
       parent: tableContainer,
     });
     const checkbox = this.renderCheckbox('forTable');
-    tableContainer.append(checkbox);
+    const { bigBtn, smallBtn } = this.renderResizeButton(tableContainer);
+    tableContainer.append(checkbox, bigBtn, smallBtn);
   }
 
   renderCheckbox(name) {

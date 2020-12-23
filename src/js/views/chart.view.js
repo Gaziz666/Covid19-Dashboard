@@ -4,6 +4,8 @@ import Chart from 'chart.js';
 import create from '../utils/create';
 import EventEmitter from '../eventEmitter';
 import CheckboxView from './checkbox.view';
+import ResizeBtnView from './resizeBtn.view';
+import ResizeController from '../controller/resizeBtn.controller';
 import { URL } from '../utils/constants';
 import CheckboxController from '../controller/checkbox.controller';
 
@@ -96,7 +98,11 @@ export default class ChartView extends EventEmitter {
     const checkBoxContainer = checkbox.renderCheckbox('forChar');
     // eslint-disable-next-line no-unused-vars
     const checkboxController = new CheckboxController(this.model, checkbox);
-    this.elements.chartContainer.append(checkBoxContainer);
+    const { bigBtn, smallBtn } = this.renderResizeButton(
+      this.elements.chartContainer
+    );
+
+    this.elements.chartContainer.append(bigBtn, smallBtn, checkBoxContainer);
   }
 
   checkCheckbox() {
@@ -138,5 +144,13 @@ export default class ChartView extends EventEmitter {
       );
     }
     return { labelsArr, casesData, deathsData, recoveredData };
+  }
+
+  renderResizeButton(element) {
+    const resizeBlock = new ResizeBtnView(this.model);
+    const { bigBtn, smallBtn } = resizeBlock.renderResizeBtn();
+    // eslint-disable-next-line no-unused-vars
+    const checkboxController = new ResizeController(resizeBlock, element);
+    return { bigBtn, smallBtn };
   }
 }
