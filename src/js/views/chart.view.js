@@ -22,9 +22,6 @@ export default class ChartView extends EventEmitter {
   rebuildCharCountry() {
     // eslint-disable-next-line no-unused-vars
     const loadCountryData = new Promise((resolve) => {
-      console.log(
-        URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
-      );
       resolve(
         this.model.fetchCountryData(
           URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
