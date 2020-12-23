@@ -22,13 +22,77 @@ export default class MainView extends EventEmitter {
       child: 'COVID-19 Dashboard by RS School',
       parent: header,
     });
-    const main = create('main', { className: 'main' });
-    const footer = create('footer', { className: 'footer' });
 
-    const selectMain = create('section', { className: 'select-main' });
+    const footer = create('footer', { className: 'footer' });
+    const footerContainer = create('div', {
+      className: 'footer_container',
+      child: null,
+      parent: footer,
+    });
+    const rsLink = create('div', {
+      className: 'rs_link',
+      child: null,
+      parent: footerContainer,
+    });
+    const rsLogo = create('a', {
+      className: 'rs_logo',
+      child: null,
+      parent: rsLink,
+      dataAttr: [['href', 'https://rs.school/js/']],
+    });
+    const rsImg = create('img', {
+      className: 'rs_image',
+      child: null,
+      parent: rsLogo,
+      dataAttr: [
+        ['src', '../src/assets/img/rs_school_js.svg'],
+        ['alt', 'RS School logo'],
+      ],
+    });
+    const gitHubInfo = create('div', {
+      className: 'github_info',
+      child: null,
+      parent: footerContainer,
+    });
+    const gitHubLinks = create('div', {
+      className: 'github_links',
+      child: null,
+      parent: gitHubInfo,
+    });
+    const gitHubLogo = create('img', {
+      className: 'github_logo',
+      child: null,
+      parent: gitHubInfo,
+      dataAttr: [
+        ['src', '../src/assets/img/github-logo.svg'],
+        ['alt', 'GitHub logo'],
+      ],
+    });
+    const gitHubGaziz = create('a', {
+      className: 'github_link',
+      child: 'Gaziz666',
+      parent: gitHubLinks,
+      dataAttr: [['href', 'https://github.com/Gaziz666']],
+    });
+    const gitHubRoman = create('a', {
+      className: 'github_link',
+      child: 'Rrroman',
+      parent: gitHubLinks,
+      dataAttr: [['href', 'https://github.com/Rrroman']],
+    });
+    const gitHubValeriya = create('a', {
+      className: 'github_link',
+      child: 'filonushka',
+      parent: gitHubLinks,
+      dataAttr: [['href', 'https://github.com/filonushka']],
+    });
+    const main = create('main', { className: 'main' });
+
+    const sectionMain = create('section', { className: 'section-main' });
     // const selectGraf = create('section', { className: 'select-graf' });
     const firstColumMain = create('div', { className: 'first-column' });
     const secondColumMain = create('div', { className: 'second-column' });
+    const thirdColumMain = create('div', { className: 'third-column' });
 
     this.elements.list = create('ul', { className: 'list-wrapper' });
     this.elements.inputSearch = create('input', {
@@ -47,13 +111,20 @@ export default class MainView extends EventEmitter {
     this.elements.chartContainer = create('div', { className: 'chart' });
 
     firstColumMain.append(this.elements.globalCases, selectSearchWrapper);
-    secondColumMain.append(
-      this.elements.map,
+    secondColumMain.append(this.elements.map);
+    thirdColumMain.append(
       this.elements.tableCases,
       this.elements.chartContainer
     );
-    selectMain.append(firstColumMain, secondColumMain);
-    main.appendChild(selectMain);
+
+    rsLogo.append(rsImg);
+    rsLink.append(rsLogo);
+    gitHubInfo.append(gitHubLinks, gitHubLogo);
+    footerContainer.append(rsLink, gitHubInfo);
+    footer.append(footerContainer);
+
+    sectionMain.append(firstColumMain, secondColumMain, thirdColumMain);
+    main.appendChild(sectionMain);
 
     document.body.prepend(footer);
     document.body.prepend(main);

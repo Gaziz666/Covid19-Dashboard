@@ -13,23 +13,25 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 10px;
 }
 
 .select__cases-count {
   margin-left: 5px;
   margin-right: 5px;
   color: red;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .select__country-name {
-  font-size: 1.2rem;
+  font-size: 0.8rem;
 }
 
 .search-country,
 .select-block {
   color: #bdbdbd;
   background-color: rgb(43, 45, 46);
+  border-radius: 5px;
 }
 
 .flag-img {
