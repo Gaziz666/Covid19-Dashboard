@@ -54,6 +54,11 @@ export default class MainView extends EventEmitter {
       child: null,
       parent: footerContainer,
     });
+    const year = create('div', {
+      className: 'year',
+      child: 'created in 2020 by',
+      parent: gitHubInfo,
+    });
     const gitHubLinks = create('div', {
       className: 'github_links',
       child: null,
@@ -68,19 +73,19 @@ export default class MainView extends EventEmitter {
         ['alt', 'GitHub logo'],
       ],
     });
-    const gitHubGaziz = create('a', {
+    create('a', {
       className: 'github_link',
       child: 'Gaziz666',
       parent: gitHubLinks,
       dataAttr: [['href', 'https://github.com/Gaziz666']],
     });
-    const gitHubRoman = create('a', {
+    create('a', {
       className: 'github_link',
       child: 'Rrroman',
       parent: gitHubLinks,
       dataAttr: [['href', 'https://github.com/Rrroman']],
     });
-    const gitHubValeriya = create('a', {
+    create('a', {
       className: 'github_link',
       child: 'filonushka',
       parent: gitHubLinks,
@@ -89,7 +94,6 @@ export default class MainView extends EventEmitter {
     const main = create('main', { className: 'main' });
 
     const sectionMain = create('section', { className: 'section-main' });
-    // const selectGraf = create('section', { className: 'select-graf' });
     const firstColumMain = create('div', { className: 'first-column' });
     const secondColumMain = create('div', { className: 'second-column' });
     const thirdColumMain = create('div', { className: 'third-column' });
@@ -119,7 +123,7 @@ export default class MainView extends EventEmitter {
 
     rsLogo.append(rsImg);
     rsLink.append(rsLogo);
-    gitHubInfo.append(gitHubLinks, gitHubLogo);
+    gitHubInfo.append(year, gitHubLogo, gitHubLinks);
     footerContainer.append(rsLink, gitHubInfo);
     footer.append(footerContainer);
 

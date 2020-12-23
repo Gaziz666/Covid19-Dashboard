@@ -1,7 +1,8 @@
 .button-container {
   display: flex;
   flex-direction: row;
-  margin: 5px;
+  justify-content: center;
+  margin: 5px auto;
   align-items: center;
 }
 
@@ -11,9 +12,9 @@
   border-color: #ffffff;
   color: #ffffff;
   margin: 5px 0;
-  width: 31px;
-  height: 31px;
-  font-size: 1.1rem;
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
   padding: 5px;
   cursor: pointer;
 }
@@ -29,9 +30,10 @@
 
 .cases-type {
   border: 2px solid #ffffff;
-  font-size: 1.1rem;
+  font-size: 1rem;
   padding: 5px;
   width: 150px;
+  height: 30px;
   text-align: center;
 }
 

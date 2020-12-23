@@ -5,10 +5,6 @@
   src: url('./../assets/fonts/Roboto-Regular.ttf') format('truetype');
 }
 
-/* * {
-  border: 2px solid red;
-} */
-
 html {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
@@ -27,7 +23,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Убираем внутренние отступы */
 ul,
 ol {
   padding: 0;
@@ -83,7 +78,6 @@ ol {
 .global-cases {
   margin: 0px 5px;
   color: #ffffff;
-  border: 2px solid #1c1c1c;
   background-color: #1c1c1c;
   border: 1px solid #1c1c1c;
   border-radius: 10px;
@@ -94,12 +88,12 @@ ol {
 .global__header {
   font-size: 2rem;
   margin: 0 auto;
-  padding-top: 10px;
+  padding: 10px;
 }
 .first-column {
   width: auto;
   align-items: center;
-  padding-top: 20px;
+  padding: 20px;
 }
 .second-column {
   height: 700px;
@@ -118,7 +112,7 @@ ol {
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: space-evenly;
-  padding-top: 20px;
+  padding: 20px;
 }
 
 .footer {
@@ -136,7 +130,6 @@ ol {
   align-items: center;
   justify-content: space-evenly;
   flex-wrap: wrap;
-  /* max-width: 1280px; */
   padding: 0px 10px;
   margin: 0px auto;
 }
@@ -145,6 +138,7 @@ ol {
   height: 100px;
   width: 200px;
 }
+
 .github_logo {
   height: 35px;
   width: 35px;
@@ -155,10 +149,12 @@ ol {
   display: flex;
   flex-direction: column;
 }
+
 .github_links {
   display: flex;
   justify-content: center;
 }
+
 .github_link {
   text-decoration: none;
   color: #000000;
@@ -170,4 +166,9 @@ ol {
 .rs_image {
   height: 70px;
   width: 120px;
+}
+
+.rs_image {
+  height: 80px;
+  width: 160px;
 }
