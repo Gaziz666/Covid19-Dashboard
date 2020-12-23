@@ -4,6 +4,7 @@
   flex-direction: row;
   justify-content: flex-start;
 }
+
 .checkbox-label {
   display: block;
   cursor: pointer;
@@ -13,6 +14,7 @@
   border-radius: 20px;
   border: 3px solid #a1a1a1;
 }
+
 .on,
 .off {
   text-align: center;
@@ -42,6 +44,7 @@
   border-top-right-radius: 16px;
   border-bottom-right-radius: 16px;
 }
+
 .checkbox {
   position: absolute;
   left: -5000px;
@@ -51,6 +54,7 @@
   opacity: 1;
   background-color: black;
 }
+
 .checkbox:checked + .checkbox-label .off {
   opacity: 0.3;
   background-color: rgb(43, 45, 46);
