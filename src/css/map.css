@@ -2,12 +2,11 @@
 .map-container,
 .map .map-base {
   position: relative;
-  max-height: 400px;
+  max-height: 600px;
   max-width: 1000px;
   min-height: 350px;
   min-width: 300px;
   border: 1px solid #000;
-  background: #3d3d3d;
 }
 
 .icon-marker {
@@ -188,4 +187,8 @@
 
 .legend__color_ultra_max_cases {
   background-color: #ff0d00;
+}
+
+.leaflet-container {
+  background-color: #252525;
 }

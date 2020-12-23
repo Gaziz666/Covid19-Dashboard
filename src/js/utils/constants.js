@@ -1,10 +1,13 @@
+const today = new Date();
 const URL = {
   SUMMARY: 'https://api.covid19api.com/summary',
   COUNTRY_ARR: 'https://corona.lmao.ninja/v2/countries',
   ALL_DAYS: 'https://disease.sh/v3/covid-19/historical/all?lastdays=366',
   ALL_DAYS_GLOBAL: 'https://corona-api.com/timeline',
-  COUNTRY_HISTORY: 'https://corona.lmao.ninja/v3/covid-19/historical/',
-  PERIOD: '?lastdays=366',
+  COUNTRY_HISTORY: 'https://api.covid19api.com/country/',
+  PERIOD: `?from=2020-01-01&to=${today.getFullYear()}-${
+    today.getMonth() + 1
+  }-${today.getDay()}`,
   ALL_POPULATION: 'https://corona.lmao.ninja/v3/covid-19/all',
 };
 
@@ -32,4 +35,19 @@ const CASES_TYPES = {
   EXTRA_ULTRA_CASES: 1000000000,
 };
 
-export { URL, MAP_SETTINGS, CASES_TYPES };
+const CASES = [
+  {
+    NEW: 'NewConfirmed',
+    TOTAL: 'TotalConfirmed',
+  },
+  {
+    NEW: 'NewDeaths',
+    TOTAL: 'TotalDeaths',
+  },
+  {
+    NEW: 'NewRecovered',
+    TOTAL: 'TotalRecovered',
+  },
+];
+
+export { URL, MAP_SETTINGS, CASES_TYPES, CASES };

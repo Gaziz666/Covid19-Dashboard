@@ -1,7 +1,10 @@
 import L from 'leaflet';
 import EventEmitter from '../eventEmitter';
-import { MAP_SETTINGS, CASES_TYPES } from '../utils/constants';
+import { MAP_SETTINGS, CASES_TYPES, CASES } from '../utils/constants';
 import CheckboxView from './checkbox.view';
+import CasesTypeBtnView from './casesTypeBtn.view';
+import CheckboxController from '../controller/checkbox.controller';
+import CasesBtnController from '../controller/casesBtn.controller';
 
 import '../../css/map.css';
 import create from '../utils/create';
@@ -55,18 +58,21 @@ export default class MapView extends EventEmitter {
       }
     }
 
+    const mapBounds = new L.LatLngBounds([-90, -180], [90, 180]);
+
     const div = create('div', { className: 'map-container' });
     this.elements.map.prepend(div);
     const mapContainer = this.elements.map.firstChild;
-    const myMap = L.map(mapContainer).setView(
-      MAP_SETTINGS.COORDINATES,
-      MAP_SETTINGS.ZOOM_LVL
-    );
+    const myMap = L.map(mapContainer)
+      .setView(MAP_SETTINGS.COORDINATES, MAP_SETTINGS.ZOOM_LVL)
+      .setMaxBounds(mapBounds);
 
     L.tileLayer(MAP_SETTINGS.MAP_URL_TEMPLATE, {
       attribution: MAP_SETTINGS.ATTRIBUTION,
       subdomains: MAP_SETTINGS.SUBDOMAINS,
       maxZoom: MAP_SETTINGS.MAX_ZOOM,
+      bounds: mapBounds,
+      noWrap: true,
     }).addTo(myMap);
 
     const hasData =
@@ -96,11 +102,11 @@ export default class MapView extends EventEmitter {
     const geoJsonLayers = new L.GeoJSON(geoJson, {
       pointToLayer: (feature = {}, latLong) => {
         const { properties = {} } = feature;
-        const { Country, Date } = properties;
+        const { Country, Date, Slug } = properties;
         const { index } = feature;
         let casesString = this.model.returnCasesWithCheckCheckboxes(
-          properties,
-          'confirmed'
+          null,
+          properties
         );
 
         const casesNumber = Number(casesString.split(',').join(''));
@@ -119,26 +125,26 @@ export default class MapView extends EventEmitter {
         const html = `
           <span class="icon-marker ${
             this.sizeClassSelector
-          }" data-country_name="${Country}" data-country_index="${index}">
+          }" data-country_name="${Slug}" data-country_index="${index}">
             <span class="icon-marker-tooltip">
               <h2>${Country}</h2>
               <ul>
                 <li><strong>Confirmed:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  properties,
-                  'confirmed'
+                  CASES[0],
+                  properties
                 )}</li>
                 <li><strong>Deaths:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  properties,
-                  'deaths'
+                  CASES[1],
+                  properties
                 )}</li>
                 <li><strong>Recovered:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  properties,
-                  'recovered'
+                  CASES[2],
+                  properties
                 )}</li>
                 <li><strong>Last Update:</strong> ${Date}</li>
               </ul>
             </span>
-            ${casesString}
+            ${this.model.returnCasesWithCheckCheckboxes(null, properties)}
           </span>
         `;
         return L.marker(latLong, {
@@ -152,16 +158,19 @@ export default class MapView extends EventEmitter {
     });
 
     geoJsonLayers.addTo(myMap);
+    const casesTypeButton = new CasesTypeBtnView(this.model);
+    const casesBtnContainer = casesTypeButton.renderButton();
+    // eslint-disable-next-line no-unused-vars
+    const casesBtnController = new CasesBtnController(
+      this.model,
+      casesTypeButton
+    );
 
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox('forMap');
-    checkbox.inputCases.onchange = (e) => {
-      this.emit('changeCases', e.target);
-    };
-    checkbox.inputPerHundred.onchange = (e) => {
-      this.emit('changeForPopulations', e.target);
-    };
-    this.elements.map.append(checkBoxContainer);
+    // eslint-disable-next-line no-unused-vars
+    const checkboxController = new CheckboxController(this.model, checkbox);
+    this.elements.map.append(casesBtnContainer, checkBoxContainer);
   }
 
   rebuildMapLegend() {

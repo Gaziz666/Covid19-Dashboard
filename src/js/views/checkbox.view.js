@@ -71,6 +71,13 @@ export default class CheckboxView extends EventEmitter {
     this.inputCases = inputCases;
     this.inputPerHundred = inputPerHundred;
 
+    inputCases.onchange = (e) => {
+      this.emit('changeCases', e.target);
+    };
+    inputPerHundred.onchange = (e) => {
+      this.emit('changeForPopulations', e.target);
+    };
+
     return checkBoxContainer;
   }
 }
