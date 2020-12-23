@@ -95,7 +95,9 @@ export default class MainView extends EventEmitter {
 
     const sectionMain = create('section', { className: 'section-main' });
     const firstColumMain = create('div', { className: 'first-column' });
-    const secondColumMain = create('div', { className: 'second-column' });
+    const secondColumMain = create('div', {
+      className: 'second-column relative',
+    });
     const thirdColumMain = create('div', { className: 'third-column' });
 
     this.elements.list = create('ul', { className: 'list-wrapper' });
@@ -106,13 +108,17 @@ export default class MainView extends EventEmitter {
       dataAttr: [['placeholder', 'Search...']], // <input class="search-country" placeholder="Search...">
     });
     this.elements.globalCases = create('div', { className: 'global-cases' });
-    this.elements.tableCases = create('div', { className: 'table-cases' });
+    this.elements.tableCases = create('div', {
+      className: 'table-cases relative',
+    });
     this.elements.map = create('div', { className: 'map' });
     const selectSearchWrapper = create('div', {
       className: 'select-search-wrapper relative',
       child: [this.elements.inputSearch, this.elements.list],
     });
-    this.elements.chartContainer = create('div', { className: 'chart' });
+    this.elements.chartContainer = create('div', {
+      className: 'chart relative',
+    });
 
     firstColumMain.append(this.elements.globalCases, selectSearchWrapper);
     secondColumMain.append(this.elements.map);
