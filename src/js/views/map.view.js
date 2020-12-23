@@ -2,7 +2,9 @@ import L from 'leaflet';
 import EventEmitter from '../eventEmitter';
 import { MAP_SETTINGS, CASES_TYPES, CASES } from '../utils/constants';
 import CheckboxView from './checkbox.view';
+import CasesTypeBtnView from './casesTypeBtn.view';
 import CheckboxController from '../controller/checkbox.controller';
+import CasesBtnController from '../controller/casesBtn.controller';
 
 import '../../css/map.css';
 import create from '../utils/create';
@@ -100,7 +102,7 @@ export default class MapView extends EventEmitter {
         const { Country, Date } = properties;
         const { index } = feature;
         let casesString = this.model.returnCasesWithCheckCheckboxes(
-          CASES.CONFIRMED,
+          CASES[0],
           properties
         );
 
@@ -125,15 +127,15 @@ export default class MapView extends EventEmitter {
               <h2>${Country}</h2>
               <ul>
                 <li><strong>Confirmed:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  CASES.CONFIRMED,
+                  CASES[0],
                   properties
                 )}</li>
                 <li><strong>Deaths:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  CASES.DEATHS,
+                  CASES[1],
                   properties
                 )}</li>
                 <li><strong>Recovered:</strong> ${this.model.returnCasesWithCheckCheckboxes(
-                  CASES.RECOVERED,
+                  CASES[2],
                   properties
                 )}</li>
                 <li><strong>Last Update:</strong> ${Date}</li>
@@ -153,13 +155,19 @@ export default class MapView extends EventEmitter {
     });
 
     geoJsonLayers.addTo(myMap);
+    const casesTypeButton = new CasesTypeBtnView(this.model);
+    const casesBtnContainer = casesTypeButton.renderButton();
+    // eslint-disable-next-line no-unused-vars
+    const casesBtnController = new CasesBtnController(
+      this.model,
+      casesTypeButton
+    );
 
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox('forMap');
     // eslint-disable-next-line no-unused-vars
     const checkboxController = new CheckboxController(this.model, checkbox);
-
-    this.elements.map.append(checkBoxContainer);
+    this.elements.map.append(casesBtnContainer, checkBoxContainer);
   }
 
   rebuildMapLegend() {

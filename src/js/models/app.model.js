@@ -1,4 +1,5 @@
 import EventEmitter from '../eventEmitter';
+import { CASES } from '../utils/constants';
 
 export default class AppModel extends EventEmitter {
   constructor(objData) {
@@ -13,6 +14,7 @@ export default class AppModel extends EventEmitter {
     this.searchInputValue = '';
     this.checkboxPerDayCasesIsChecked = false;
     this.checkboxFor100ThouthandPopulationIsChecked = false;
+    this.casesTypeIndex = 0;
   }
 
   async fetchData(urlCountry, urlSummary, urlAllDays, urlAllPopulation) {
@@ -143,8 +145,20 @@ export default class AppModel extends EventEmitter {
     this.emit('rebuildView');
   }
 
+  changeCasesTypeViewAdd() {
+    this.casesTypeIndex = (this.casesTypeIndex + 1) % 3;
+    this.emit('rebuildView');
+  }
+
+  changeCasesTypeViewInc() {
+    this.casesTypeIndex =
+      this.casesTypeIndex - 1 < 0 ? 2 : this.casesTypeIndex - 1;
+    this.emit('rebuildView');
+  }
+
   returnCasesWithCheckCheckboxes(caseType, countryObject) {
     let cases = '';
+    const caseTypeObj = caseType || CASES[this.casesTypeIndex];
     let countryObj = this.objData.Global;
     let population = this.selectedCountryPopulation;
     if (countryObject) {
@@ -156,17 +170,19 @@ export default class AppModel extends EventEmitter {
     }
     if (!this.checkboxFor100ThouthandPopulationIsChecked) {
       cases = this.checkboxPerDayCasesIsChecked
-        ? countryObj[caseType.NEW]
-        : countryObj[caseType.TOTAL];
+        ? countryObj[caseTypeObj.NEW]
+        : countryObj[caseTypeObj.TOTAL];
     } else {
       const populationFor100000 = 100000;
       const casesTodayPerHundred =
         Math.ceil(
-          (countryObj[caseType.NEW] / population) * populationFor100000 * 100
+          (countryObj[caseTypeObj.NEW] / population) * populationFor100000 * 100
         ) / 100;
       const casesTotalPerHundred =
         Math.ceil(
-          (countryObj[caseType.TOTAL] / population) * populationFor100000 * 100
+          (countryObj[caseTypeObj.TOTAL] / population) *
+            populationFor100000 *
+            100
         ) / 100;
       cases = this.checkboxPerDayCasesIsChecked
         ? casesTodayPerHundred
