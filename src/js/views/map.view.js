@@ -58,18 +58,21 @@ export default class MapView extends EventEmitter {
       }
     }
 
+    const mapBounds = new L.LatLngBounds([-90, -180], [90, 180]);
+
     const div = create('div', { className: 'map-container' });
     this.elements.map.prepend(div);
     const mapContainer = this.elements.map.firstChild;
-    const myMap = L.map(mapContainer).setView(
-      MAP_SETTINGS.COORDINATES,
-      MAP_SETTINGS.ZOOM_LVL
-    );
+    const myMap = L.map(mapContainer)
+      .setView(MAP_SETTINGS.COORDINATES, MAP_SETTINGS.ZOOM_LVL)
+      .setMaxBounds(mapBounds);
 
     L.tileLayer(MAP_SETTINGS.MAP_URL_TEMPLATE, {
       attribution: MAP_SETTINGS.ATTRIBUTION,
       subdomains: MAP_SETTINGS.SUBDOMAINS,
       maxZoom: MAP_SETTINGS.MAX_ZOOM,
+      bounds: mapBounds,
+      noWrap: true,
     }).addTo(myMap);
 
     const hasData =
@@ -102,7 +105,7 @@ export default class MapView extends EventEmitter {
         const { Country, Date } = properties;
         const { index } = feature;
         let casesString = this.model.returnCasesWithCheckCheckboxes(
-          CASES[0],
+          null,
           properties
         );
 
@@ -141,7 +144,7 @@ export default class MapView extends EventEmitter {
                 <li><strong>Last Update:</strong> ${Date}</li>
               </ul>
             </span>
-            ${casesString}
+            ${this.model.returnCasesWithCheckCheckboxes(null, properties)}
           </span>
         `;
         return L.marker(latLong, {
