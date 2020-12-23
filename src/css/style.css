@@ -214,17 +214,20 @@ ol {
   cursor: pointer;
   box-shadow: 0 0 10px rgb(221, 221, 221);
   transition: box-shadow 0.6s ease-in;
+  opacity: 1;
 }
 
 .resize-button {
   background-image: url(../assets/img/expand-compressed.svg);
   background-size: cover;
   background-color: #1c1c1c;
+  opacity: 0;
 }
 .small-button {
   background-image: url(../assets/img/exit-fullscreen-compressed.svg);
   background-size: cover;
   background-color: #1c1c1c;
+  opacity: 0;
 }
 
 .full-page {

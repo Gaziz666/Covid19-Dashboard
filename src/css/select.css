@@ -9,6 +9,11 @@
   cursor: pointer;
 }
 
+.list-wrapper:hover ~ .resize-button,
+.small-button {
+  opacity: 1;
+}
+
 .select-search-wrapper {
   display: flex;
   flex-direction: column;
