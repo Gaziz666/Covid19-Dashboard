@@ -73,19 +73,19 @@ export default class MainView extends EventEmitter {
         ['alt', 'GitHub logo'],
       ],
     });
-    const gitHubGaziz = create('a', {
+    create('a', {
       className: 'github_link',
       child: 'Gaziz666',
       parent: gitHubLinks,
       dataAttr: [['href', 'https://github.com/Gaziz666']],
     });
-    const gitHubRoman = create('a', {
+    create('a', {
       className: 'github_link',
       child: 'Rrroman',
       parent: gitHubLinks,
       dataAttr: [['href', 'https://github.com/Rrroman']],
     });
-    const gitHubValeriya = create('a', {
+    create('a', {
       className: 'github_link',
       child: 'filonushka',
       parent: gitHubLinks,
@@ -94,7 +94,6 @@ export default class MainView extends EventEmitter {
     const main = create('main', { className: 'main' });
 
     const sectionMain = create('section', { className: 'section-main' });
-    // const selectGraf = create('section', { className: 'select-graf' });
     const firstColumMain = create('div', { className: 'first-column' });
     const secondColumMain = create('div', { className: 'second-column' });
     const thirdColumMain = create('div', { className: 'third-column' });
