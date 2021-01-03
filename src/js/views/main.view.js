@@ -149,12 +149,7 @@ export default class MainView extends EventEmitter {
     viewListTableSearch.show();
     mapView.show();
     chartView.show();
-    // eslint-disable-next-line no-unused-vars
-    const controller = new AppController(
-      this.model,
-      viewListTableSearch,
-      mapView,
-      chartView
-    );
+    // eslint-disable-next-line no-new
+    new AppController(this.model, viewListTableSearch, mapView, chartView);
   }
 }
