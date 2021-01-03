@@ -132,7 +132,7 @@ export default class ChartView extends EventEmitter {
         Math.abs(item - arr[i - 1])
       );
     }
-    if (this.model.checkboxFor100ThouthandPopulationIsChecked) {
+    if (this.model.checkboxFor100kPopulationIsChecked) {
       const populationFor100000 = 100000;
       casesData = casesData.map(
         (item) =>

@@ -5,7 +5,6 @@ import { URL } from './utils/constants';
 import MainView from './views/main.view';
 
 require.context('./../assets/img', true, /\.(png|svg|jpg|gif)$/);
-// require.context("./../assets/audio", true, /\.wav$/);
 
 const model = new AppModel();
 
