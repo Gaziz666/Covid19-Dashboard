@@ -15,6 +15,7 @@ export default class AppModel extends EventEmitter {
     this.checkboxPerDayCasesIsChecked = false;
     this.checkboxFor100kPopulationIsChecked = false;
     this.casesTypeIndex = 0;
+    this.population = 0;
   }
 
   async fetchData(urlCountry, urlSummary, urlAllDays, urlAllPopulation) {
@@ -87,6 +88,13 @@ export default class AppModel extends EventEmitter {
       }
     });
     this.countryDataArr = summaryData.Countries;
+  }
+
+  getCasesPerHundred(casesType) {
+    return (
+      Math.ceil((casesType / this.population) * CASES_TYPES.MAX_CASES * 100) /
+      100
+    );
   }
 
   async fetchCountryData(url) {
@@ -169,17 +177,11 @@ export default class AppModel extends EventEmitter {
     let cases = '';
     const caseTypeObj = caseType || CASES[this.casesTypeIndex];
     let countryObj = this.objData.Global;
-    let population = this.selectedCountryPopulation;
+    this.population = this.selectedCountryPopulation;
 
     if (countryObject) {
-      population = countryObject.Population;
+      this.population = countryObject.Population;
       countryObj = countryObject;
-    }
-
-    function getCasesPerHundred(casesType) {
-      return (
-        Math.ceil((casesType / population) * CASES_TYPES.MAX_CASES * 100) / 100
-      );
     }
 
     if (countryObject === undefined && this.selectedCountryIndex) {
@@ -190,10 +192,10 @@ export default class AppModel extends EventEmitter {
         ? countryObj[caseTypeObj.NEW]
         : countryObj[caseTypeObj.TOTAL];
     } else {
-      const casesTodayPerHundred = getCasesPerHundred(
+      const casesTodayPerHundred = this.getCasesPerHundred(
         countryObj[caseTypeObj.NEW]
       );
-      const casesTotalPerHundred = getCasesPerHundred(
+      const casesTotalPerHundred = this.getCasesPerHundred(
         countryObj[caseTypeObj.TOTAL]
       );
       cases = this.checkboxPerDayCasesIsChecked
