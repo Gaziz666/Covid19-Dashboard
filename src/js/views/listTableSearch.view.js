@@ -4,7 +4,7 @@ import CheckboxView from './checkbox.view';
 import CasesTypeBtnView from './casesTypeBtn.view';
 import ResizeBtnView from './resizeBtn.view';
 import ResizeController from '../controller/resizeBtn.controller';
-import CheckboxController from '../controller/checkbox.controller';
+import SwitcherController from '../controller/switcher.controller';
 import CasesBtnController from '../controller/casesBtn.controller';
 
 import '../../css/checkbox.css';
@@ -18,7 +18,6 @@ export default class ListTableSearchView extends EventEmitter {
     this.model = model;
     this.elements = elements;
 
-    // attach listeners to HTML controls
     this.elements.inputSearch.addEventListener('input', (e) =>
       this.emit('searchCountry', e.target.value)
     );
@@ -43,7 +42,7 @@ export default class ListTableSearchView extends EventEmitter {
 
     const fragment = new DocumentFragment();
     this.model.getCountries().forEach((obj, index) => {
-      const cases = this.model.returnCasesWithCheckCheckboxes(null, obj);
+      const cases = this.model.getCasesState(null, obj);
       const flagImg = create('img', {
         className: 'flag-img',
         child: null,
@@ -103,18 +102,9 @@ export default class ListTableSearchView extends EventEmitter {
     const countryName = this.model.selectedCountrySlug;
     const currentCountryObj = this.model.getCountryByCode(countryName);
     const tableName = currentCountryObj.Country;
-    const confirmed = this.model.returnCasesWithCheckCheckboxes(
-      CASES[0],
-      currentCountryObj
-    );
-    const deaths = this.model.returnCasesWithCheckCheckboxes(
-      CASES[1],
-      currentCountryObj
-    );
-    const recovered = this.model.returnCasesWithCheckCheckboxes(
-      CASES[2],
-      currentCountryObj
-    );
+    const confirmed = this.model.getCasesState(CASES[0], currentCountryObj);
+    const deaths = this.model.getCasesState(CASES[1], currentCountryObj);
+    const recovered = this.model.getCasesState(CASES[2], currentCountryObj);
     let i = this.elements.tableCases.childNodes.length - 1;
     while (i > -1) {
       this.elements.tableCases.childNodes[i].remove();
@@ -130,9 +120,9 @@ export default class ListTableSearchView extends EventEmitter {
       return;
     }
     const tableName = 'Global Cases';
-    const confirmed = this.model.returnCasesWithCheckCheckboxes(CASES[0]);
-    const deaths = this.model.returnCasesWithCheckCheckboxes(CASES[1]);
-    const recovered = this.model.returnCasesWithCheckCheckboxes(CASES[2]);
+    const confirmed = this.model.getCasesState(CASES[0]);
+    const deaths = this.model.getCasesState(CASES[1]);
+    const recovered = this.model.getCasesState(CASES[2]);
 
     this.renderTable(tableName, confirmed, deaths, recovered);
   }
@@ -199,7 +189,7 @@ export default class ListTableSearchView extends EventEmitter {
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox(name);
     // eslint-disable-next-line no-new
-    new CheckboxController(this.model, checkbox);
+    new SwitcherController(this.model, checkbox);
     return checkBoxContainer;
   }
 

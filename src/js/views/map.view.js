@@ -5,7 +5,7 @@ import CheckboxView from './checkbox.view';
 import CasesTypeBtnView from './casesTypeBtn.view';
 import ResizeBtnView from './resizeBtn.view';
 import ResizeController from '../controller/resizeBtn.controller';
-import CheckboxController from '../controller/checkbox.controller';
+import SwitcherController from '../controller/switcher.controller';
 import CasesBtnController from '../controller/casesBtn.controller';
 
 import '../../css/map.css';
@@ -101,15 +101,34 @@ export default class MapView extends EventEmitter {
       }),
     };
 
+    function getMultipliers(casesNumber) {
+      let multiplier = 1000;
+      let toSlice = 0;
+      let suffix = '';
+      if (casesNumber > CASES_TYPES.MID_CASES) {
+        toSlice = -8;
+        suffix = 'k';
+      }
+      if (casesNumber > CASES_TYPES.EXTRA_MAX_CASES) {
+        toSlice = -11;
+        suffix = 'm';
+      }
+
+      return { multiplier, toSlice, suffix };
+    }
+
+    function formatCases(casesNumber) {
+      const { multiplier, toSlice, suffix } = getMultipliers(casesNumber);
+      return `${(casesNumber * multiplier)
+        .toLocaleString('en-En')
+        .slice(0, toSlice)}${suffix}`;
+    }
     const geoJsonLayers = new L.GeoJSON(geoJson, {
       pointToLayer: (feature = {}, latLong) => {
         const { properties = {} } = feature;
         const { Country, Date, Slug } = properties;
         const { index } = feature;
-        let casesString = this.model.returnCasesWithCheckCheckboxes(
-          null,
-          properties
-        );
+        let casesString = this.model.getCasesState(null, properties);
 
         const casesNumber = Number(casesString.split(',').join(''));
 
@@ -117,12 +136,7 @@ export default class MapView extends EventEmitter {
           Math.trunc(casesNumber).toString().length
         );
 
-        const thousandForRemoveDecimal = 1000;
-        if (casesNumber > CASES_TYPES.MID_CASES) {
-          casesString = `${(casesNumber * thousandForRemoveDecimal)
-            .toLocaleString('en-En')
-            .slice(0, -8)}k+`;
-        }
+        casesString = formatCases(casesNumber);
 
         const html = `
           <span class="icon-marker ${
@@ -131,22 +145,22 @@ export default class MapView extends EventEmitter {
             <span class="icon-marker-tooltip">
               <h2>${Country}</h2>
               <ul>
-                <li><strong>Confirmed:</strong> ${this.model.returnCasesWithCheckCheckboxes(
+                <li><strong>Confirmed:</strong> ${this.model.getCasesState(
                   CASES[0],
                   properties
                 )}</li>
-                <li><strong>Deaths:</strong> ${this.model.returnCasesWithCheckCheckboxes(
+                <li><strong>Deaths:</strong> ${this.model.getCasesState(
                   CASES[1],
                   properties
                 )}</li>
-                <li><strong>Recovered:</strong> ${this.model.returnCasesWithCheckCheckboxes(
+                <li><strong>Recovered:</strong> ${this.model.getCasesState(
                   CASES[2],
                   properties
                 )}</li>
                 <li><strong>Last Update:</strong> ${Date}</li>
               </ul>
             </span>
-            ${this.model.returnCasesWithCheckCheckboxes(null, properties)}
+           ${casesString}
           </span>
         `;
         return L.marker(latLong, {
@@ -170,7 +184,7 @@ export default class MapView extends EventEmitter {
     const checkBoxContainer = checkbox.renderCheckbox('forMap');
 
     // eslint-disable-next-line no-new
-    new CheckboxController(this.model, checkbox);
+    new SwitcherController(this.model, checkbox);
     const { bigBtn, smallBtn } = this.renderResizeButton(
       this.elements.map.parentNode
     );

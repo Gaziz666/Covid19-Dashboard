@@ -1,5 +1,6 @@
 import EventEmitter from '../eventEmitter';
 import { CASES, CASES_TYPES } from '../utils/constants';
+import ApiError from '../apiError';
 
 export default class AppModel extends EventEmitter {
   constructor(objData) {
@@ -26,19 +27,23 @@ export default class AppModel extends EventEmitter {
       {},
     ];
     try {
-      [
-        resCountry,
-        resSummary,
-        resAllDays,
-        resAllPopulation,
-      ] = await Promise.all([
-        fetch(urlCountry),
-        fetch(urlSummary),
-        fetch(urlAllDays),
-        fetch(urlAllPopulation),
-      ]);
+      try {
+        [
+          resCountry,
+          resSummary,
+          resAllDays,
+          resAllPopulation,
+        ] = await Promise.all([
+          fetch(urlCountry),
+          fetch(urlSummary),
+          fetch(urlAllDays),
+          fetch(urlAllPopulation),
+        ]);
+      } catch (err) {
+        console.error(err, 'We are using backup data');
+        throw err;
+      }
     } catch (err) {
-      console.error(err, 'We are using backup data');
       [
         resCountry,
         resSummary,
@@ -58,8 +63,9 @@ export default class AppModel extends EventEmitter {
     const allPopulation = await resAllPopulation.json();
     this.selectedCountryPopulation = allPopulation.population;
     if (summaryData.Message) {
-      alert(
-        `${summaryData.Message} Sorry, the server is busy. Please try again later`
+      throw new ApiError(
+        summaryData.Message,
+        `Please wait api response and refresh page`
       );
     }
     this.allDate = allDays;
@@ -102,7 +108,10 @@ export default class AppModel extends EventEmitter {
     try {
       resCountryHistory = await fetch(url);
     } catch (err) {
-      alert('Sorry, the server is busy. Please try again later');
+      throw new ApiError(
+        err.statusCode,
+        'Sorry, the server is busy. Please try again later'
+      );
     }
     this.countryHistoryCases = await resCountryHistory.json();
   }
@@ -116,22 +125,25 @@ export default class AppModel extends EventEmitter {
       return this.countryDataArr
         .sort((a, b) => Number(b[cases]) - Number(a[cases]))
         .filter((obj) =>
-          obj.Country.toLowerCase().includes(this.searchInputValue)
+          obj.Country.toLowerCase().includes(
+            this.searchInputValue.toLowerCase()
+          )
         );
     }
+    function casesPer100k(countryObj) {
+      return (
+        (+countryObj[cases] / +countryObj.Population) * CASES_TYPES.MAX_CASES
+      );
+    }
     return this.countryDataArr
-      .sort(
-        (a, b) =>
-          Number((+b[cases] / +b.Population) * CASES_TYPES.MAX_CASES) -
-          Number((+a[cases] / +a.Population) * CASES_TYPES.MAX_CASES)
-      )
+      .sort((a, b) => casesPer100k(b) - casesPer100k(a))
       .filter((obj) =>
-        obj.Country.toLowerCase().includes(this.searchInputValue)
+        obj.Country.toLowerCase().includes(this.searchInputValue.toLowerCase())
       );
   }
 
   getCountryByCode(countrySlug) {
-    return this.countryDataArr.filter((item) => item.Slug === countrySlug)[0];
+    return this.countryDataArr.find((item) => item.Slug === countrySlug);
   }
 
   getGlobal() {
@@ -173,7 +185,7 @@ export default class AppModel extends EventEmitter {
     this.emit('rebuildView');
   }
 
-  returnCasesWithCheckCheckboxes(caseType, countryObject) {
+  getCasesState(caseType, countryObject) {
     let cases = '';
     const caseTypeObj = caseType || CASES[this.casesTypeIndex];
     let countryObj = this.objData.Global;

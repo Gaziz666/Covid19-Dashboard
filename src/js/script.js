@@ -17,7 +17,7 @@ const loadData = new Promise((resolve) => {
       URL.ALL_POPULATION
     )
   );
-});
+}).catch((err) => alert(err.message));
 
 loadData.then(() => {
   const view = new MainView(model);
