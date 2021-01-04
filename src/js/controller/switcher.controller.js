@@ -1,22 +1,22 @@
-export default class CheckboxController {
+export default class SwitcherController {
   constructor(model, checkboxView) {
     this.model = model;
     this.checkboxView = checkboxView;
 
     this.checkboxView
       .on('changeCases', (checkbox) => {
-        this.changeCasesCheckbox(checkbox);
+        this.changeCasesState(checkbox);
       })
       .on('changeForPopulations', (checkbox) => {
-        this.changeForPopulationCheckbox(checkbox);
+        this.changeForPopulationState(checkbox);
       });
   }
 
-  changeCasesCheckbox(checkbox) {
+  changeCasesState(checkbox) {
     this.model.changeCasesView(checkbox);
   }
 
-  changeForPopulationCheckbox(checkbox) {
+  changeForPopulationState(checkbox) {
     this.model.changeForPopulationView(checkbox);
   }
 }

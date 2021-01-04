@@ -7,7 +7,7 @@ import CheckboxView from './checkbox.view';
 import ResizeBtnView from './resizeBtn.view';
 import ResizeController from '../controller/resizeBtn.controller';
 import { URL } from '../utils/constants';
-import CheckboxController from '../controller/checkbox.controller';
+import SwitcherController from '../controller/switcher.controller';
 
 export default class ChartView extends EventEmitter {
   constructor(model, elements) {
@@ -22,15 +22,14 @@ export default class ChartView extends EventEmitter {
   }
 
   rebuildCharCountry() {
-    new Promise((resolve) => {
-      resolve(
-        this.model.fetchCountryData(
-          URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
-        )
-      );
-    }).then(() => {
-      this.rebuildChart();
-    });
+    this.model
+      .fetchCountryData(
+        URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
+      )
+      .catch((err) => {
+        throw err;
+      })
+      .then(() => this.rebuildChart);
   }
 
   rebuildChart() {
@@ -96,7 +95,7 @@ export default class ChartView extends EventEmitter {
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox('forChar');
     // eslint-disable-next-line no-new
-    new CheckboxController(this.model, checkbox);
+    new SwitcherController(this.model, checkbox);
     const { bigBtn, smallBtn } = this.renderResizeButton(
       this.elements.chartContainer
     );
@@ -131,20 +130,16 @@ export default class ChartView extends EventEmitter {
         Math.abs(item - arr[i - 1])
       );
     }
-    if (this.model.checkboxFor100kPopulationIsChecked) {
+
+    function getCasesPer100k(item) {
       const populationFor100000 = 100000;
-      casesData = casesData.map(
-        (item) =>
-          Math.ceil((item / population) * populationFor100000 * 100) / 100
-      );
-      deathsData = deathsData.map(
-        (item) =>
-          Math.ceil((item / population) * populationFor100000 * 100) / 100
-      );
-      recoveredData = recoveredData.map(
-        (item) =>
-          Math.ceil((item / population) * populationFor100000 * 100) / 100
-      );
+      return Math.ceil((item / population) * populationFor100000 * 100) / 100;
+    }
+
+    if (this.model.checkboxFor100kPopulationIsChecked) {
+      casesData = casesData.map((item) => getCasesPer100k(item));
+      deathsData = deathsData.map((item) => getCasesPer100k(item));
+      recoveredData = recoveredData.map((item) => getCasesPer100k(item));
     }
     return { labelsArr, casesData, deathsData, recoveredData };
   }
