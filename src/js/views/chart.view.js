@@ -22,8 +22,7 @@ export default class ChartView extends EventEmitter {
   }
 
   rebuildCharCountry() {
-    // eslint-disable-next-line no-unused-vars
-    const loadCountryData = new Promise((resolve) => {
+    new Promise((resolve) => {
       resolve(
         this.model.fetchCountryData(
           URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
@@ -45,8 +44,8 @@ export default class ChartView extends EventEmitter {
     const charData = this.checkCheckbox();
 
     const ctx = chart.getContext('2d');
-    // eslint-disable-next-line no-unused-vars
-    const myChart = new Chart(ctx, {
+    // eslint-disable-next-line no-new
+    new Chart(ctx, {
       type: 'line',
       data: {
         labels: charData.labelsArr,
@@ -96,8 +95,8 @@ export default class ChartView extends EventEmitter {
 
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox('forChar');
-    // eslint-disable-next-line no-unused-vars
-    const checkboxController = new CheckboxController(this.model, checkbox);
+    // eslint-disable-next-line no-new
+    new CheckboxController(this.model, checkbox);
     const { bigBtn, smallBtn } = this.renderResizeButton(
       this.elements.chartContainer
     );
@@ -132,7 +131,7 @@ export default class ChartView extends EventEmitter {
         Math.abs(item - arr[i - 1])
       );
     }
-    if (this.model.checkboxFor100ThouthandPopulationIsChecked) {
+    if (this.model.checkboxFor100kPopulationIsChecked) {
       const populationFor100000 = 100000;
       casesData = casesData.map(
         (item) =>
@@ -153,8 +152,8 @@ export default class ChartView extends EventEmitter {
   renderResizeButton(element) {
     const resizeBlock = new ResizeBtnView(this.model);
     const { bigBtn, smallBtn } = resizeBlock.renderResizeBtn();
-    // eslint-disable-next-line no-unused-vars
-    const checkboxController = new ResizeController(resizeBlock, element);
+    // eslint-disable-next-line no-new
+    new ResizeController(resizeBlock, element);
     return { bigBtn, smallBtn };
   }
 }

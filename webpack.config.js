@@ -1,6 +1,7 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -15,6 +16,14 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       template: './public/index.html',
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: '**/*.json',
+          to: 'assets/[name].[ext]',
+        },
+      ],
     }),
     new CleanWebpackPlugin(),
   ],
@@ -41,6 +50,13 @@ module.exports = {
       {
         test: /\.(ttf|woff|woff2|eot)$/,
         loader: 'file-loader',
+      },
+      {
+        test: /\.json$/,
+        loader: 'file-loader',
+        options: {
+          name: 'assets/[name].[ext]',
+        },
       },
     ],
   },

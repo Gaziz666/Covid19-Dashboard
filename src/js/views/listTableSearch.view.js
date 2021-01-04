@@ -198,27 +198,24 @@ export default class ListTableSearchView extends EventEmitter {
   renderCheckbox(name) {
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox(name);
-    // eslint-disable-next-line no-unused-vars
-    const checkboxController = new CheckboxController(this.model, checkbox);
+    // eslint-disable-next-line no-new
+    new CheckboxController(this.model, checkbox);
     return checkBoxContainer;
   }
 
   renderCasesTypeBtn() {
     const casesTypeButton = new CasesTypeBtnView(this.model);
     const casesBtnContainer = casesTypeButton.renderButton();
-    // eslint-disable-next-line no-unused-vars
-    const casesBtnController = new CasesBtnController(
-      this.model,
-      casesTypeButton
-    );
+    // eslint-disable-next-line no-new
+    new CasesBtnController(this.model, casesTypeButton);
     return casesBtnContainer;
   }
 
   renderResizeButton(element) {
     const resizeBlock = new ResizeBtnView(this.model);
     const { bigBtn, smallBtn } = resizeBlock.renderResizeBtn();
-    // eslint-disable-next-line no-unused-vars
-    const checkboxController = new ResizeController(resizeBlock, element);
+    // eslint-disable-next-line no-new
+    new ResizeController(resizeBlock, element);
     return { bigBtn, smallBtn };
   }
 }

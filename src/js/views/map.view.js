@@ -162,16 +162,15 @@ export default class MapView extends EventEmitter {
     geoJsonLayers.addTo(myMap);
     const casesTypeButton = new CasesTypeBtnView(this.model);
     const casesBtnContainer = casesTypeButton.renderButton();
-    // eslint-disable-next-line no-unused-vars
-    const casesBtnController = new CasesBtnController(
-      this.model,
-      casesTypeButton
-    );
+
+    // eslint-disable-next-line no-new
+    new CasesBtnController(this.model, casesTypeButton);
 
     const checkbox = new CheckboxView(this.model);
     const checkBoxContainer = checkbox.renderCheckbox('forMap');
-    // eslint-disable-next-line no-unused-vars
-    const checkboxController = new CheckboxController(this.model, checkbox);
+
+    // eslint-disable-next-line no-new
+    new CheckboxController(this.model, checkbox);
     const { bigBtn, smallBtn } = this.renderResizeButton(
       this.elements.map.parentNode
     );
@@ -224,8 +223,8 @@ export default class MapView extends EventEmitter {
   renderResizeButton(element) {
     const resizeBlock = new ResizeBtnView(this.model);
     const { bigBtn, smallBtn } = resizeBlock.renderResizeBtn();
-    // eslint-disable-next-line no-unused-vars
-    const checkboxController = new ResizeController(resizeBlock, element);
+    // eslint-disable-next-line no-new
+    new ResizeController(resizeBlock, element);
     return { bigBtn, smallBtn };
   }
 }
