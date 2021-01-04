@@ -117,9 +117,8 @@ export default class MapView extends EventEmitter {
           Math.trunc(casesNumber).toString().length
         );
 
-        const thousandForRemoveDecimal = 1000;
         if (casesNumber > CASES_TYPES.MID_CASES) {
-          casesString = `${(casesNumber * thousandForRemoveDecimal)
+          casesString = `${(casesNumber * 1000)
             .toLocaleString('en-En')
             .slice(0, -8)}k+`;
         }
