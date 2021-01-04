@@ -18,7 +18,6 @@ export default class ListTableSearchView extends EventEmitter {
     this.model = model;
     this.elements = elements;
 
-    // attach listeners to HTML controls
     this.elements.inputSearch.addEventListener('input', (e) =>
       this.emit('searchCountry', e.target.value)
     );
