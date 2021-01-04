@@ -81,7 +81,6 @@ export default class AppModel extends EventEmitter {
         }
         i += 1;
         if (country.CountryCode === 'XK') {
-          // second data don't have data of Kosovo
           summaryData.Countries[index].CountryInfo = {
             _id: '',
             iso2: 'XK',
