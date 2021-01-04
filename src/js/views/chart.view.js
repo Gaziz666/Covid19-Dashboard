@@ -22,16 +22,6 @@ export default class ChartView extends EventEmitter {
   }
 
   rebuildCharCountry() {
-    // new Promise((resolve) => {
-    //   resolve(
-    //     this.model.fetchCountryData(
-    //       URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
-    //     )
-    //   );
-    // }).then(() => {
-    //   this.rebuildChart();
-    // });
-
     this.model
       .fetchCountryData(
         URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
