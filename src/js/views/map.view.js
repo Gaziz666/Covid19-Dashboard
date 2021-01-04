@@ -102,7 +102,7 @@ export default class MapView extends EventEmitter {
     };
 
     function getMultipliers(casesNumber) {
-      let multiplier = 1000;
+      const multiplier = 1000;
       let toSlice = 0;
       let suffix = '';
       if (casesNumber > CASES_TYPES.MID_CASES) {
