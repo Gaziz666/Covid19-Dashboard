@@ -29,7 +29,7 @@ export default class ChartView extends EventEmitter {
       .catch((err) => {
         throw err;
       })
-      .then(() => this.rebuildChart);
+      .then(() => this.rebuildChart());
   }
 
   rebuildChart() {
