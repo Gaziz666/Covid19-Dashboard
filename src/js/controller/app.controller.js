@@ -26,6 +26,10 @@ export default class AppController {
         this.viewListTableSearch.show();
         this.mapView.show();
         this.chartView.rebuildCharCountry();
+      })
+      .on('rebuildViewTableMap', () => {
+        this.viewListTableSearch.show();
+        this.mapView.show();
       });
   }
 

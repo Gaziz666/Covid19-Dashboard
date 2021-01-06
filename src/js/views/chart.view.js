@@ -22,14 +22,18 @@ export default class ChartView extends EventEmitter {
   }
 
   rebuildCharCountry() {
-    this.model
-      .fetchCountryData(
-        URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
-      )
-      .catch((err) => {
-        throw err;
-      })
-      .then(() => this.rebuildChart());
+    if (this.model.selectedCountrySlug === '') {
+      this.rebuildChart();
+    } else {
+      this.model
+        .fetchCountryData(
+          URL.COUNTRY_HISTORY + this.model.selectedCountrySlug + URL.PERIOD
+        )
+        .catch((err) => {
+          throw err;
+        })
+        .then(() => this.rebuildChart());
+    }
   }
 
   rebuildChart() {
