@@ -1,0 +1,52 @@
+.table-cases {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.table-header {
+  border: 1px solid #1c1c1c;
+  font-size: 1.2rem;
+  margin: 0px 5px;
+  padding: 5px;
+  background-color: #1c1c1c;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.table {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.table-body {
+  border: 1px solid #1c1c1c;
+  font-size: 1.8rem;
+  margin: 0px 5px;
+  padding: 5px;
+  background-color: #1c1c1c;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.table__country-name {
+  align-items: center;
+  text-align: center;
+}
+
+.table-column {
+  text-align: center;
+  margin: 5px;
+}
+
+.table-column__confirmed {
+  color: #ffac00;
+}
+
+.table-column__deaths {
+  color: #c90a0e;
+}
+
+.table-column__recovered {
+  color: #4be700;
+}

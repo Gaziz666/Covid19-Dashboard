@@ -1,0 +1,53 @@
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5px auto;
+  align-items: center;
+}
+
+.button-left,
+.button-right {
+  background-color: transparent;
+  border-color: #ffffff;
+  color: #ffffff;
+  margin: 5px 0;
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.button-left {
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+.button-right {
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.cases-type {
+  border: 2px solid #ffffff;
+  font-size: 1rem;
+  padding: 5px;
+  width: 150px;
+  height: 30px;
+  text-align: center;
+}
+
+.cases-type_confirmed {
+  border-color: rgba(255, 172, 0, 1);
+  color: rgba(255, 172, 0, 1);
+}
+
+.cases-type_deaths {
+  border-color: rgba(201, 10, 14, 1);
+  color: rgba(201, 10, 14, 1);
+}
+
+.cases-type_recovered {
+  border-color: rgba(75, 231, 0, 1);
+  color: rgba(75, 231, 0, 1);
+}

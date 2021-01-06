@@ -1,0 +1,41 @@
+.list-wrapper {
+  width: 100%;
+  height: 440px;
+  overflow: hidden;
+  overflow-y: scroll;
+  border: 1px solid black;
+  color: #bdbdbd;
+  background-color: rgb(43, 45, 46);
+  cursor: pointer;
+}
+
+.select-search-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.select__cases-count {
+  margin-left: 5px;
+  margin-right: 5px;
+  color: red;
+  font-size: 1.2rem;
+}
+
+.select__country-name {
+  font-size: 1rem;
+}
+
+.search-country,
+.select-block {
+  color: #bdbdbd;
+  background-color: rgb(43, 45, 46);
+  border-radius: 5px;
+}
+
+.flag-img {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+}
