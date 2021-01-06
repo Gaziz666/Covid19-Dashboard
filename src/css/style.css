@@ -121,7 +121,7 @@ ol {
 
 @media screen and (max-width: 990px) {
   .third-column {
-    width: auto;
+    width: 100%;
     align-items: center;
     justify-content: center;
   }

@@ -7,7 +7,7 @@ export default class AppModel extends EventEmitter {
     super();
     this.objData = objData || {};
     this.countryDataArr = [];
-    this.countryHistoryCases = {};
+    this.countryHistoryCases = '';
     this.allDate = {};
     this.selectedCountrySlug = '';
     this.selectedCountryIndex = '';
@@ -175,13 +175,13 @@ export default class AppModel extends EventEmitter {
 
   changeCasesTypeViewAdd() {
     this.casesTypeIndex = (this.casesTypeIndex + 1) % 3;
-    this.emit('rebuildView');
+    this.emit('rebuildViewTableMap');
   }
 
   changeCasesTypeViewInc() {
     this.casesTypeIndex =
       this.casesTypeIndex - 1 < 0 ? 2 : this.casesTypeIndex - 1;
-    this.emit('rebuildView');
+    this.emit('rebuildViewTableMap');
   }
 
   getCasesState(caseType, countryObject) {
